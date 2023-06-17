@@ -36,8 +36,6 @@ const Signup: React.FC<{}> = () => {
             <div
                 className="bg-transparent px-4 pb-4 pt-5 sm:p-6 sm:pb-4"
             >
-                <button style={{ background: 'rgb(46, 46, 46)' }} className=" absolute right-5 rounded-full w-10 h-10 text-white text-2xl"><i className="fas fa-times"></i></button>
-
                 <div className="sm:flex sm:items-center flex-col ">
 
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
