@@ -1,5 +1,5 @@
 import useModal from "@/hooks/useModal"
-import FooterLoginSignup from "@/commonUI/FooterLoginSignup"
+import FooterLoginSignup from "@/components/FooterLoginSignup"
 function Login() {
 
     const { setModalState } = useModal()

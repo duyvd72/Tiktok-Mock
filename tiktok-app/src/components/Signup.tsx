@@ -1,6 +1,6 @@
 
 import React from 'react'
-import FooterLoginSignup from '@/commonUI/FooterLoginSignup'
+import FooterLoginSignup from '@/components/FooterLoginSignup'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 
 
