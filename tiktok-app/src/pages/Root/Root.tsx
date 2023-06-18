@@ -1,8 +1,12 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import SideBar from '../../components/SideBar';
-
+import LoginModal from '@/components/LoginModal';
+import useModal from '@/hooks/useModal';
 const Root = () => {
+
+  const { modalIsOpen } = useModal()
+
   return (
     <div>
       <Navbar />
@@ -11,6 +15,7 @@ const Root = () => {
         <div className="w-[calc(100vw-260px)] p-5 flex">
           <Outlet />
         </div>
+        {modalIsOpen && <LoginModal />}
       </div>
     </div>
   );
