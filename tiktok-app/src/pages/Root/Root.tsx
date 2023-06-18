@@ -3,17 +3,21 @@ import Navbar from '../../components/Navbar';
 import SideBar from '../../components/SideBar';
 import LoginModal from '@/components/LoginModal';
 import useModal from '@/hooks/useModal';
-const Root = () => {
+import ScrollToTop from '@/components/ScrollToTop';
 
-  const { modalIsOpen } = useModal()
+const Root = () => {
+  const { modalIsOpen } = useModal();
 
   return (
     <div>
       <Navbar />
-      <div className="flex h-[calc(100vh-66px)]">
+      <div className="flex h-[calc(100vh-66px)] mt-[66px]">
         <SideBar />
-        <div className="w-[calc(100vw-260px)] p-5 flex">
+        <div className="p-5 relative ms-[260px] w-full">
           <Outlet />
+          <div className="fixed bottom-10 right-10">
+            <ScrollToTop />
+          </div>
         </div>
         {modalIsOpen && <LoginModal />}
       </div>

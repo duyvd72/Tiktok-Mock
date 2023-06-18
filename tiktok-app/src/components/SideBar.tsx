@@ -5,7 +5,7 @@ const SideBar = () => {
 
   const { setModalIsOpen } = useModal()
   return (
-    <div className="flex flex-col p-3 w-[260px] overflow-auto">
+    <div className="flex flex-col p-3 w-[260px] overflow-auto fixed z-50">
       <div className="flex flex-col">
         <NavLink className="font-bold py-2 px-3 text-[18px]" to="/">
           <i className="fas fa-home me-3"></i>Dành cho bạn

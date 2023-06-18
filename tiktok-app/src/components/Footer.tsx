@@ -1,12 +1,9 @@
 import { NavLink } from 'react-router-dom';
-import LoadingSpinner from '@/components/LoadingSpinner';
 
 const Footer = () => {
   return (
     <div className="flex flex-col gap-3 p-3 mt-auto  border-t-[1px]">
       <div>
-        <LoadingSpinner />
-
         <NavLink
           className="hover:underline me-3 text-sm text-gray-400 border-gray-300"
           to="/footer"
