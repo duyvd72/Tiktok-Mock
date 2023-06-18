@@ -1,7 +1,13 @@
-import React from 'react';
+import VideoItem from './components/VideoItem/VideoItem';
 
 const NewsFeed = () => {
-  return <div>NewsFeed</div>;
+  return (
+    <div className="w-full">
+      <VideoItem />
+      <VideoItem />
+      <VideoItem />
+    </div>
+  );
 };
 
 export default NewsFeed;
