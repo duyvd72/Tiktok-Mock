@@ -2,19 +2,18 @@
 import React from 'react'
 import FooterLoginSignup from '@/components/FooterLoginSignup'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
-
+import USER from '@/api/user'
 
 const Signup: React.FC<{}> = () => {
-
-
 
     const initialValues = {
         username: '',
         password: ''
     }
 
-    const handleSubmit = (values: { [key: string]: any }) => {
-        console.log(values)
+    const handleSubmit = async (values: { username: string, password: string }) => {
+        const data = await USER.REGISTER(values)
+        console.log('data', data)
     }
 
     const validateForm = (values: any) => {

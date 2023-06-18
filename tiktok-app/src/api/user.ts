@@ -12,5 +12,5 @@ const fetchAPI = async (apiCall: AxiosResponse) => {
 export default class USER {
 
     static REGISTER = async (data: { username: string, password: string }) => await fetchAPI(axios.post('accounts/register', data))
-
+    static LOGIN = async (data: { username: string, password: string }) => await fetchAPI(axios.post('accounts/login', data))
 }

@@ -21,8 +21,7 @@ API.interceptors.response.use(function (response: any) {
 });
 
 export const setToken = (token: string) => {
-    API.defaults.Authorization = `Bearer ${token}`
+    API.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }
-
 
 export default API
