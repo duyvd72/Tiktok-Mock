@@ -1,7 +1,14 @@
 import logo from '../assets/images/logo.png';
 import { NavLink } from 'react-router-dom';
-
+import useModal from '@/hooks/useModal';
 const Navbar = () => {
+
+  const { setModalIsOpen } = useModal()
+
+  const onSignIn = () => {
+    setModalIsOpen(true)
+  }
+
   return (
     <div className="flex justify-between items-center p-3 border-b-[1px] bg-white fixed w-full z-50 top-0">
       <div className="flex-1">
@@ -29,6 +36,7 @@ const Navbar = () => {
         <button
           className="border px-2 py-1 rounded-[4px]
           bg-[#fe2c55] hover:bg-[#e32b50] text-white font-bold"
+          onClick={() => onSignIn()}
         >
           Đăng nhập
         </button>

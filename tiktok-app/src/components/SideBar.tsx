@@ -1,7 +1,9 @@
 import { NavLink } from 'react-router-dom';
 import Footer from './Footer';
-
+import useModal from '@/hooks/useModal';
 const SideBar = () => {
+
+  const { setModalIsOpen } = useModal()
   return (
     <div className="flex flex-col p-3 w-[260px] overflow-auto fixed z-50">
       <div className="flex flex-col">
@@ -25,6 +27,7 @@ const SideBar = () => {
         <button
           className="border border-[#fe2c55] text-[#fe2c55] font-bold p-3
             rounded-md hover:bg-[#fe2c550f]"
+          onClick={() => setModalIsOpen(true)}
         >
           Đăng nhập
         </button>

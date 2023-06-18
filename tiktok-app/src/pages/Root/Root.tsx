@@ -1,9 +1,13 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import SideBar from '../../components/SideBar';
+import LoginModal from '@/components/LoginModal';
+import useModal from '@/hooks/useModal';
 import ScrollToTop from '@/components/ScrollToTop';
 
 const Root = () => {
+  const { modalIsOpen } = useModal();
+
   return (
     <div>
       <Navbar />
@@ -15,6 +19,7 @@ const Root = () => {
             <ScrollToTop />
           </div>
         </div>
+        {modalIsOpen && <LoginModal />}
       </div>
     </div>
   );
