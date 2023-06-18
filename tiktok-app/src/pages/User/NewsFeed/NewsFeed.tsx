@@ -1,8 +1,13 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import VideoItem from './components/VideoItem/VideoItem';
 
 const NewsFeed = () => {
-  return <div><Outlet/></div>;
+  return (
+    <div className="w-full">
+      <VideoItem />
+      <VideoItem />
+      <VideoItem />
+    </div>
+  );
 };
 
 export default NewsFeed;

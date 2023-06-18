@@ -1,7 +1,9 @@
-import React from 'react';
-
 const ScrollToTop = () => {
-  return <div>ScrollToTop</div>;
+  return (
+    <button className="bg-[#fe2c55] w-8 h-8 rounded-full flex justify-center items-center">
+      <i className="fas fa-chevron-up text-white"></i>
+    </button>
+  );
 };
 
 export default ScrollToTop;

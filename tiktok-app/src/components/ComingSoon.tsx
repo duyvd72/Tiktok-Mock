@@ -1,5 +1,4 @@
-import img from '../assets/images/comingsoon.png';
-
+import img from "../assets/images/comingsoon.png";
 const ComingSoon = () => {
   return (
     <div className="w-full flex justify-center self-center">
