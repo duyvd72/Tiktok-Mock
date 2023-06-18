@@ -1,17 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
-  margin    : 0;
-  padding   : 0;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: "IBM Plex Sans", sans-serif;
 }
 
 .active {
@@ -25,3 +25,36 @@ body {
 ::-webkit-scrollbar-thumb {
   background: #ededed;
 }
+
+.aaa {
+  position: relative;
+}
+
+.aaa::after {
+  position: absolute;
+  background-color: #fe2c55;
+  content: "";
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 5px;
+  /* transform: translateX(0); */
+}
+
+.aaa:hover::after {
+  /* transform: translateX(0px); */
+  width: 100%;
+  transition: transform 0.3s;
+}
+
+/* .video:hover {
+  background-color: aqua;
+}
+
+.like:hover {
+  background-color: aqua;
+}
+
+.liked:hover {
+  background-color: aqua;
+} */
