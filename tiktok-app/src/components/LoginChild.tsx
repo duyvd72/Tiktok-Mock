@@ -3,8 +3,13 @@ import FooterLoginSignup from '@/components/FooterLoginSignup'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import USER from '@/api/user'
 import LOCALSTORAGE from '@/util/LocalStorage'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router'
+import useModal from '@/hooks/useModal'
 function LoginChild() {
 
+    const navigate = useNavigate()
+    const { setModalIsOpen } = useModal()
     const initialValues = {
         username: '',
         password: ''
@@ -12,7 +17,17 @@ function LoginChild() {
 
     const handleSubmit = async (values: { [key: string]: any }) => {
         const response: { [ket: string]: any } = await USER.LOGIN(values)
+        if (!response._id) {
+            toast.error(`${response.message}`)
+        } else {
+            setModalIsOpen(false)
+            setTimeout(() => {
+                navigate('/')
+            });
+        }
+
         LOCALSTORAGE.setToken(response.token)
+
     }
 
     const validateForm = (values: any) => {
