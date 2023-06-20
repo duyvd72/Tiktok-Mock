@@ -3,7 +3,6 @@ import Navbar from '../../components/Navbar';
 import SideBar from '../../components/SideBar';
 import LoginModal from '@/components/LoginModal';
 import useModal from '@/hooks/useModal';
-import ScrollToTop from '@/components/ScrollToTop';
 
 const Root = () => {
   const { modalIsOpen } = useModal();
@@ -15,9 +14,6 @@ const Root = () => {
         <SideBar />
         <div className="p-5 relative ms-[260px] w-full">
           <Outlet />
-          <div className="fixed bottom-10 right-10">
-            <ScrollToTop />
-          </div>
         </div>
         {modalIsOpen && <LoginModal />}
       </div>
