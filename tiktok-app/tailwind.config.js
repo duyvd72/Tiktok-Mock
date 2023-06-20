@@ -1,14 +1,14 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require("tailwindcss/colors");
+
 export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {},
     colors: {
-      backgroundFadedIn: "#161823",
-      customedWhite: "#eee",
-      customedPink: "rgb(254, 44, 85)",
+      ...colors,
+      customedPink: "#fe2c55",
       customedGrey: "#e9ecef",
-      
     },
   },
   plugins: [],

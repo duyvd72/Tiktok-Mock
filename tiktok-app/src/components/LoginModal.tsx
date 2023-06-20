@@ -7,10 +7,10 @@ const LoginModal = () => {
   const { modalState, setModalIsOpen } = useModal()
 
   return <main>
-    <div className="relative z-10"  >
+    <div className="relative z-[9999]"  >
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacit text-white " >
       </div>
-      <div className="fixed inset-0 z-10 overflow-y-auto" onClick={() => setModalIsOpen(false)}>
+      <div className="fixed inset-0 z-[9999] overflow-y-auto" onClick={() => setModalIsOpen(false)}>
         <div
           className="absolute left-[50%] top-[15%] transform translate-x-[-50%]  overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg  "
           style={{ background: 'rgb(37, 37, 37)' }}
