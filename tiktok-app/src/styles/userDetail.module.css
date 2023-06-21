@@ -1,0 +1,46 @@
+.ddd {
+  width: 101px;
+  height: 3px;
+  background-color: black;
+}
+
+.aaa {
+  transform: translateX(101px);
+  width: 157px;
+  height: 3px;
+  background-color: black;
+}
+
+#like:hover ~ .ddd {
+  transform: translateX(101px);
+  width: 157px;
+  transition: trasition 0.3s;
+}
+
+#video:hover ~ .aaa {
+  transform: translateX(0);
+  width: 101px;
+  transition: trasition 0.3s;
+}
+
+#edit {
+  background-color: rgba(121, 121, 121, 0.3);
+}
+
+#skeleton {
+  background-color: #f2f2f2;
+  border-radius: 4px;
+  animation: skeleton-loading 1s infinite ease-in-out alternate;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: #f2f2f2;
+  }
+  50% {
+    background-color: #e6e6e6;
+  }
+  100% {
+    background-color: #f2f2f2;
+  }
+}

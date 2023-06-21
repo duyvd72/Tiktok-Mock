@@ -1,8 +1,15 @@
+import { useState } from "react";
 import img from "../assets/images/comingsoon.png";
-import video from "../assets/video/Download.mp4";
+import styles from "@/styles/userDetail.module.css";
+import UserDetailVideos from "./UserDetailVideos";
+import EditUserInfor from "./EditUserInfor";
+
 const UserDetail = () => {
+  const [clickLike, setClickLike] = useState(true);
+  const [clickEdit, setClickEdit] = useState(false);
+
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       <div className="flex flex-row">
         <div className="flex flex-row items-center w-2/5">
           <img
@@ -26,7 +33,10 @@ const UserDetail = () => {
               </svg>
             </div>
             <p className="text-lg	font-medium cursor-pointer">An Thảo</p>
-            <button className="flex items-center border rounded border-slate-950 py-1 px-5 mt-3 cursor-pointer">
+            <button
+              className="flex items-center border rounded border-slate-950 py-1 px-5 mt-3 cursor-pointer"
+              onClick={() => setClickEdit(true)}
+            >
               <svg
                 className="cursor-pointer"
                 xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +50,7 @@ const UserDetail = () => {
           </div>
         </div>
 
-        <div className="">
+        <div>
           <svg
             className="cursor-pointer"
             xmlns="http://www.w3.org/2000/svg"
@@ -68,10 +78,18 @@ const UserDetail = () => {
       </div>
       <p className="my-2">Chưa có tiểu sử</p>
       <div className="mt-5 border-b">
-        <p className="px-7 text-lg pb-2 video cursor-pointer video inline font-bold">
+        <p
+          className="px-7 text-lg pb-2 video cursor-pointer inline font-bold"
+          id={styles.video}
+          onClick={() => setClickLike(true)}
+        >
           Video
         </p>
-        <div className="items-center px-7 cursor-pointer like inline text-gray-600 font-bold">
+        <div
+          className="items-center px-7 cursor-pointer inline text-gray-600 font-bold"
+          id={styles.like}
+          onClick={() => setClickLike(false)}
+        >
           <svg
             className="inline"
             xmlns="http://www.w3.org/2000/svg"
@@ -84,128 +102,11 @@ const UserDetail = () => {
           </svg>
           <span className="text-lg ml-2 pb-2">Yêu Thích</span>
         </div>
-        <div className="items-center px-7 pb-2 cursor-pointer liked inline text-gray-600 font-bold">
-          <svg
-            className="inline"
-            xmlns="http://www.w3.org/2000/svg"
-            height="15"
-            width="15"
-            viewBox="0 0 448 512"
-            fill="#475569"
-          >
-            <path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z" />
-          </svg>
-          <span className="text-lg ml-2">Đã Thích</span>
-        </div>
-        <div className="ddd"></div>
+        <div className={`${clickLike ? styles.ddd : styles.aaa}`}></div>
       </div>
-
-      <div className="grid grid-cols-6 gap-4 mt-2">
-        <div className="bg-slate-700">
-          <div>
-            <div>
-              <video className="h-72  rounded-md">
-                <source src={video} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            {/* <div className="bg-slate-700">
-              <svg
-                className="like-icon tiktok-h342g4-StyledPlay e148ts225"
-                width="18"
-                data-e2e=""
-                height="18"
-                viewBox="0 0 48 48"
-                fill="#fff"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M16 10.554V37.4459L38.1463 24L16 10.554ZM12 8.77702C12 6.43812 14.5577 4.99881 16.5569 6.21266L41.6301 21.4356C43.5542 22.6038 43.5542 25.3962 41.6301 26.5644L16.5569 41.7873C14.5577 43.0012 12 41.5619 12 39.223V8.77702Z"
-                ></path>
-              </svg>
-              <strong
-                data-e2e="video-views"
-                className="video-count tiktok-1nb981f-StrongVideoCount e148ts222"
-              >
-                56.5K
-              </strong>
-            </div> */}
-          </div>
-          <div className="pt-2 px-2">
-            <p>Title của AAAAA </p>
-          </div>
-        </div>
-        <div>
-          <div>
-            <video className="h-72 rounded-md">
-              <source src={video} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-          <div className="pt-2 px-2 ">
-            <p>Title của video </p>
-          </div>
-        </div>
-        <div>
-          <div>
-            <video controls className="h-72 rounded-md">
-              <source src={video} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-          <div className="pt-2 px-2 ">
-            <p>Title của video </p>
-          </div>
-        </div>
-        <div>
-          <div>
-            <video controls className="h-72 rounded-md">
-              <source src={video} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-          <div className="pt-2 px-2 ">
-            <p>Title của video </p>
-          </div>
-        </div>
-        <div>
-          <div>
-            <video controls className="h-72 rounded-md">
-              <source src={video} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-          <div className="pt-2 px-2 ">
-            <p>Title của video </p>
-          </div>
-        </div>
-        <div>
-          <div>
-            <video controls className="h-72 rounded-md">
-              <source src={video} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-          <div className="pt-2 px-2 ">
-            <p>Title của video </p>
-          </div>
-        </div>
-        <div>
-          <div>
-            <video controls className="h-72 rounded-md">
-              <source src={video} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-          <div className="pt-2 px-2 ">
-            <p>Title của video </p>
-          </div>
-        </div>
-      </div>
+      {clickLike ? <UserDetailVideos /> : <p>chưa có video</p>}
+      {clickEdit ? <EditUserInfor setClickEdit={setClickEdit} /> : <div></div>}
     </div>
   );
 };
-
 export default UserDetail;
