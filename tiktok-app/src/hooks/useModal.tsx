@@ -2,13 +2,15 @@ import { useContext } from "react"
 import { WrapperContext } from "@/context/WrapperApp"
 function useModal() {
 
-    const { modalState, setModalState, modalIsOpen, setModalIsOpen } = useContext(WrapperContext)
+    const { modalState, setModalState, modalIsOpen, setModalIsOpen, currentUser, setCurrentUser, onlineUsers, setOnlineUsers } = useContext(WrapperContext)
 
     return {
         modalState,
         setModalState,
         modalIsOpen,
-        setModalIsOpen
+        setModalIsOpen,
+        currentUser,
+        setCurrentUser,
     }
 }
 

@@ -15,6 +15,10 @@ const Navbar = () => {
     setModalIsOpen(true);
   };
 
+  const onChat = () => {
+    navigate('/chat')
+  }
+
   return (
     <div className="flex justify-between items-center p-3 border-b-[1px] bg-white fixed w-full z-50 top-0">
       <div className="flex-1">
@@ -50,7 +54,7 @@ const Navbar = () => {
           Đăng nhập
         </button> */}
         <div className="flex items-center gap-5">
-          <button>
+          <button onClick={() => onChat()}>
             <i className="far fa-comment-alt text-xl"></i>
           </button>
           <div className="relative">

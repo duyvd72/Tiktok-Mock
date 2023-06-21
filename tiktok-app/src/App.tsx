@@ -7,7 +7,8 @@ import WrapperApp from '@/context/WrapperApp';
 import UploadVideo from '@/pages/User/UploadVideo/UploadVideo';
 import VideoDetails from "@/pages/User/VideoDetails/VideoDetails";
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify'
+import Chat from "@/components/Chat";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/userId" element={<UserDetail />}></Route>
           <Route path="/following" element={<NewsFeed />} />
           <Route path="/explore" element={<ComingSoon />}></Route>
+          <Route path="/chat" element={<Chat />}></Route>
           <Route path="/live" element={<ComingSoon />}></Route>
           <Route path="/upload" element={<UploadVideo />} />
         </Route>

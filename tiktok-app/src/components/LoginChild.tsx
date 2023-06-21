@@ -6,10 +6,11 @@ import LOCALSTORAGE from '@/util/LocalStorage'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router'
 import useModal from '@/hooks/useModal'
+import jwt from 'jwt-decode'
 function LoginChild() {
 
     const navigate = useNavigate()
-    const { setModalIsOpen } = useModal()
+    const { setModalIsOpen, setCurrentUser } = useModal()
     const initialValues = {
         username: '',
         password: ''
@@ -20,6 +21,8 @@ function LoginChild() {
         if (!response._id) {
             toast.error(`${response.message}`)
         } else {
+            const user: any = jwt(response.token)
+            setCurrentUser(user)
             setModalIsOpen(false)
             setTimeout(() => {
                 navigate('/')
