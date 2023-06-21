@@ -1,4 +1,5 @@
-import { Field, Formik, Form, ErrorMessage, useField } from 'formik';
+import UploadButton from '@/components/UploadButton';
+import { Field, Formik, Form, ErrorMessage } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
@@ -16,14 +17,11 @@ const UploadVideo = () => {
       <h1 className="font-bold text-2xl">Tải video lên</h1>
       <p className="text-gray-400">Đăng video vào tài khoản của bạn</p>
       <div className="flex gap-5 mt-5">
-        <div className="flex flex-col justify-center gap-2 w-1/3 px-[3rem] py-[8rem] border-[2px] border-dashed border-gray-300 rounded-md">
-          <i className="fas fa-file-upload text-center text-3xl text-gray-400"></i>
-          <h2 className="font-bold">Chọn video để tải lên</h2>
-          <p className="text-center">Tối đa 30 phút</p>
-          <p className="text-center">Nhỏ hơn 2 GB</p>
-          <button className="text-white bg-[#f32c55] p-2 rounded-[4px] font-bold hover:bg-[#e32b50]">
-            Chọn tập tin
-          </button>
+        <div
+          className="flex justify-center items-center
+            gap-5 w-[280px] h-[420px] border-[2px] p-4 border-dashed border-gray-300 rounded-md"
+        >
+          <UploadButton />
         </div>
         <div className="w-2/3">
           <Formik

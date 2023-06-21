@@ -6,6 +6,7 @@ import defaultAva from '@/assets/images/default-ava.png';
 const Navbar = () => {
   const { setModalIsOpen } = useModal();
   const navigate = useNavigate();
+  const token = localStorage.getItem('token');
 
   const handleUploadBtn = () => {
     navigate('/upload');
@@ -15,9 +16,13 @@ const Navbar = () => {
     setModalIsOpen(true);
   };
 
+  const handleProfileBtn = () => {
+    navigate('/userId');
+  };
+
   const onChat = () => {
-    navigate('/chat')
-  }
+    navigate('/chat');
+  };
 
   return (
     <div className="flex justify-between items-center p-3 border-b-[1px] bg-white fixed w-full z-50 top-0">
@@ -46,25 +51,30 @@ const Navbar = () => {
         >
           <i className="fas fa-plus me-3"></i>Tải lên
         </button>
-        {/* <button
-          className="border px-2 py-1 rounded-[4px]
+        {token == null ? (
+          <button
+            className="border px-2 py-1 rounded-[4px]
             bg-[#fe2c55] hover:bg-[#e32b50] text-white font-bold"
-          onClick={() => onSignIn()}
-        >
-          Đăng nhập
-        </button> */}
-        <div className="flex items-center gap-5">
-          <button onClick={() => onChat()}>
-            <i className="far fa-comment-alt text-xl"></i>
+            onClick={() => onSignIn()}
+          >
+            Đăng nhập
           </button>
-          <div className="relative">
-            <img src={defaultAva} alt="" className="w-[40px] h-[40px]" />
-            <div className="absolute right-0 w-[100px] bg-red-400 hidden">
-              <button className="p-2">My Profile</button>
-              <button className="p-2">Logout</button>
+        ) : (
+          <div className="flex items-center gap-5">
+            <button onClick={onChat}>
+              <i className="far fa-comment-alt text-xl"></i>
+            </button>
+            <div className="relative group">
+              <img src={defaultAva} alt="" className="w-[40px] h-[40px]" />
+              <div className="absolute right-0 w-[100px] bg-red-400 hidden group-hover:block rounded-md">
+                <button className="p-2" onClick={handleProfileBtn}>
+                  My Profile
+                </button>
+                <button className="p-2">Logout</button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

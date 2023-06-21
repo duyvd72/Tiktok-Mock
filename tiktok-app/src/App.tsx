@@ -5,10 +5,10 @@ import ComingSoon from './components/ComingSoon';
 import UserDetail from './components/UserDetail';
 import WrapperApp from '@/context/WrapperApp';
 import UploadVideo from '@/pages/User/UploadVideo/UploadVideo';
-import VideoDetails from "@/pages/User/VideoDetails/VideoDetails";
+import VideoDetails from '@/pages/User/VideoDetails/VideoDetails';
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify'
-import Chat from "@/components/Chat";
+import { ToastContainer } from 'react-toastify';
+import Chat from '@/components/Chat';
 
 function App() {
   return (
