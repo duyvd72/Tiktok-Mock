@@ -51,6 +51,7 @@ const Navbar = () => {
         >
           <i className="fas fa-plus me-3"></i>Tải lên
         </button>
+
         {token == null ? (
           <button
             className="border px-2 py-1 rounded-[4px]
