@@ -62,7 +62,7 @@ const Navbar = () => {
           </button>
         ) : (
           <div className="flex items-center gap-5">
-            <button>
+            <button onClick={onChat}>
               <i className="far fa-comment-alt text-xl"></i>
             </button>
             <div className="relative group">
