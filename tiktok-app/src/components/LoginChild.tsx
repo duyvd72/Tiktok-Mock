@@ -62,8 +62,8 @@ function LoginChild() {
             validate={validateForm}
             onSubmit={handleSubmit}
           >
-            <Form className="w-full flex-col text-center text-white">
-              <div>
+            <Form className="w-full flex flex-col text-white gap-5">
+              <div className="flex flex-col gap-2">
                 <label
                   style={{ minWidth: '100px' }}
                   className="inline-block me-2"
@@ -73,7 +73,7 @@ function LoginChild() {
                 </label>
                 <Field
                   style={{ background: 'rgb(46, 46, 46)' }}
-                  className="py-2 ps-2"
+                  className="py-2 ps-2 rounded-[4px]"
                   type="text"
                   id="username"
                   name="username"
@@ -83,7 +83,7 @@ function LoginChild() {
                 </ErrorMessage>
               </div>
 
-              <div className="my-5">
+              <div className="flex flex-col gap-2">
                 <label
                   style={{ minWidth: '100px' }}
                   className="inline-block me-2"
@@ -93,7 +93,7 @@ function LoginChild() {
                 </label>
                 <Field
                   style={{ background: 'rgb(46, 46, 46)' }}
-                  className="py-2 ps-2"
+                  className="py-2 ps-2 rounded-[4px]"
                   type="password"
                   id="password"
                   name="password"
@@ -103,7 +103,10 @@ function LoginChild() {
                 </ErrorMessage>
               </div>
 
-              <button type="submit" className="font-bold px-6 py-2 bg-red-500">
+              <button
+                type="submit"
+                className="font-bold px-6 py-2 bg-[#fe2c55] rounded-[4px]"
+              >
                 Đăng nhập
               </button>
             </Form>

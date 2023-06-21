@@ -6,6 +6,7 @@ import UserDetail from './components/UserDetail';
 import WrapperApp from '@/context/WrapperApp';
 import UploadVideo from '@/pages/User/UploadVideo/UploadVideo';
 import VideoDetails from '@/pages/User/VideoDetails/VideoDetails';
+<<<<<<< Updated upstream
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Chat from '@/components/Chat';
@@ -35,6 +36,28 @@ function App() {
       </Routes>
       <ToastContainer />
     </>
+=======
+
+function App() {
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <WrapperApp>
+            <Root />
+          </WrapperApp>
+        }
+      >
+        <Route path="/" element={<NewsFeed />}></Route>
+        <Route path="/userId" element={<UserDetail />}></Route>
+        <Route path="/following" element={<NewsFeed />} />
+        <Route path="/explore" element={<ComingSoon />}></Route>
+        <Route path="/live" element={<ComingSoon />}></Route>
+        <Route path="/upload" element={<UploadVideo />} />
+      </Route>
+    </Routes>
+>>>>>>> Stashed changes
   );
 }
 

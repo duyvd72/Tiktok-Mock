@@ -51,6 +51,7 @@ const Navbar = () => {
         >
           <i className="fas fa-plus me-3"></i>Tải lên
         </button>
+
         {token == null ? (
           <button
             className="border px-2 py-1 rounded-[4px]
@@ -61,7 +62,7 @@ const Navbar = () => {
           </button>
         ) : (
           <div className="flex items-center gap-5">
-            <button onClick={onChat}>
+            <button>
               <i className="far fa-comment-alt text-xl"></i>
             </button>
             <div className="relative group">
