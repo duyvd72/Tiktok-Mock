@@ -4,26 +4,32 @@ import NewsFeed from "./pages/User/NewsFeed/NewsFeed";
 import ComingSoon from "./components/ComingSoon";
 import UserDetail from "./components/UserDetail";
 import WrapperApp from "@/context/WrapperApp";
-import Chat from "./components/Chat";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify'
+import Chat from "@/components/Chat";
+
 function App() {
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <WrapperApp>
-            <Root />
-          </WrapperApp>
-        }
-      >
-        <Route path="/" element={<NewsFeed />}></Route>
-        <Route path="/userId" element={<UserDetail />}></Route>
-        <Route path="/following" element={<NewsFeed />} />
-        <Route path="/explore" element={<ComingSoon />}></Route>
-        <Route path="/live" element={<ComingSoon />}></Route>
-        <Route path="/chat" element={<Chat />}></Route>
-      </Route>
-    </Routes>
+    <>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <WrapperApp>
+              <Root />
+            </WrapperApp>
+          }
+        >
+          <Route path="/" element={<NewsFeed />}></Route>
+          <Route path="/userId" element={<UserDetail />}></Route>
+          <Route path="/following" element={<NewsFeed />} />
+          <Route path="/explore" element={<ComingSoon />}></Route>
+          <Route path="/chat" element={<Chat />}></Route>
+          <Route path="/live" element={<ComingSoon />}></Route>
+        </Route>
+      </Routes>
+      <ToastContainer />
+    </>
   );
 }
 
