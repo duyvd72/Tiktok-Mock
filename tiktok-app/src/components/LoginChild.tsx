@@ -1,34 +1,38 @@
 import FooterLoginSignup from '@/components/FooterLoginSignup';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import USER from '@/api/user';
-import LOCALSTORAGE from '@/util/LocalStorage';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import useModal from '@/hooks/useModal';
 import jwt from 'jwt-decode';
+import { setAccessToken } from '@/utils/accessTokenLS';
+import { loginUserAPI } from '@/api/userAPIs';
+import { ILoggingUser } from '@/interfaces/interfaces';
+import { useAppDispatch } from '@/redux/hooks';
 
 function LoginChild() {
   const navigate = useNavigate();
-  const { setModalIsOpen, setCurrentUser } = useModal();
+  const dispatch = useAppDispatch();
+  // const { setModalIsOpen, setCurrentUser } = useModal();
   const initialValues = {
     username: '',
     password: '',
   };
 
-  const handleSubmit = async (values: { [key: string]: any }) => {
-    const response: { [ket: string]: any } = await USER.LOGIN(values);
-    if (!response._id) {
-      toast.error(`${response.message}`);
-    } else {
-      const user: any = jwt(response.token);
-      setCurrentUser(user);
-      setModalIsOpen(false);
-      setTimeout(() => {
-        navigate('/');
-      });
-    }
+  const handleSubmit = (values: ILoggingUser) => {
+    dispatch(loginUserAPI(values));
 
-    LOCALSTORAGE.setToken(response.token);
+    // const response: { [ket: string]: any } = await USER.LOGIN(values);
+    //   if (!response._id) {
+    //     toast.error(`${response.message}`);
+    //   } else {
+    //     const user: any = jwt(response.token);
+    //     setCurrentUser(user);
+    //     setModalIsOpen(false);
+    //     setTimeout(() => {
+    //       navigate('/');
+    //     });
+    //   }
+    //   setAccessToken(response.token);
   };
 
   const validateForm = (values: any) => {

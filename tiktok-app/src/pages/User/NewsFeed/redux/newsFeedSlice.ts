@@ -28,4 +28,13 @@ const newsFeedSlice = createSlice({
   },
 });
 
+// {
+//   [getVideoListAPI.pending]:(state) => {
+//     state.loading = true
+//   },
+//   [getVideoListAPI.fulfilled]:(state,action) => {
+//     state.videoList = action.payload;
+//           state.loading = false
+//   },
+// }
 export default newsFeedSlice;

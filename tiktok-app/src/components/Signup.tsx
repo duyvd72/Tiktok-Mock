@@ -2,7 +2,6 @@ import FooterLoginSignup from '@/components/FooterLoginSignup';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 // import { storage } from '@/firebase/index'
 // import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import USER from '@/api/user';
 
 const Signup = (): JSX.Element => {
   const initialValues = {
@@ -12,18 +11,16 @@ const Signup = (): JSX.Element => {
     fullname: '',
   };
   const handleSubmit = async (values: { [key: string]: any }) => {
-    const result: { [key: string]: any } = await USER.REGISTER({
-      ...values,
-      avatarUrl: '',
-    });
-
-    if (result.status === 'This username has been existed') {
-      console.log(result);
-    }
-
-    if (result.status === 'Create user success') {
-      console.log(result);
-    }
+    // const result: { [key: string]: any } = await USER.REGISTER({
+    //   ...values,
+    //   avatarUrl: '',
+    // });
+    // if (result.status === 'This username has been existed') {
+    //   console.log(result);
+    // }
+    // if (result.status === 'Create user success') {
+    //   console.log(result);
+    // }
     // const storageRef = ref(storage, field?.name);
     // const uploadTask = uploadBytesResumable(storageRef, field as Blob);
     // uploadTask.on("state_changed",
@@ -37,7 +34,6 @@ const Signup = (): JSX.Element => {
     //     },
     //     () => {
     //         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-
     //         });
     //     }
     // );

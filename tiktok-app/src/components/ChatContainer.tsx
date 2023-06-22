@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Formik, Field, Form } from 'formik';
-import axios from '@/config/index';
 import removeCharacter from '@/utils/removeCharacter';
+import axiosInstance from '@/libs/axios/axiosConfig';
 interface IChatContainer {
   socket: any;
   currentUserChat: { [key: string]: any };
@@ -29,10 +29,10 @@ const ChatContainer: React.FC<IChatContainer> = ({
   useEffect(() => {
     if (currentUserChat._id) {
       (async () => {
-        const data = await axios.get(
+        const response = await axiosInstance.get(
           `messages/get?from=${currentUser.id}&to=${currentUserChat._id}`
         );
-        setConservation(data);
+        setConservation(response.data);
       })();
       socket.emit(
         'join-room',
@@ -77,7 +77,7 @@ const ChatContainer: React.FC<IChatContainer> = ({
       },
     ]);
 
-    await axios.post('messages/create', {
+    await axiosInstance.post('messages/create', {
       from: currentUser.id,
       to: currentUserChat._id,
       message: inputMessage,
