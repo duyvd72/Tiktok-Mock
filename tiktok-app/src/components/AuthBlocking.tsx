@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react"
-import LOCALSTORAGE from "@/util/LocalStorage"
 import axios from "axios"
+import { getAccessToken } from "@/utils/accessTokenLS"
+import useModal from "@/hooks/useModal"
+import jwt from 'jwt-decode'
+import Navbar from "./Navbar"
+import NewsFeed from "@/pages/User/NewsFeed/NewsFeed"
+import SideBar from "./SideBar"
+import LoginModal from "./LoginModal"
 
 interface IAuthBlocking {
     children: React.ReactNode
@@ -9,6 +15,7 @@ interface IAuthBlocking {
 const AuthBlocking: React.FC<IAuthBlocking> = ({ children }) => {
 
     const [auth, setAuth] = useState(false)
+    const { setCurrentUser, modalIsOpen } = useModal()
 
     const validateToken = (token: string) => {
         axios.get('/accounts/validatetoken', {
@@ -28,14 +35,26 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children }) => {
     }
 
     useEffect(() => {
-        const token = LOCALSTORAGE.getToken()
+        const token = getAccessToken()
         if (token) {
-            validateToken(token)
+            setCurrentUser(jwt(token))
+            setAuth(true)
         }
-    })
+    }, [])
+
 
     if (!auth) {
-        return <div>...You need to login first</div>
+        return <div>
+            <Navbar />
+            <div className="flex h-[calc(100vh-66px)] mt-[66px]">
+                <SideBar />
+                <div className="p-5 relative ms-[260px] w-full">
+                    <NewsFeed />
+                </div>
+                {modalIsOpen && <LoginModal />}
+            </div>
+
+        </div>
     }
 
     return <main>{children}</main>

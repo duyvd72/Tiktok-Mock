@@ -3,7 +3,6 @@ import Navbar from '../../components/Navbar';
 import SideBar from '../../components/SideBar';
 import LoginModal from '@/components/LoginModal';
 import useModal from '@/hooks/useModal';
-
 const Root = () => {
   const { modalIsOpen } = useModal();
 
