@@ -9,6 +9,7 @@ import VideoDetails from '@/pages/User/VideoDetails/VideoDetails';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Chat from '@/components/Chat';
+import AuthBlocking from './components/AuthBlocking';
 
 function App() {
   return (
@@ -18,7 +19,9 @@ function App() {
           path="/"
           element={
             <WrapperApp>
-              <Root />
+              <AuthBlocking>
+                <Root />
+              </AuthBlocking>
             </WrapperApp>
           }
         >

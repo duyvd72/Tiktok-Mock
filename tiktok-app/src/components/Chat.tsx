@@ -50,7 +50,7 @@ function Chat() {
               <i className="fas fa-cog "></i>
             </p>
           </div>
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 max-h-[520px] overflow-y-auto">
             {listUser &&
               listUser.map((user: any) => {
                 if (user?._id !== currentUser?.id) {

@@ -33,6 +33,7 @@ function useLoginSignUpUser() {
             setModalIsOpen(false)
             setModalState('login')
             dispatch(authenticationSlice.actions.resetLoading())
+            location.reload()
         }
 
         if (isLoading.state === 'success' && isLoading.data?.type !== 'login') {
