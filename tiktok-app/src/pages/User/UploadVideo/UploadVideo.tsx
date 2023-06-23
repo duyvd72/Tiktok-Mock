@@ -1,15 +1,37 @@
+import { uploadVideoAPI } from '@/api/userAPIs';
 import UploadButton from '@/components/UploadButton';
 import { Field, Formik, Form, ErrorMessage } from 'formik';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 const UploadVideo = () => {
+  const [video, setVideo] = useState<undefined | null | string>(null);
+  const [videoUrl, setVideoUrl] = useState('');
+  const [fileName, setFileName] = useState('Chưa chọn file nào');
+
   const navigate = useNavigate();
 
   const handleCancelBtn = () => {
     if (window.confirm('Bạn có muốn hủy bỏ đăng video?')) {
       navigate('/');
     }
+  };
+
+  const handleUploadBtn = async (values: any) => {
+    console.log({
+      videoTitle: values.title,
+      videoHashtag: values.hashtag,
+      videoUrl: videoUrl,
+      userId: '',
+    });
+
+    const uploadingVideo = {
+      videoTitle: values.title,
+      videoHashtag: values.hashtag,
+      videoUrl: videoUrl,
+      userId: '6493181bf3dba4052fba2d6f',
+    };
   };
 
   return (
@@ -21,19 +43,27 @@ const UploadVideo = () => {
           className="flex justify-center items-center
             gap-5 w-[280px] h-[420px] border-[2px] p-4 border-dashed border-gray-300 rounded-md"
         >
-          <UploadButton />
+          <UploadButton
+            video={video}
+            fileName={fileName}
+            setVideo={setVideo}
+            setFileName={setFileName}
+            setVideoUrl={setVideoUrl}
+          />
         </div>
         <div className="w-2/3">
           <Formik
             initialValues={{
               title: '',
               hashtag: '',
+              test: '',
             }}
             validationSchema={Yup.object({
               title: Yup.string().required('Chú thích không được để trống!'),
               hashtag: Yup.string().required('Hash tag không được để trống!'),
+              test: Yup.string(),
             })}
-            onSubmit={() => console.log(123)}
+            onSubmit={(values) => handleUploadBtn(values)}
           >
             <Form className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">
@@ -76,7 +106,12 @@ const UploadVideo = () => {
                 >
                   Hủy bỏ
                 </button>
-                <button className="text-white bg-[#f32c55] py-2 px-10 rounded-[4px] font-bold hover:bg-[#e32b50]">
+                <button
+                  type="submit"
+                  disabled={videoUrl === ''}
+                  className="text-white bg-[#f32c55] py-2 px-10 rounded-[4px]
+                    font-bold hover:bg-[#e32b50] disabled:bg-gray-300"
+                >
                   Đăng
                 </button>
               </div>

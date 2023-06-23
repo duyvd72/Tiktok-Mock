@@ -18,7 +18,7 @@ const NewsFeed = () => {
         <ScrollToTop />
       </div>
       {videoList.map((video) => {
-        return <VideoItem key={video._id} />;
+        return <VideoItem key={video._id} video={video} />;
       })}
     </div>
   );

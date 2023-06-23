@@ -1,8 +1,45 @@
+import { storage } from '@/firebase/index';
+import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { useState } from 'react';
 
-const UploadButton = () => {
-  const [video, setVideo] = useState<undefined | null | string>(null);
-  const [fileName, setFileName] = useState('Chưa chọn file nào');
+interface IProps {
+  video: string | null | undefined;
+  fileName: string;
+  setVideo: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+  setFileName: React.Dispatch<React.SetStateAction<string>>;
+  setVideoUrl: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const UploadButton = (props: IProps) => {
+  const { video, fileName, setVideo, setFileName, setVideoUrl } = props;
+
+  const [process, setProcess] = useState(0);
+
+  const handleChangeFile = (files: FileList | null) => {
+    if (!files) return;
+    const storageRef = ref(storage, files[0].name);
+    const uploadTask = uploadBytesResumable(storageRef, files[0]);
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProcess(progress);
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((videoUrl) => {
+          setVideoUrl(videoUrl);
+          setFileName(files[0].name);
+          setVideo(URL.createObjectURL(files[0]));
+        });
+      }
+    );
+  };
 
   return (
     <div>
@@ -26,12 +63,16 @@ const UploadButton = () => {
               onClick={() => {
                 setVideo(null);
                 setFileName('');
+                setVideoUrl('');
+                setProcess(0);
               }}
             >
               <i className="fas fa-trash-alt"></i>
             </button>
           </div>
         </div>
+      ) : process ? (
+        <p className="text-center">Đang tải lên {process}%</p>
       ) : (
         <div>
           <div className="flex flex-col justify-center text-center gap-3">
@@ -49,15 +90,11 @@ const UploadButton = () => {
 
           <input
             id="uploadBtn"
+            name="video"
             className="hidden"
             type="file"
             accept="video/*"
-            onChange={({ target: { files } }) => {
-              if (files) {
-                setFileName(files[0].name);
-                setVideo(URL.createObjectURL(files[0]));
-              }
-            }}
+            onChange={({ target: { files } }) => handleChangeFile(files)}
           />
         </div>
       )}
