@@ -30,7 +30,7 @@ const UserChat: React.FC<IUserChat> = ({ userData, onlineUsers }) => {
 
     return (
         <main className='flex cursor-pointer'>
-            <div className="rounded-full bg-white m-3 flex justify-center items-center relative" >
+            <div className="rounded-full bg-white m-3 flex justify-center items-center relative " >
                 <div className={`rounded-full absolute right-[-5px] top-[-10px] w-[15px] h-[15px] ${isOnline ? `bg-green-600` : `bg-red-400`}`}></div>
                 {userData && userData.avatarUrl ?
                     <img src={userData.avatarUrl} className='h-[50px] w-[50px] rounded-full' alt="" />
@@ -39,8 +39,8 @@ const UserChat: React.FC<IUserChat> = ({ userData, onlineUsers }) => {
                 }
             </div>
             <div className=' flex flex-col justify-center w-[190px]'>
-                <p className='text-ellipsis whitespace-nowrap overflow-hidden'>{userData.fullname}</p>
-                <p className='text-sm'>{isOnline ? 'Đang hoạt động' : (Date.now() - timeOffline) > 1000 * 60 * 60 * 24 ? 'Đang offline' : ((Date.now() - timeOffline) / 3600000) > 1 ? Math.floor(Date.now() - timeOffline) / 3600000 : "Đang offline"}</p>
+                <p className='text-ellipsis whitespace-nowrap overflow-hidden font-bold'>{userData.fullname}</p>
+                <p className='text-sm'>{isOnline ? 'Đang hoạt động' : (Date.now() - timeOffline) > 1000 * 60 * 60 * 24 ? 'Đang offline' : ((Date.now() - timeOffline) / 3600000) > 1 ? `${Math.floor((Date.now() - timeOffline) / 3600000)} giờ trước` : "Đang offline"}</p>
             </div>
         </main>
     )

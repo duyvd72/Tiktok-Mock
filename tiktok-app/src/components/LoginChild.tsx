@@ -1,38 +1,19 @@
 import FooterLoginSignup from '@/components/FooterLoginSignup';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router';
-import useModal from '@/hooks/useModal';
-import jwt from 'jwt-decode';
-import { setAccessToken } from '@/utils/accessTokenLS';
-import { loginUserAPI } from '@/api/userAPIs';
 import { ILoggingUser } from '@/interfaces/interfaces';
-import { useAppDispatch } from '@/redux/hooks';
-
+import useLoginSignUpUser from '@/hooks/useLoginSignUpUser'
+import LoadingSpinner from '@/components/LoadingSpinner';
 function LoginChild() {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  // const { setModalIsOpen, setCurrentUser } = useModal();
+  const { isLoading, userLogin } = useLoginSignUpUser()
   const initialValues = {
     username: '',
     password: '',
   };
 
   const handleSubmit = (values: ILoggingUser) => {
-    dispatch(loginUserAPI(values));
 
-    // const response: { [ket: string]: any } = await USER.LOGIN(values);
-    //   if (!response._id) {
-    //     toast.error(`${response.message}`);
-    //   } else {
-    //     const user: any = jwt(response.token);
-    //     setCurrentUser(user);
-    //     setModalIsOpen(false);
-    //     setTimeout(() => {
-    //       navigate('/');
-    //     });
-    //   }
-    //   setAccessToken(response.token);
+    userLogin(values)
+
   };
 
   const validateForm = (values: any) => {
@@ -69,7 +50,6 @@ function LoginChild() {
             <Form className="w-full flex flex-col text-white gap-5">
               <div className="flex flex-col gap-2">
                 <label
-                  style={{ minWidth: '100px' }}
                   className="inline-block me-2"
                   htmlFor="username"
                 >
@@ -89,7 +69,6 @@ function LoginChild() {
 
               <div className="flex flex-col gap-2">
                 <label
-                  style={{ minWidth: '100px' }}
                   className="inline-block me-2"
                   htmlFor="password"
                 >
@@ -109,9 +88,9 @@ function LoginChild() {
 
               <button
                 type="submit"
-                className="font-bold px-6 py-2 bg-[#fe2c55] rounded-[4px]"
+                className="font-bold px-6 py-3 bg-[#fe2c55] rounded-[4px] flex justify-center"
               >
-                Đăng nhập
+                {isLoading.loading ? <LoadingSpinner height={8} /> : "Đăng nhập"}
               </button>
             </Form>
           </Formik>

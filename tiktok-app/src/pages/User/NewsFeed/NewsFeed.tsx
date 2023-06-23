@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 const NewsFeed = () => {
   const dispatch = useAppDispatch();
   const videoList = useAppSelector((state) => state.newsFeed.videoList);
-  console.log(videoList);
 
   useEffect(() => {
     dispatch(getVideoListAPI());

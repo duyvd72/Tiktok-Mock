@@ -21,6 +21,13 @@ export interface ILoggingUser {
   password: string;
 }
 
+export interface ISignUpUser {
+  username: string;
+  password: string;
+  nickname: string;
+  fullname: string;
+}
+
 export interface ICurrentUser {
   _id: string;
   username: string;
@@ -37,4 +44,12 @@ export interface ICurrentUser {
   createdAt: string;
   status: string;
   __v: number;
+}
+
+
+export interface IAccountItem {
+  avatarUrl: string,
+  nickname: string,
+  fullname: string
+  _id?: string
 }
