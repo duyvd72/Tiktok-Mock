@@ -1,83 +1,54 @@
 import styles from "@/styles/userDetail.module.css";
 import img from "../assets/images/comingsoon.png";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
 import { ErrorMessage, Field, Formik } from "formik";
 import * as Yup from "yup";
+import { InitialValuesContext } from "./UserDetail";
 
 interface EditUserInforProps {
   setClickEdit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-interface IUserInfo {
-  _id: Object;
-  avatarUrl: string;
-  nickname: string;
-  fullname: string;
-  username: string;
-  password: string;
-  role: string;
-  myVideo: Array<string>;
-  videoliked: Array<string>;
-  following: Array<string>;
-  follow: Array<string>;
-  createdAt: Date;
-  updatedAt: Date;
-  bio: String;
-  __v: Number;
-}
-
 const EditUserInfor = ({ setClickEdit }: EditUserInforProps) => {
-  const [userUrlList, setUserUrlList] = useState<IUserInfo | undefined>(
-    undefined
-  );
-  const [nickname, setNickname] = useState("");
+  const initialValues = useContext(InitialValuesContext);
+  console.log("initialValues", initialValues);
 
-  useEffect(() => {
+  const handleUpdateUser = (values: any) => {
     axios
-      .get("http://localhost:3005/accounts/searchuser/6493178af3dba4052fba2d6c")
+      .put(
+        `http://localhost:3005/accounts/6493178af3dba4052fba2d6c/update`,
+        values
+      )
       .then((response) => {
-        setUserUrlList(response.data);
+        console.log("User updated successfully:", response.data);
       })
       .catch((err) => console.log(err));
-  }, []);
-
-  const handleNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("nickname: ", nickname);
-
-    setNickname(e.target.value);
   };
-
-  const handleUpdateUser = async () => {
-    return axios.put(
-      `http://localhost:3005/accounts/6493178af3dba4052fba2d6c/update`,
-      {
-        nickname: nickname,
-      }
-    );
-  };
-  console.log("nickname", userUrlList?.nickname.toString());
 
   return (
-    <div className="fixed inset-0 z-50 py-5" id={styles.edit}>
+    <div className="fixed inset-0 z-50 py-5 overflow-y-auto" id={styles.edit}>
       <Formik
-        initialValues={{
-          nickname: userUrlList?.nickname.toString(),
-          fullname: userUrlList?.fullname.toString(),
-          bio: "",
-        }}
+        initialValues={initialValues}
         validationSchema={Yup.object().shape({
-          nickname: Yup.string().matches(
-            /^[A-Za-z0-9_.]+$/,
-            "Đoạn mã không hợp lệ"
-          ),
+          nickname: Yup.string()
+            .required("không được để trống TikTokID")
+            .matches(/^[A-Za-z0-9_.]+$/, "Đoạn mã không hợp lệ")
+            .min(3, "TikTokID phải gồm ít nhất 3 kí tự")
+            .max(24, "Tối đa 24 kí tự"),
+          fullname: Yup.string().max(30, "Tối đa 30 kí tự"),
+          bio: Yup.string().max(80, "Tối đa 80 kí tự"),
         })}
-        onSubmit={(value) => console.log(value)}
+        onSubmit={(values) => {
+          console.log("values", values);
+
+          handleUpdateUser(values);
+        }}
       >
         {(formik) => {
           return (
             <form onSubmit={formik.handleSubmit}>
-              <div className="bg-white w-2/3 rounded-md m-auto overflow-y-auto">
+              <div className="bg-white w-1/2 rounded-md m-auto ">
                 <div className="flex justify-between border-slate-400 border-b py-2 px-5">
                   <p className="font-bold text-2xl">Sửa hồ sơ</p>
                   <div onClick={() => setClickEdit(false)}>
@@ -94,11 +65,23 @@ const EditUserInfor = ({ setClickEdit }: EditUserInforProps) => {
                 <div className="flex p-5 border-slate-400 border-b">
                   <p className="w-1/4 font-bold">Ảnh hồ sơ</p>
                   <div className="w-2/4">
-                    <img
-                      src={img}
-                      alt="avatar"
-                      className="w-28 h-28 rounded-full cursor-pointer m-auto"
-                    />
+                    <div className="relative w-fit m-auto cursor-pointer">
+                      <img
+                        src={img}
+                        alt="avatar"
+                        className="w-28 h-28 rounded-full cursor-pointer m-auto"
+                      />
+                      <div className="rounded-full border border-gray absolute right-0 bottom-1 bg-white p-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="20"
+                          viewBox="0 0 512 512"
+                          fill="#000000"
+                        >
+                          <path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z" />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="flex p-5 border-slate-400 border-b">
@@ -108,13 +91,11 @@ const EditUserInfor = ({ setClickEdit }: EditUserInforProps) => {
                       name="nickname"
                       type="text"
                       className="w-full bg-gray-200 h-10 rounded-md p-3 mb-1"
-                      onChange={handleNickName}
-                      placeholder={userUrlList?.nickname.toString()}
                     />
                     <ErrorMessage
                       name="nickname"
                       render={(msg: string) => (
-                        <p className="text-red-800">{msg}</p>
+                        <p className="text-red-800 text-xs">{msg}</p>
                       )}
                     />
                     <label htmlFor="" className="text-slate-500 text-xs">
@@ -130,17 +111,15 @@ const EditUserInfor = ({ setClickEdit }: EditUserInforProps) => {
                     <Field
                       name="fullname"
                       type="text"
+                      onChange={formik.handleChange}
                       className="w-full bg-gray-200 h-10 rounded-md p-3 mb-1"
                     />
                     <ErrorMessage
                       name="fullname"
                       render={(msg: string) => (
-                        <p className="text-red-800">{msg}</p>
+                        <p className="text-red-800 text-xs">{msg}</p>
                       )}
                     />
-                    <label htmlFor="" className="text-slate-500 text-xs">
-                      Bạn chỉ có thể thay đổi biệt danh 7 ngày một lần.
-                    </label>
                   </div>
                 </div>
                 <div className="flex p-5 border-slate-400 border-b">
@@ -158,13 +137,14 @@ const EditUserInfor = ({ setClickEdit }: EditUserInforProps) => {
                 </div>
                 <div className="flex flex-row-reverse p-5 border-slate-400 border-b">
                   <button
-                    className="bg-gray-200 w-32 px-5 py-2 mr-2 rounded-md"
-                    onClick={handleUpdateUser}
+                    // bg-gray-200 border-gray-500
+                    className="w-32 px-5 py-2 ml-5 mr-2 rounded-md bg-[#fe2c55] text-white"
+                    type="submit"
                   >
                     Lưu
                   </button>
                   <button
-                    className="w-32 px-5 py-2 mr-2 rounded-md border border-gray-800"
+                    className="border-gray-300 w-32 px-5 py-2 mr-2 rounded-md border"
                     onClick={() => setClickEdit(false)}
                   >
                     Hủy
