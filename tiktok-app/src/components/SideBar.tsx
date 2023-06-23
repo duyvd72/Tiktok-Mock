@@ -14,14 +14,12 @@ const SideBar = () => {
   const [seeLess, setSeeLess] = useState(false);
 
   useEffect(() => {
-    if (currentUser?.id) {
+    if (currentUser?._id) {
       (async () => {
         try {
-          const reponse = await axiosInstance.get(
-            `/accounts/searchuser/${currentUser.id}`
-          );
-          setUser(reponse.data);
-          setMaxFollowing(reponse.data.following.length);
+          const reponse = await axiosInstance.get(`/accounts/searchuser/${currentUser.id}`);
+          setUser(reponse.data)
+          setMaxFollowing(reponse.data.following.length)
         } catch (error) {
           console.log('res', error);
         }
@@ -63,33 +61,18 @@ const SideBar = () => {
         </NavLink>
       </div>
       <div className="p-3 flex flex-col gap-3 border-t-[1px]">
+
         {currentUser?.id ? (
           <>
-            <p
-              className="text-sm font-semibold relative left-[-10px] "
-              style={{ color: 'rgba(22, 24, 35, .75)' }}
-            >
-              Following accounts
-            </p>
-            {renderFollowingAccounts &&
-              renderFollowingAccounts.map((item: IAccountItem) => (
-                <AccountItem
-                  key={item._id}
-                  avatarUrl={item.avatarUrl}
-                  nickname={item.nickname}
-                  fullname={item.fullname}
-                />
-              ))}
-            {renderFollowingAccounts && renderFollowingAccounts.length > 0 ? (
-              <p
-                className="text-[#fe2c55] font-bold text-sm cursor-pointer"
-                onClick={onLoadMore}
-              >
-                {seeLess ? 'See less' : 'See more'}
-              </p>
-            ) : (
-              <p>You don't follow anyone</p>
-            )}
+            <p className='text-sm font-semibold relative left-[-10px] ' style={{ color: 'rgba(22, 24, 35, .75)' }}>Following accounts</p>
+            {renderFollowingAccounts && renderFollowingAccounts.map((item: IAccountItem) => (
+              <AccountItem key={item._id} avatarUrl={item.avatarUrl} nickname={item.nickname} fullname={item.fullname} />
+            ))}
+            {renderFollowingAccounts && renderFollowingAccounts.length > 0
+              ?
+              <p className='text-[#fe2c55] font-bold text-sm cursor-pointer' onClick={onLoadMore}>{seeLess ? 'See less' : 'See more'}</p>
+              :
+              <p>You don't follow anyone</p>}
           </>
         ) : (
           <>

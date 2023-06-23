@@ -36,7 +36,7 @@ const ChatContainer: React.FC<IChatContainer> = ({
       socket.emit(
         'join-room',
         Math.abs(
-          removeCharacter(currentUser.id) - removeCharacter(currentUserChat._id)
+          removeCharacter(currentUser._id) - removeCharacter(currentUserChat._id)
         )
       );
     }
@@ -63,7 +63,7 @@ const ChatContainer: React.FC<IChatContainer> = ({
     socket.emit(
       'send-message',
       Math.abs(
-        removeCharacter(currentUser.id) - removeCharacter(currentUserChat._id)
+        removeCharacter(currentUser._id) - removeCharacter(currentUserChat._id)
       ),
       {
         message: inputMessage,
@@ -96,7 +96,7 @@ const ChatContainer: React.FC<IChatContainer> = ({
 
   return (
     <main className='flex-1 flex flex-col '>
-      <div className={`flex-1 flex flex-col border-b-2 p-3 overflow-y-auto `} >
+      <div className={`flex-1 flex flex-col max-h-[440px] border-b-2 p-3 overflow-y-auto `} >
         {conservation.map((item, index) => (
           <div key={index} ref={scrollRef} className={`${item.sender === currentUser.id ? `flex justify-end mt-5 ` : 'flex items-center mt-5'}`}>
             {item.sender !== currentUser.id ? currentUserChat && currentUserChat.avatarUrl ?
