@@ -1,6 +1,6 @@
 import ButtonGroup from '@/pages/User/NewsFeed/components/ButtonGroup/ButtonGroup';
-import video from '@/assets/videos/test-tiktok.mp4';
 import { IVideo } from '@/interfaces/interfaces';
+import defaultAva from '@/assets/images/default-ava.png';
 
 interface IProps {
   video: IVideo;
@@ -15,19 +15,19 @@ const VideoItem = (props: IProps) => {
         <div>
           <img
             className="w-[56px] h-[56px] rounded-full"
-            src="https://gamek.mediacdn.vn/133514250583805952/2022/2/14/levi-gam-seagames31-2-16448385450131496240851.jpg"
+            src={video.ownerVideo.avatarUrl || defaultAva}
             alt=""
           />
         </div>
         <div className="w-[50%]">
           <div className="flex items-center gap-2">
-            <p className="font-bold">levi</p>
-            <p className="text-sm">Đỗ Duy Khánh</p>
+            <p className="font-bold">{video.ownerVideo.nickname}</p>
+            <p className="text-sm">{video.ownerVideo.fullname}</p>
           </div>
           <div>
             <p>
               {video.videoTitle}
-              <strong>{video.videoHastag}</strong>
+              <strong>{video.videoHashtag}</strong>
             </p>
           </div>
           <div className="flex gap-5 mt-3  w-[70%]">

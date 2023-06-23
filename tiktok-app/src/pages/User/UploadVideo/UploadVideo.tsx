@@ -3,12 +3,14 @@ import UploadButton from '@/components/UploadButton';
 import { Field, Formik, Form, ErrorMessage } from 'formik';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 const UploadVideo = () => {
   const [video, setVideo] = useState<undefined | null | string>(null);
   const [videoUrl, setVideoUrl] = useState('');
   const [fileName, setFileName] = useState('Chưa chọn file nào');
+  const [process, setProcess] = useState(0);
 
   const navigate = useNavigate();
 
@@ -18,20 +20,28 @@ const UploadVideo = () => {
     }
   };
 
-  const handleUploadBtn = async (values: any) => {
-    console.log({
-      videoTitle: values.title,
-      videoHashtag: values.hashtag,
-      videoUrl: videoUrl,
-      userId: '',
-    });
-
+  const handleUploadBtn = (values: any, { resetForm }: any) => {
     const uploadingVideo = {
       videoTitle: values.title,
       videoHashtag: values.hashtag,
       videoUrl: videoUrl,
       userId: '6493181bf3dba4052fba2d6f',
     };
+
+    console.log('uploadingVideo', uploadingVideo);
+
+    uploadVideoAPI(uploadingVideo)
+      .then(() => {
+        setVideo(null);
+        setFileName('');
+        setVideoUrl('');
+        setProcess(0);
+        toast.success('Đăng tải video thành công!');
+        resetForm();
+      })
+      .catch((err) => {
+        toast.error(err);
+      });
   };
 
   return (
@@ -46,9 +56,11 @@ const UploadVideo = () => {
           <UploadButton
             video={video}
             fileName={fileName}
+            process={process}
             setVideo={setVideo}
             setFileName={setFileName}
             setVideoUrl={setVideoUrl}
+            setProcess={setProcess}
           />
         </div>
         <div className="w-2/3">
@@ -56,14 +68,12 @@ const UploadVideo = () => {
             initialValues={{
               title: '',
               hashtag: '',
-              test: '',
             }}
             validationSchema={Yup.object({
               title: Yup.string().required('Chú thích không được để trống!'),
               hashtag: Yup.string().required('Hash tag không được để trống!'),
-              test: Yup.string(),
             })}
-            onSubmit={(values) => handleUploadBtn(values)}
+            onSubmit={handleUploadBtn}
           >
             <Form className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">

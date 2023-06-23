@@ -2,7 +2,7 @@ export interface IVideo {
   _id: string;
   videoUrl: string;
   videoTitle: string;
-  videoHastag: string;
+  videoHashtag: string;
   ownerVideo: {
     _id: string;
     avatarUrl: string;

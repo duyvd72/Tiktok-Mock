@@ -5,15 +5,23 @@ import { useState } from 'react';
 interface IProps {
   video: string | null | undefined;
   fileName: string;
+  process: number;
   setVideo: React.Dispatch<React.SetStateAction<string | null | undefined>>;
   setFileName: React.Dispatch<React.SetStateAction<string>>;
   setVideoUrl: React.Dispatch<React.SetStateAction<string>>;
+  setProcess: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const UploadButton = (props: IProps) => {
-  const { video, fileName, setVideo, setFileName, setVideoUrl } = props;
-
-  const [process, setProcess] = useState(0);
+  const {
+    video,
+    fileName,
+    process,
+    setVideo,
+    setFileName,
+    setVideoUrl,
+    setProcess,
+  } = props;
 
   const handleChangeFile = (files: FileList | null) => {
     if (!files) return;
