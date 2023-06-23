@@ -17,7 +17,7 @@ const SideBar = () => {
     if (currentUser?._id) {
       (async () => {
         try {
-          const reponse = await axiosInstance.get(`/accounts/searchuser/${currentUser.id}`);
+          const reponse = await axiosInstance.get(`/accounts/searchuser/${currentUser._id}`);
           setUser(reponse.data)
           setMaxFollowing(reponse.data.following.length)
         } catch (error) {
@@ -62,7 +62,7 @@ const SideBar = () => {
       </div>
       <div className="p-3 flex flex-col gap-3 border-t-[1px]">
 
-        {currentUser?.id ? (
+        {currentUser?._id ? (
           <>
             <p className='text-sm font-semibold relative left-[-10px] ' style={{ color: 'rgba(22, 24, 35, .75)' }}>Following accounts</p>
             {renderFollowingAccounts && renderFollowingAccounts.map((item: IAccountItem) => (
