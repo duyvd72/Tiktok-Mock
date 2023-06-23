@@ -1,7 +1,14 @@
 import ButtonGroup from '@/pages/User/NewsFeed/components/ButtonGroup/ButtonGroup';
 import video from '@/assets/videos/test-tiktok.mp4';
+import { IVideo } from '@/interfaces/interfaces';
 
-const VideoItem = () => {
+interface IProps {
+  video: IVideo;
+}
+
+const VideoItem = (props: IProps) => {
+  const { video } = props;
+
   return (
     <div className="w-[80%] mx-auto">
       <div className="flex gap-4 justify-center">
@@ -19,10 +26,8 @@ const VideoItem = () => {
           </div>
           <div>
             <p>
-              Touch 👌 Pass 😬 Reaction{' '}
-              <strong>
-                #UnitedOnTikTok #MUFC #ManUtd #OldTrafford #Totti #SoccerAid
-              </strong>
+              {video.videoTitle}
+              <strong>{video.videoHastag}</strong>
             </p>
           </div>
           <div className="flex gap-5 mt-3  w-[70%]">
@@ -41,7 +46,7 @@ const VideoItem = () => {
                 </div>
               </div>
               <video className="rounded-lg">
-                <source src={video} type="video/mp4" />
+                <source src={video.videoUrl} type="video/mp4" />
               </video>
             </div>
             <div className="mt-auto">

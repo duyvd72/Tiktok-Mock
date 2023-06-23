@@ -1,4 +1,9 @@
-import { ICurrentUser, ILoggingUser, IVideo } from '@/interfaces/interfaces';
+import {
+  ICurrentUser,
+  ILoggingUser,
+  IUploadingVideo,
+  IVideo,
+} from '@/interfaces/interfaces';
 import axiosInstance from '@/libs/axios/axiosConfig';
 import { setAccessToken } from '@/utils/accessTokenLS';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -30,3 +35,14 @@ export const loginUserAPI = createAsyncThunk(
     }
   }
 );
+
+export const uploadVideoAPI = async (
+  uploadingVideo: IUploadingVideo
+): Promise<IVideo> => {
+  try {
+    const response = await axiosInstance.post('videos/upload', uploadingVideo);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to upload video!');
+  }
+};

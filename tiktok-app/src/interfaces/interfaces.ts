@@ -38,3 +38,10 @@ export interface ICurrentUser {
   status: string;
   __v: number;
 }
+
+export interface IUploadingVideo {
+  userId: string;
+  videoTitle: string;
+  videoHashtag: string;
+  videoUrl: string;
+}
