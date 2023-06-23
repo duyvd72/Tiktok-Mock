@@ -30,7 +30,13 @@ const SideBar = () => {
 
   const onLoadMore = () => {
     if (loadMore <= maxFollowing) {
-      setLoadMore(loadMore + 5)
+      setLoadMore(prev => {
+        if (prev + 5 > maxFollowing) {
+          setSeeLess(true)
+        }
+        return prev + 5
+      })
+
     } else {
       if (seeLess) {
         setLoadMore(loadMore - 5)
@@ -64,7 +70,11 @@ const SideBar = () => {
             {renderFollowingAccounts && renderFollowingAccounts.map((item: IAccountItem) => (
               <AccountItem key={item._id} avatarUrl={item.avatarUrl} nickname={item.nickname} fullname={item.fullname} />
             ))}
-            <p className='text-[#fe2c55] font-bold text-sm cursor-pointer' onClick={onLoadMore}> {seeLess ? 'See less' : 'See more'}</p>
+            {renderFollowingAccounts && renderFollowingAccounts.length > 0
+              ?
+              <p className='text-[#fe2c55] font-bold text-sm cursor-pointer' onClick={onLoadMore}>{seeLess ? 'See less' : 'See more'}</p>
+              :
+              <p>You don't follow anyone</p>}
           </>
           :
           <>
