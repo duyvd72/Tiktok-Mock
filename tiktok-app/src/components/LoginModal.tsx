@@ -2,10 +2,18 @@ import Login from '@/components/Login';
 import useModal from '@/hooks/useModal';
 import Signup from '@/components/Signup';
 import LoginChild from '@/components/LoginChild';
+import { useEffect } from 'react';
 
 const LoginModal = () => {
-  const { modalState, setModalIsOpen } = useModal();
+  const { modalState, setModalIsOpen, modalIsOpen } = useModal();
 
+  useEffect(() => {
+    if (modalIsOpen) {
+      document.body.style.overflow = 'hidden'
+    }
+
+    return () => { document.body.style.overflow = 'auto' }
+  }, [])
   return (
     <main>
       <div className="relative z-[9999]">
@@ -19,7 +27,7 @@ const LoginModal = () => {
             onClick={() => setModalIsOpen(false)}
           >
             <div
-              className="absolute left-[50%] top-[15%] transform translate-x-[-50%]  overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg  "
+              className="absolute left-[50%] top-[5%] transform translate-x-[-50%]  overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg  "
               style={{ background: 'rgb(37, 37, 37)' }}
               onClick={(e) => e.stopPropagation()}
             >

@@ -33,7 +33,7 @@ function App() {
           <Route path="/upload" element={<UploadVideo />} />
         </Route>
       </Routes>
-      <ToastContainer />
+      <ToastContainer autoClose={500} />
     </>
   );
 }

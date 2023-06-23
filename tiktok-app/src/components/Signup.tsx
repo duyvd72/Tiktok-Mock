@@ -1,42 +1,23 @@
 import FooterLoginSignup from '@/components/FooterLoginSignup';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-// import { storage } from '@/firebase/index'
-// import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-
+import { ISignUpUser } from '@/interfaces/interfaces'
+import useLoginSignUpUser from '@/hooks/useLoginSignUpUser';
+import LoadingSpinner from '@/components/LoadingSpinner'
 const Signup = (): JSX.Element => {
+
+  const { userSignUp, isLoading } = useLoginSignUpUser()
+
   const initialValues = {
     username: '',
     password: '',
     nickname: '',
     fullname: '',
   };
-  const handleSubmit = async (values: { [key: string]: any }) => {
-    // const result: { [key: string]: any } = await USER.REGISTER({
-    //   ...values,
-    //   avatarUrl: '',
-    // });
-    // if (result.status === 'This username has been existed') {
-    //   console.log(result);
-    // }
-    // if (result.status === 'Create user success') {
-    //   console.log(result);
-    // }
-    // const storageRef = ref(storage, field?.name);
-    // const uploadTask = uploadBytesResumable(storageRef, field as Blob);
-    // uploadTask.on("state_changed",
-    //     (_snapshot) => {
-    //         //   const progress =
-    //         //     Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-    //         //   setProgresspercent(progress);
-    //     },
-    //     (error) => {
-    //         alert(error);
-    //     },
-    //     () => {
-    //         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-    //         });
-    //     }
-    // );
+
+  const handleSubmit = async (values: ISignUpUser) => {
+
+    userSignUp(values)
+
   };
 
   const validateForm = (values: any) => {
@@ -48,6 +29,14 @@ const Signup = (): JSX.Element => {
 
     if (!values.password) {
       errors.password = 'Password is required';
+    }
+
+    if (!values.nickname) {
+      errors.username = 'Nickname is required';
+    }
+
+    if (!values.fullname) {
+      errors.password = 'Fullname is required';
     }
 
     return errors;
@@ -78,17 +67,16 @@ const Signup = (): JSX.Element => {
             onSubmit={handleSubmit}
           >
             <Form className="w-full flex-col text-center text-white">
-              <div>
+              <div className='flex flex-col gap-2'>
                 <label
-                  style={{ minWidth: '100px' }}
-                  className="inline-block me-2 text-left"
+                  className=" me-2 text-left"
                   htmlFor="nickname"
                 >
                   Nickname
                 </label>
                 <Field
                   style={{ background: 'rgb(46, 46, 46)' }}
-                  className="py-2 ps-2 mb-2"
+                  className="py-2 ps-2 mb-2 w-full rounded-[4px]"
                   type="text"
                   id="nickname"
                   name="nickname"
@@ -97,17 +85,17 @@ const Signup = (): JSX.Element => {
                   {(msg) => <div className="text-red-500">{msg}</div>}
                 </ErrorMessage>
               </div>
-              <div>
+
+              <div className='flex flex-col gap-2'>
                 <label
-                  style={{ minWidth: '100px' }}
-                  className="inline-block me-2 text-left"
+                  className="me-2 text-left"
                   htmlFor="fullname"
                 >
                   Fullname
                 </label>
                 <Field
                   style={{ background: 'rgb(46, 46, 46)' }}
-                  className="py-2 ps-2 mb-2"
+                  className="py-2 ps-2 mb-2 w-full rounded-[4px]"
                   type="text"
                   id="fullname"
                   name="fullname"
@@ -116,17 +104,17 @@ const Signup = (): JSX.Element => {
                   {(msg) => <div className="text-red-500">{msg}</div>}
                 </ErrorMessage>
               </div>
-              <div>
+
+              <div className='flex flex-col gap-2'>
                 <label
-                  style={{ minWidth: '100px' }}
-                  className="inline-block me-2 text-left"
+                  className="me-2 text-left"
                   htmlFor="username"
                 >
                   Username
                 </label>
                 <Field
                   style={{ background: 'rgb(46, 46, 46)' }}
-                  className="py-2 ps-2"
+                  className="py-2 ps-2 mb-2 w-full rounded-[4px]"
                   type="text"
                   id="username"
                   name="username"
@@ -136,17 +124,16 @@ const Signup = (): JSX.Element => {
                 </ErrorMessage>
               </div>
 
-              <div className="my-5">
+              <div className="flex flex-col gap-2 mb-5">
                 <label
-                  style={{ minWidth: '100px' }}
-                  className="inline-block me-2 text-left"
+                  className="me-2 text-left "
                   htmlFor="password"
                 >
                   Password
                 </label>
                 <Field
                   style={{ background: 'rgb(46, 46, 46)' }}
-                  className="py-2 ps-2"
+                  className="py-2 ps-2 w-full rounded-[4px]"
                   type="password"
                   id="password"
                   name="password"
@@ -157,7 +144,7 @@ const Signup = (): JSX.Element => {
               </div>
 
               <button type="submit" className="font-bold px-6 py-2 bg-red-500">
-                Đăng ký
+                {isLoading.loading ? <LoadingSpinner width={2} height={2} /> : "Đăng ký"}
               </button>
             </Form>
           </Formik>

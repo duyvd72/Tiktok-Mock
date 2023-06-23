@@ -56,11 +56,10 @@ function Chat() {
                 if (user?._id !== currentUser?.id) {
                   return (
                     <section
-                      className={`${
-                        currentUserChat._id == user._id
-                          ? `bg-slate-200`
-                          : `hover:bg-slate-100 `
-                      }`}
+                      className={`${currentUserChat._id == user._id
+                        ? `bg-slate-200`
+                        : `hover:bg-slate-100 `
+                        }`}
                       key={user?._id}
                       onClick={() => {
                         setCurrentUserChat(user);

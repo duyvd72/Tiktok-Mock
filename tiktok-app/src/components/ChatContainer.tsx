@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Formik, Field, Form } from 'formik';
 import removeCharacter from '@/utils/removeCharacter';
 import axiosInstance from '@/libs/axios/axiosConfig';
+
 interface IChatContainer {
   socket: any;
   currentUserChat: { [key: string]: any };
@@ -20,11 +20,10 @@ const ChatContainer: React.FC<IChatContainer> = ({
   currentUser,
   currentUserChat,
 }) => {
-  const [conservation, setConservation] = useState<IMessage[]>([]);
-  const scrollRef = useRef<any>();
-  const initialValues = {
-    message: '',
-  };
+  const [conservation, setConservation] = useState<IMessage[]>([])
+  const scrollRef = useRef<any>()
+  const [message, setMessage] = useState('')
+  const count = useRef<any>(0)
 
   useEffect(() => {
     if (currentUserChat._id) {
@@ -47,9 +46,14 @@ const ChatContainer: React.FC<IChatContainer> = ({
 
   useEffect(() => {
     socket.on('message-receive', (data: any) => {
-      setConservation((prevMessages) => [...prevMessages, data]);
+      count.current += 1
+      if (count.current <= 1) {
+        setConservation((prevMessages) => [...prevMessages, data]);
+      } else {
+        count.current = 0
+      }
     });
-  }, []);
+  }, [])
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
@@ -84,52 +88,53 @@ const ChatContainer: React.FC<IChatContainer> = ({
     });
   };
 
+  const handleSubmit = (e: any) => {
+    e.preventDefault()
+    sendMessage(message)
+    setMessage('')
+  }
+
   return (
-    <main>
-      <div className="flex-1 flex flex-col border-b-2 h-[440px] overflow-y-auto p-3">
+    <main className='flex-1 flex flex-col '>
+      <div className={`flex-1 flex flex-col border-b-2 p-3 overflow-y-auto `} >
         {conservation.map((item, index) => (
-          <div
-            key={item._id}
-            ref={scrollRef}
-            className={`${
-              item.sender === currentUser.id ? `flex justify-end ` : ''
-            }`}
-          >
-            <p
-              className={`${
-                item.sender === currentUser.id
-                  ? ` text-white bg-cyan-500 p-3 rounded-lg w-fit mt-5`
-                  : `text-black mt-5 p-3 rounded-lg w-fit bg-slate-300`
-              }`}
-              key={index}
-            >
-              {item.message}
+          <div key={index} ref={scrollRef} className={`${item.sender === currentUser.id ? `flex justify-end mt-5 ` : 'flex items-center mt-5'}`}>
+            {item.sender !== currentUser.id ? currentUserChat && currentUserChat.avatarUrl ?
+              <img src={currentUserChat.avatarUrl} className='h-[50px] w-[50px] rounded-full' alt="" />
+              :
+              <i className=" fa fa-user h-[50px] w-[50px] ring-1 rounded-full text-2xl text-gray-300 flex justify-center items-center "></i>
+              : ""
+            }
+            <p className={`max-w-[80%] break-words ${item.sender === currentUser.id ?
+              ` text-white bg-cyan-500 p-3 rounded-lg w-fit me-2`
+              :
+              `text-black p-3 ms-2 rounded-lg w-fit bg-slate-300`}`} key={index}>{item.message}
             </p>
+            {item.sender === currentUser.id ? currentUserChat && currentUserChat.avatarUrl ?
+              <img src={currentUserChat.avatarUrl} className='h-[50px] w-[50px] rounded-full' alt="" />
+              :
+              <i className="fa fa-user h-[50px] w-[50px] ring-1 rounded-full text-2xl text-gray-300 flex justify-center items-center "></i>
+              : ""
+            }
           </div>
         ))}
       </div>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={(values, { resetForm }) => {
-          sendMessage(values.message);
-          resetForm();
-        }}
-      >
-        <Form>
-          <div className="bg-white py-3 flex ps-3">
-            <Field
-              placeholder="gửi tin nhắn..."
-              type="text"
-              name="message"
-              className="bg-gray-200 p-2 ps-3 rounded-md w-full outline-none"
-            />
-            <button type="submit" className="text-2xl mx-5">
-              <i className="fas fa-paper-plane text-red-600"></i>
-            </button>
-          </div>
-        </Form>
-      </Formik>
-    </main>
+      <form onSubmit={handleSubmit}>
+        <div className="bg-white py-3 flex ps-3">
+          <input
+            placeholder="gửi tin nhắn..."
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            name="message"
+            className="bg-gray-200 p-2 ps-3 rounded-md w-full outline-none"
+          />
+          <button type="submit" className="text-2xl mx-5" disabled={!message} >
+            <i className={`fas fa-paper-plane  ${message ? 'text-red-600' : 'text-trueGray-500'}`}></i>
+          </button>
+        </div>
+      </form>
+    </main >
   );
 };
 
