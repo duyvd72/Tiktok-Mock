@@ -160,6 +160,7 @@ const UserDetail = () => {
         )}
       </div>
     </InitialValuesContext.Provider>
+    
   );
 };
 export default UserDetail;
