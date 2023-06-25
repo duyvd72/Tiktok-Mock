@@ -52,6 +52,7 @@ export interface IAccountItem {
   fullname: string;
   _id?: string;
 }
+
 export interface IUploadingVideo {
   userId: string;
   videoTitle: string;

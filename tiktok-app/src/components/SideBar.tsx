@@ -72,14 +72,16 @@ const SideBar = () => {
               Following accounts
             </p>
             {renderFollowingAccounts &&
-              renderFollowingAccounts.map((item: IAccountItem) => (
-                <AccountItem
-                  key={item._id}
-                  avatarUrl={item.avatarUrl}
-                  nickname={item.nickname}
-                  fullname={item.fullname}
-                />
-              ))}
+              renderFollowingAccounts.map((item: IAccountItem) => {
+                return (
+                  <AccountItem
+                    key={item._id}
+                    avatarUrl={item.avatarUrl}
+                    nickname={item.nickname}
+                    fullname={item.fullname}
+                  />
+                );
+              })}
             {renderFollowingAccounts && renderFollowingAccounts.length > 0 ? (
               <p
                 className="text-[#fe2c55] font-bold text-sm cursor-pointer"
@@ -88,7 +90,7 @@ const SideBar = () => {
                 {seeLess ? 'See less' : 'See more'}
               </p>
             ) : (
-              <p>You don't follow anyone</p>
+              <p>Bạn vẫn chưa theo dõi ai !</p>
             )}
           </>
         ) : (

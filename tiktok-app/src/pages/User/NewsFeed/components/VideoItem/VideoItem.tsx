@@ -1,7 +1,7 @@
 import ButtonGroup from '@/pages/User/NewsFeed/components/ButtonGroup/ButtonGroup';
 import { IVideo } from '@/interfaces/interfaces';
 import defaultAva from '@/assets/images/default-ava.png';
-import { useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 
 interface IProps {
   video: IVideo;
@@ -9,29 +9,43 @@ interface IProps {
 
 const VideoItem = (props: IProps) => {
   const { video } = props;
-  const videoRef = useRef(null);
+  const videoRef = useRef<any>();
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1);
 
   const handlePlayBtn = () => {
-    const video: any = videoRef.current;
-    if (video.paused) {
-      video.play();
-      setIsPlaying(true);
+    const video = videoRef.current;
+    if (video) {
+      if (video.paused) {
+        video.play();
+        setIsPlaying(true);
+      } else {
+        video.pause();
+        setIsPlaying(false);
+      }
+    }
+  };
+
+  const handleVolumeRange = (e: ChangeEvent<HTMLInputElement>) => {
+    const video = videoRef.current;
+    const newVolume = Number(e.target.value);
+    setVolume(newVolume);
+
+    if (newVolume === 0) {
+      video.muted = true;
     } else {
-      video.pause();
-      setIsPlaying(false);
+      video.muted = false;
+      video.volume = newVolume;
     }
   };
 
   const handleVolumeBtn = () => {
-    const video: any = videoRef.current;
-    if (video.volume === 0) {
-      video.volume = 1;
-      setVolume(1);
-      setVolume(1);
+    const video = videoRef.current;
+    if (volume === 0) {
+      video.muted = false;
+      setVolume(video.volume);
     } else {
-      video.volume = 0;
+      video.muted = true;
       setVolume(0);
     }
   };
@@ -58,7 +72,7 @@ const VideoItem = (props: IProps) => {
             </p>
           </div>
           <div className="flex gap-5 mt-3  w-[70%]">
-            <div className="relative">
+            <div className="relative z-10">
               <div
                 className="absolute z-50 w-full bottom-8 opacity-100 
             hover:opacity-100 transition-opacity ease-in-out"
@@ -71,14 +85,30 @@ const VideoItem = (props: IProps) => {
                       <i className="fas fa-pause"></i>
                     )}
                   </button>
-
-                  <button className="p-2 text-white" onClick={handleVolumeBtn}>
-                    {volume ? (
-                      <i className="fas fa-volume-up"></i>
-                    ) : (
-                      <i className="fas fa-volume-mute"></i>
-                    )}
-                  </button>
+                  <div className="group">
+                    <div className="text-white relative w-[85%] mx-auto">
+                      <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step={0.1}
+                        value={volume}
+                        onChange={handleVolumeRange}
+                        className="absolute w-[70px] right-[-17.5px] bottom-8 cursor-pointer
+                        rotate-[270deg] accent-slate-200 opacity-0 group-hover:opacity-100"
+                      />
+                    </div>
+                    <button
+                      className="p-2 text-white"
+                      onClick={handleVolumeBtn}
+                    >
+                      {volume ? (
+                        <i className="fas fa-volume-up"></i>
+                      ) : (
+                        <i className="fas fa-volume-mute"></i>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
               <video
