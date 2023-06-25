@@ -1,12 +1,12 @@
 import styles from "@/styles/userDetail.module.css";
 import axios from "axios";
-import img from "../assets/images/comingsoon.png";
 import { ChangeEvent, useContext, useState } from "react";
 import { ErrorMessage, Field, Formik } from "formik";
 import * as Yup from "yup";
 import { InitialValuesContext } from "./UserDetail";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useParams } from "react-router-dom";
 
 interface EditUserInforProps {
   setClickEdit: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,13 +16,11 @@ const EditUserInfor = ({ setClickEdit }: EditUserInforProps) => {
   const initialValues = useContext(InitialValuesContext);
   const [changeImage, setChangeImage] = useState(false);
   const [imageState, setImageState] = useState("");
+  const { userId } = useParams();
 
   const handleUpdateUser = (values: any) => {
     axios
-      .put(
-        `http://localhost:3005/accounts/6493178af3dba4052fba2d6c/update`,
-        values
-      )
+      .put(`http://localhost:3005/accounts/${userId}/update`, values)
       .then(() => {
         toast("cập nhật thành công");
         setChangeImage(false);
@@ -56,6 +54,9 @@ const EditUserInfor = ({ setClickEdit }: EditUserInforProps) => {
         }}
       >
         {(formik) => {
+          {
+            console.log("avatarUrl", formik.values.avatarUrl);
+          }
           return (
             <form onSubmit={formik.handleSubmit}>
               <div className="bg-white w-1/2 rounded-md m-auto ">
@@ -77,8 +78,9 @@ const EditUserInfor = ({ setClickEdit }: EditUserInforProps) => {
                   <div className="w-2/4 relative">
                     <div className="w-fit m-auto cursor-pointer">
                       <img
-                        // src={imageState}
-                        src={img}
+                        src={
+                          "blob:http://127.0.0.1:5173/0d035e3a-cb9b-48f3-871f-c6b6bf9d3f4e"
+                        }
                         alt="avatar"
                         className="w-28 h-28 rounded-full cursor-pointer m-auto"
                       />

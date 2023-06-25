@@ -11,9 +11,19 @@ export const WrapperContext = createContext<any>(null);
 const WrapperApp: React.FC<IWrapperApp> = ({ children }) => {
     const [modalState, setModalState] = useState<ModalState>('login')
     const [modalIsOpen, setModalIsOpen] = useState(false)
+    const [currentUser, setCurrentUser] = useState(null)
 
     return (
-        <WrapperContext.Provider value={{ modalState, modalIsOpen, setModalIsOpen, setModalState }}>
+        <WrapperContext.Provider value={
+            {
+                modalState,
+                modalIsOpen,
+                currentUser,
+                setModalIsOpen,
+                setModalState,
+                setCurrentUser,
+            }
+        }>
             {children}
         </WrapperContext.Provider>
     );

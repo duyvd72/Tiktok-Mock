@@ -35,7 +35,7 @@ const UserDetailVideos = () => {
               >
                 <video
                   className="w-full rounded-md"
-                  style={{ height: "340px", width: "100%" }}
+                  style={{ height: "340px", minWidth: "191px" }}
                   onMouseOver={handleOnMouseOver}
                   onMouseOut={handleOnMouseOut}
                   muted

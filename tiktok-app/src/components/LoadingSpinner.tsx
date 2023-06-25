@@ -1,7 +1,14 @@
 import img from '../assets/images/loading.gif';
 
-const LoadingSpinner = () => {
-  return <img className="w-16 h-16" src={img} alt="" />;
+interface ILoadingSpinnerProps {
+  width?: number;
+  height: number;
+};
+
+const LoadingSpinner = (props: ILoadingSpinnerProps) => {
+  const { width = undefined, height } = props;
+
+  return <img className={`w-${width} h-${height}`} src={img} alt="" />;
 };
 
 export default LoadingSpinner;

@@ -1,13 +1,28 @@
-import logo from '../assets/images/logo.png';
-import { NavLink } from 'react-router-dom';
-import useModal from '@/hooks/useModal';
-const Navbar = () => {
+import logo from "../assets/images/logo.png";
+import { NavLink, useNavigate } from "react-router-dom";
+import useModal from "@/hooks/useModal";
+import defaultAva from "@/assets/images/default-ava.png";
 
-  const { setModalIsOpen } = useModal()
+const Navbar = () => {
+  const { setModalIsOpen, currentUser } = useModal();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const handleUploadBtn = () => {
+    navigate("/upload");
+  };
 
   const onSignIn = () => {
-    setModalIsOpen(true)
-  }
+    setModalIsOpen(true);
+  };
+
+  const handleProfileBtn = () => {
+    navigate(`/${currentUser._id}`);
+  };
+
+  const onChat = () => {
+    navigate("/chat");
+  };
 
   return (
     <div className="flex justify-between items-center p-3 border-b-[1px] bg-white fixed w-full z-50 top-0">
@@ -29,20 +44,38 @@ const Navbar = () => {
           <i className="fas fa-search "></i>
         </button>
       </div>
-      <div className="flex flex-1 gap-3 justify-end">
-        <button className="border px-2 py-1 rounded-[4px] font-bold hover:bg-[#12141d10]">
+      <div className="flex flex-1 gap-5 justify-end">
+        <button
+          className="border px-2 py-1 rounded-[4px] font-bold hover:bg-[#12141d10]"
+          onClick={handleUploadBtn}
+        >
           <i className="fas fa-plus me-3"></i>Tải lên
         </button>
-        <button
-          className="border px-2 py-1 rounded-[4px]
-          bg-[#fe2c55] hover:bg-[#e32b50] text-white font-bold"
-          onClick={() => onSignIn()}
-        >
-          Đăng nhập
-        </button>
-        <button className="px-2 py-1">
-          <i className="fas fa-ellipsis-v"></i>
-        </button>
+
+        {token == null ? (
+          <button
+            className="border px-2 py-1 rounded-[4px]
+            bg-[#fe2c55] hover:bg-[#e32b50] text-white font-bold"
+            onClick={() => onSignIn()}
+          >
+            Đăng nhập
+          </button>
+        ) : (
+          <div className="flex items-center gap-5">
+            <button onClick={onChat}>
+              <i className="far fa-comment-alt text-xl"></i>
+            </button>
+            <div className="relative group">
+              <img src={defaultAva} alt="" className="w-[40px] h-[40px]" />
+              <div className="absolute right-0 w-[100px] bg-red-400 hidden group-hover:block rounded-md">
+                <button className="p-2" onClick={handleProfileBtn}>
+                  My Profile
+                </button>
+                <button className="p-2">Logout</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

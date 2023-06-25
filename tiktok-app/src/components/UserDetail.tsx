@@ -4,6 +4,8 @@ import styles from "@/styles/userDetail.module.css";
 import UserDetailVideos from "./UserDetailVideos";
 import EditUserInfor from "./EditUserInfor";
 import axios from "axios";
+import { useParams } from "react-router-dom";
+import useModal from "@/hooks/useModal";
 
 interface IUserInfo {
   avatarUrl: string;
@@ -20,7 +22,10 @@ export const InitialValuesContext = createContext<IUserInfo>({
 const UserDetail = () => {
   const [clickLike, setClickLike] = useState(true);
   const [clickEdit, setClickEdit] = useState(false);
-  const [checkUser, setCheckUser] = useState(true);
+  const { userId } = useParams();
+  const { currentUser } = useModal();
+
+  console.log(currentUser._id === userId);
 
   const [initialValues, setInitialValues] = useState({
     avatarUrl: "",
@@ -31,7 +36,7 @@ const UserDetail = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3005/accounts/searchuser/6493178af3dba4052fba2d6c")
+      .get(`http://localhost:3005/accounts/searchuser/${userId}`)
       .then((response) => {
         setInitialValues({
           avatarUrl: response.data.avatarUrl,
@@ -71,7 +76,7 @@ const UserDetail = () => {
               <p className="text-lg	font-medium cursor-pointer">
                 {initialValues?.fullname || ""}
               </p>
-              {checkUser ? (
+              {currentUser._id === userId ? (
                 <button
                   className="flex items-center border rounded border-slate-950 py-1 px-5 mt-3 cursor-pointer"
                   onClick={() => setClickEdit(true)}
@@ -160,7 +165,6 @@ const UserDetail = () => {
         )}
       </div>
     </InitialValuesContext.Provider>
-    
   );
 };
 export default UserDetail;
