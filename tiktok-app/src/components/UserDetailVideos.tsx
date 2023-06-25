@@ -6,7 +6,7 @@ const UserDetailVideos = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.BACKEND_URL}/videos/getAllVideo`)
+      .get(`${import.meta.env.VITE_BACKEND_URL}/videos/getAllVideo`)
       .then((response) => {
         setVideoUrlList(response.data);
       })

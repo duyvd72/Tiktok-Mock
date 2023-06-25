@@ -34,7 +34,7 @@ const UserDetail = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.BACKEND_URL}/accounts/searchuser/${userId}`)
+      .get(`${import.meta.env.VITE_BACKEND_URL}/accounts/searchuser/${userId}`)
       .then((response) => {
         setInitialValues({
           avatarUrl: response.data.avatarUrl,

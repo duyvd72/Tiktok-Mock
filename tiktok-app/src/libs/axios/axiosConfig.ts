@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getAccessToken } from '../../utils/accessTokenLS';
 
 const axiosInstance = axios.create({
-  baseURL: process.env.BACKEND_URL,
+  baseURL: import.meta.env.VITE_BACKEND_URL,
   headers: {
     'Content-Type': 'application/json',
   },

@@ -5,7 +5,7 @@ import ChatContainer from './ChatContainer';
 import io from 'socket.io-client';
 import axiosInstance from '@/libs/axios/axiosConfig';
 
-const socket = io(`${process.env.BACKEND_URL}`);
+const socket = io(`${import.meta.env.VITE_BACKEND_URL}`);
 
 function Chat() {
   const { currentUser } = useModal();
@@ -56,11 +56,10 @@ function Chat() {
                 if (user?._id !== currentUser?._id) {
                   return (
                     <section
-                      className={`${
-                        currentUserChat._id == user._id
-                          ? `bg-slate-200`
-                          : `hover:bg-slate-100 `
-                      }`}
+                      className={`${currentUserChat._id == user._id
+                        ? `bg-slate-200`
+                        : `hover:bg-slate-100 `
+                        }`}
                       key={user?._id}
                       onClick={() => {
                         setCurrentUserChat(user);

@@ -24,7 +24,7 @@ const EditUserInfor = ({
 
   const handleUpdateUser = (values: any) => {
     axios
-      .put(`${process.env.BACKEND_URL}/accounts/${userId}/update`, values)
+      .put(`${import.meta.env.VITE_BACKEND_URL}/accounts/${userId}/update`, values)
       .then((res) => {
         toast.success('Cập nhật thành công');
         setChangeImage(false);
@@ -158,21 +158,20 @@ const EditUserInfor = ({
                       )}
                     />
                     <label htmlFor="" className="text-slate-500 text-xs">
-                      {}
+                      { }
                       /80
                     </label>
                   </div>
                 </div>
                 <div className="flex flex-row-reverse p-5 border-slate-400 border-b">
                   <button
-                    className={`w-32 px-5 py-2 ml-5 mr-2 rounded-md ${
-                      initialValues.nickname !== formik.values.nickname ||
+                    className={`w-32 px-5 py-2 ml-5 mr-2 rounded-md ${initialValues.nickname !== formik.values.nickname ||
                       initialValues.fullname !== formik.values.fullname ||
                       initialValues.bio !== formik.values.bio ||
                       changeImage === true
-                        ? 'bg-[#fe2c55] text-white'
-                        : 'bg-gray-200 text-slate-500 pointer-events-none'
-                    } `}
+                      ? 'bg-[#fe2c55] text-white'
+                      : 'bg-gray-200 text-slate-500 pointer-events-none'
+                      } `}
                     type="submit"
                   >
                     Lưu

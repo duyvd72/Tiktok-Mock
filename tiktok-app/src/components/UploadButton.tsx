@@ -1,6 +1,5 @@
 import { storage } from '@/firebase/index';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
-import { useState } from 'react';
 
 interface IProps {
   video: string | null | undefined;
