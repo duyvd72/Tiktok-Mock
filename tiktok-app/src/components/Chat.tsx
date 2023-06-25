@@ -16,7 +16,7 @@ function Chat() {
   const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    socket.emit('add-user', currentUser.id);
+    socket.emit('add-user', currentUser._id);
   }, []);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ function Chat() {
           <div className="flex-1 max-h-[520px] overflow-y-auto">
             {listUser &&
               listUser.map((user: any) => {
-                if (user?._id !== currentUser?.id) {
+                if (user?._id !== currentUser?._id) {
                   return (
                     <section
                       className={`${currentUserChat._id == user._id

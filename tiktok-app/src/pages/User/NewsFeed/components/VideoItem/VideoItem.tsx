@@ -1,11 +1,17 @@
 import ButtonGroup from '@/pages/User/NewsFeed/components/ButtonGroup/ButtonGroup';
 import { IVideo } from '@/interfaces/interfaces';
 import defaultAva from '@/assets/images/default-ava.png';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setVideoTimestamp } from '../../redux/videoTimeStampSlice';
+import { useLocation } from 'react-router-dom';
 
+/* Linh ---------------------------------------------------------------------- starts */
 interface IProps {
   video: IVideo;
 }
+/* Linh ---------------------------------------------------------------------- ends */
 
 const VideoItem = (props: IProps) => {
   const { video } = props;
@@ -31,24 +37,93 @@ const VideoItem = (props: IProps) => {
     const newVolume = Number(e.target.value);
     setVolume(newVolume);
 
-    if (newVolume === 0) {
-      video.muted = true;
-    } else {
-      video.muted = false;
-      video.volume = newVolume;
+    if (video) {
+      if (newVolume === 0) {
+        video.muted = true;
+      } else {
+        video.muted = false;
+        video.volume = newVolume;
+      }
     }
   };
 
   const handleVolumeBtn = () => {
     const video = videoRef.current;
-    if (volume === 0) {
-      video.muted = false;
-      setVolume(video.volume);
-    } else {
-      video.muted = true;
-      setVolume(0);
+    if (video) {
+      if (volume === 0) {
+        video.muted = false;
+        setVolume(video.volume);
+      } else {
+        video.muted = true;
+        setVolume(0);
+      }
     }
   };
+
+  /* Linh ---------------------------------------------------------------------- starts */
+  const [pauseVideo, setPauseVideo] = useState<boolean>(false);
+
+  const navigate = useNavigate();
+  const handleNavigate = (videoId: string) => {
+    // console.log("Da paused");
+    // console.log("videoTimeStamp: ", videoTimeStamp);
+    navigate(`/videodetails/${videoId}`);
+    setPauseVideo(true);
+  };
+
+  const dispatch = useAppDispatch();
+  const videoTimeStamp = useAppSelector(
+    (state) => state.videoTimeStamp.videoTimestamp
+  );
+
+  useEffect(() => {
+    const videoElement = videoRef.current as HTMLVideoElement;
+    let currentTimestamp = 0;
+    const startTracking = () => {
+      currentTimestamp = Math.round((videoElement?.currentTime ?? 0) * 1000);
+      // console.log("currentTimestamp useEffect: ", currentTimestamp);
+      dispatch(setVideoTimestamp(currentTimestamp));
+    };
+    const handleBeforeUnload = () => {
+      videoElement?.pause();
+      currentTimestamp = Math.round((videoElement?.currentTime ?? 0) * 1000);
+      dispatch(setVideoTimestamp(currentTimestamp));
+    };
+    // if(videoElement) {
+    //   videoElement.addEventListener("play", startTracking);
+    //   videoElement.addEventListener("loadedmetadata", function() {
+    //     this.currentTime = videoTimeStamp;
+    //   });
+    // };
+    if (pauseVideo) {
+      window.addEventListener('beforeunload', handleBeforeUnload);
+      if (videoElement) {
+        videoElement.addEventListener('loadedmetadata', function () {
+          this.currentTime = videoTimeStamp;
+          // console.log("Da paused trong useEffect: ", videoTimeStamp);
+        });
+      }
+    } else {
+      if (videoElement) {
+        videoElement.addEventListener('play', startTracking);
+        videoElement.addEventListener('loadedmetadata', function () {
+          // console.log("Playing trong useEffect: ", videoTimeStamp);
+          this.currentTime = videoTimeStamp;
+        });
+      }
+    }
+
+    return () => {
+      if (videoElement) {
+        videoElement.removeEventListener('play', startTracking);
+        videoElement.removeEventListener('loadedmetadata', function () {
+          this.currentTime = videoTimeStamp;
+        });
+        // window.removeEventListener('beforeunload', handleBeforeUnload);
+      }
+    };
+  }, [pauseVideo, videoRef]);
+  /* Linh ---------------------------------------------------------------------- ends */
 
   return (
     <div className="w-[80%] mx-auto">
@@ -112,15 +187,16 @@ const VideoItem = (props: IProps) => {
                 </div>
               </div>
               <video
-                className="min-w-[320px] min-h-[570px] rounded-lg bg-black"
+                className="min-w-[320px] min-h-[570px] rounded-lg bg-black cursor-pointer"
                 ref={videoRef}
-                loop
+                loop={true}
+                onClick={() => handleNavigate(video._id)}
               >
                 <source src={video.videoUrl} type="video/mp4" />
               </video>
             </div>
             <div className="mt-auto">
-              <ButtonGroup />
+              <ButtonGroup handleNavigate={() => handleNavigate(video._id)} />
             </div>
           </div>
         </div>

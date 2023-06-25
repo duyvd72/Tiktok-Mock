@@ -14,11 +14,11 @@ const SideBar = () => {
   const [seeLess, setSeeLess] = useState(false);
 
   useEffect(() => {
-    if (currentUser?.id) {
+    if (currentUser?._id) {
       (async () => {
         try {
           const reponse = await axiosInstance.get(
-            `/accounts/searchuser/${currentUser.id}`
+            `/accounts/searchuser/${currentUser._id}`
           );
           setUser(reponse.data);
           setMaxFollowing(reponse.data.following.length);
@@ -63,7 +63,7 @@ const SideBar = () => {
         </NavLink>
       </div>
       <div className="p-3 flex flex-col gap-3 border-t-[1px]">
-        {currentUser?.id ? (
+        {currentUser?._id ? (
           <>
             <p
               className="text-sm font-semibold relative left-[-10px] "
