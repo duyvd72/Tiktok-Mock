@@ -5,7 +5,7 @@ import defaultAva from '@/assets/images/default-ava.png';
 import { removeAccessToken } from '@/utils/accessTokenLS';
 
 const Navbar = () => {
-  const { setModalIsOpen } = useModal();
+  const { setModalIsOpen, currentUser } = useModal();
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
 
@@ -18,7 +18,7 @@ const Navbar = () => {
   };
 
   const handleProfileBtn = () => {
-    navigate('/userId');
+    navigate(`/${currentUser._id}`);
   };
 
   const onChat = () => {

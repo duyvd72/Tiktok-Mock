@@ -27,20 +27,11 @@
   background-color: rgba(121, 121, 121, 0.3);
 }
 
-#skeleton {
-  background-color: #f2f2f2;
-  border-radius: 4px;
-  animation: skeleton-loading 1s infinite ease-in-out alternate;
-}
-
-@keyframes skeleton-loading {
-  0% {
-    background-color: #f2f2f2;
-  }
-  50% {
-    background-color: #e6e6e6;
-  }
-  100% {
-    background-color: #f2f2f2;
-  }
+.file {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  opacity: 0;
 }
