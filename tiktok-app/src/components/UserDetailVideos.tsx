@@ -1,12 +1,12 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 const UserDetailVideos = () => {
   const [videoUrlList, setVideoUrlList] = useState<[]>([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3005/videos/getAllVideo")
+      .get(`${process.env.BACKEND_URL}/videos/getAllVideo`)
       .then((response) => {
         setVideoUrlList(response.data);
       })
@@ -31,11 +31,11 @@ const UserDetailVideos = () => {
             <div className="relative">
               <div
                 className="grid rounded-md bg-neutral-950 content-center"
-                style={{ width: "fit-content" }}
+                style={{ width: 'fit-content' }}
               >
                 <video
                   className="w-full rounded-md"
-                  style={{ height: "340px", minWidth: "191px" }}
+                  style={{ height: '340px', minWidth: '191px' }}
                   onMouseOver={handleOnMouseOver}
                   onMouseOut={handleOnMouseOut}
                   muted

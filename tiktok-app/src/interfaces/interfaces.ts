@@ -2,7 +2,7 @@ export interface IVideo {
   _id: string;
   videoUrl: string;
   videoTitle: string;
-  videoHastag: string;
+  videoHashtag: string;
   ownerVideo: {
     _id: string;
     avatarUrl: string;
@@ -56,6 +56,6 @@ export interface IAccountItem {
 export interface IUploadingVideo {
   userId: string;
   videoTitle: string;
-  videoHastag: string;
+  videoHashtag: string;
   videoUrl: string;
 }

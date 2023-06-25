@@ -33,7 +33,7 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children }) => {
 
   const validateToken = (token: string) => {
     axios
-      .get('http://localhost:3005/accounts/validatetoken', {
+      .get(`${process.env.BACKEND_URL}/accounts/validatetoken`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -51,7 +51,7 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children }) => {
         ) {
           const currentToken: IUser = jwt(token);
           axios
-            .get('http://localhost:3005/accounts/refreshToken', {
+            .get(`${process.env.BACKEND_URL}/accounts/refreshToken`, {
               headers: {
                 Authorization: `Bearer ${currentToken.refreshToken}`,
               },

@@ -59,7 +59,7 @@ const Navbar = () => {
           <i className="fas fa-plus me-3"></i>Tải lên
         </button>
 
-        {token == null ? (
+        {token === 'undefined' || token === 'null' || token == null ? (
           <button
             className="border px-2 py-1 rounded-[4px]
             bg-[#fe2c55] hover:bg-[#e32b50] text-white font-bold"

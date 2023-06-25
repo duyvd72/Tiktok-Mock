@@ -1,42 +1,40 @@
-import { createContext, useEffect, useState } from "react";
-import img from "../assets/images/comingsoon.png";
-import styles from "@/styles/userDetail.module.css";
-import UserDetailVideos from "./UserDetailVideos";
-import EditUserInfor from "./EditUserInfor";
-import axios from "axios";
-import { useParams } from "react-router-dom";
-import useModal from "@/hooks/useModal";
+import { createContext, useEffect, useState } from 'react';
+import img from '../assets/images/comingsoon.png';
+import styles from '@/styles/userDetail.module.css';
+import UserDetailVideos from './UserDetailVideos';
+import EditUserInfor from './EditUserInfor';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import useModal from '@/hooks/useModal';
 
 interface IUserInfo {
   avatarUrl: string;
   nickname: string;
   fullname: string;
-  bio: String;
+  bio: string;
 }
 export const InitialValuesContext = createContext<IUserInfo>({
-  avatarUrl: "",
-  nickname: "",
-  fullname: "",
-  bio: "",
+  avatarUrl: '',
+  nickname: '',
+  fullname: '',
+  bio: '',
 });
 const UserDetail = () => {
   const [clickLike, setClickLike] = useState(true);
   const [clickEdit, setClickEdit] = useState(false);
   const { userId } = useParams();
-  const { currentUser } = useModal();
-
-  console.log(currentUser._id === userId);
+  const { currentUser, setCurrentUser } = useModal();
 
   const [initialValues, setInitialValues] = useState({
-    avatarUrl: "",
-    nickname: "",
-    fullname: "",
-    bio: "",
+    avatarUrl: '',
+    nickname: '',
+    fullname: '',
+    bio: '',
   });
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3005/accounts/searchuser/${userId}`)
+      .get(`${process.env.BACKEND_URL}/accounts/searchuser/${userId}`)
       .then((response) => {
         setInitialValues({
           avatarUrl: response.data.avatarUrl,
@@ -46,7 +44,7 @@ const UserDetail = () => {
         });
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [currentUser]);
 
   return (
     <InitialValuesContext.Provider value={initialValues}>
@@ -74,7 +72,7 @@ const UserDetail = () => {
                 </svg>
               </div>
               <p className="text-lg	font-medium cursor-pointer">
-                {initialValues?.fullname || ""}
+                {initialValues?.fullname || ''}
               </p>
               {currentUser._id === userId ? (
                 <button
@@ -145,12 +143,12 @@ const UserDetail = () => {
               height="15"
               width="15"
               viewBox="0 0 448 512"
-              fill={clickLike ? "#475569" : "#000"}
+              fill={clickLike ? '#475569' : '#000'}
             >
               <path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z" />
             </svg>
             <span
-              className={`text-lg ml-2 pb-2 ${clickLike ? "" : "text-black"}`}
+              className={`text-lg ml-2 pb-2 ${clickLike ? '' : 'text-black'}`}
             >
               Yêu Thích
             </span>
@@ -159,7 +157,10 @@ const UserDetail = () => {
         </div>
         {clickLike ? <UserDetailVideos /> : <p>chưa có video</p>}
         {clickEdit ? (
-          <EditUserInfor setClickEdit={setClickEdit} />
+          <EditUserInfor
+            setClickEdit={setClickEdit}
+            setCurrentUser={setCurrentUser}
+          />
         ) : (
           <div></div>
         )}

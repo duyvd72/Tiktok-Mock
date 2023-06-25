@@ -1,62 +1,65 @@
-import styles from "@/styles/userDetail.module.css";
-import axios from "axios";
-import { ChangeEvent, useContext, useState } from "react";
-import { ErrorMessage, Field, Formik } from "formik";
-import * as Yup from "yup";
-import { InitialValuesContext } from "./UserDetail";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useParams } from "react-router-dom";
+import styles from '@/styles/userDetail.module.css';
+import axios from 'axios';
+import { ChangeEvent, useContext, useState } from 'react';
+import { ErrorMessage, Field, Formik } from 'formik';
+import * as Yup from 'yup';
+import { InitialValuesContext } from './UserDetail';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useParams } from 'react-router-dom';
 
 interface EditUserInforProps {
   setClickEdit: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentUser: any;
 }
 
-const EditUserInfor = ({ setClickEdit }: EditUserInforProps) => {
+const EditUserInfor = ({
+  setClickEdit,
+  setCurrentUser,
+}: EditUserInforProps) => {
   const initialValues = useContext(InitialValuesContext);
   const [changeImage, setChangeImage] = useState(false);
-  const [imageState, setImageState] = useState("");
+  const [imageState, setImageState] = useState('');
   const { userId } = useParams();
 
   const handleUpdateUser = (values: any) => {
     axios
-      .put(`http://localhost:3005/accounts/${userId}/update`, values)
-      .then(() => {
-        toast("cập nhật thành công");
+      .put(`${process.env.BACKEND_URL}/accounts/${userId}/update`, values)
+      .then((res) => {
+        toast.success('Cập nhật thành công');
         setChangeImage(false);
+        setClickEdit(false);
+        setCurrentUser(res.data.user);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     if (file) {
-      console.log(URL.createObjectURL(file));
       setImageState(URL.createObjectURL(file));
       setChangeImage(true);
     }
   };
+
   return (
     <div className="fixed inset-0 z-50 py-5 overflow-y-auto" id={styles.edit}>
       <Formik
         initialValues={initialValues}
         validationSchema={Yup.object().shape({
           nickname: Yup.string()
-            .required("không được để trống TikTokID")
-            .matches(/^[A-Za-z0-9_.]+$/, "Đoạn mã không hợp lệ")
-            .min(3, "TikTokID phải gồm ít nhất 3 kí tự")
-            .max(24, "Tối đa 24 kí tự"),
-          fullname: Yup.string().max(30, "Tối đa 30 kí tự"),
-          bio: Yup.string().max(80, "Tối đa 80 kí tự"),
+            .required('Không được để trống TikTokID')
+            // .matches(/^[A-Za-z0-9_.]+$/, "Đoạn mã không hợp lệ")
+            .min(3, 'TikTokID phải gồm ít nhất 3 kí tự')
+            .max(24, 'Tối đa 24 kí tự'),
+          fullname: Yup.string().max(30, 'Tối đa 30 kí tự'),
+          bio: Yup.string().max(80, 'Tối đa 80 kí tự'),
         })}
         onSubmit={(values) => {
           handleUpdateUser(values);
         }}
       >
         {(formik) => {
-          {
-            console.log("avatarUrl", formik.values.avatarUrl);
-          }
           return (
             <form onSubmit={formik.handleSubmit}>
               <div className="bg-white w-1/2 rounded-md m-auto ">
@@ -79,7 +82,7 @@ const EditUserInfor = ({ setClickEdit }: EditUserInforProps) => {
                     <div className="w-fit m-auto cursor-pointer">
                       <img
                         src={
-                          "blob:http://127.0.0.1:5173/0d035e3a-cb9b-48f3-871f-c6b6bf9d3f4e"
+                          'blob:http://127.0.0.1:5173/0d035e3a-cb9b-48f3-871f-c6b6bf9d3f4e'
                         }
                         alt="avatar"
                         className="w-28 h-28 rounded-full cursor-pointer m-auto"
@@ -167,8 +170,8 @@ const EditUserInfor = ({ setClickEdit }: EditUserInforProps) => {
                       initialValues.fullname !== formik.values.fullname ||
                       initialValues.bio !== formik.values.bio ||
                       changeImage === true
-                        ? "bg-[#fe2c55] text-white"
-                        : "bg-gray-200 text-slate-500 pointer-events-none"
+                        ? 'bg-[#fe2c55] text-white'
+                        : 'bg-gray-200 text-slate-500 pointer-events-none'
                     } `}
                     type="submit"
                   >

@@ -28,9 +28,9 @@ const UploadVideo = () => {
   const handleUploadBtn = (values: any, { resetForm }: any) => {
     const uploadingVideo = {
       videoTitle: values.title,
-      videoHastag: values.hashtag,
-      videoUrl: videoUrl,
-      userId: currentUser.id,
+      videoHashtag: values.hashtag,
+      videoUrl: videoUrl + currentUser._id,
+      userId: currentUser._id,
     };
 
     console.log('uploadingVideo', uploadingVideo);

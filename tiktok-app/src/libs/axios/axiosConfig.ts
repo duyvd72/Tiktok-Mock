@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getAccessToken } from '../../utils/accessTokenLS';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3005',
+  baseURL: process.env.BACKEND_URL,
   headers: {
     'Content-Type': 'application/json',
   },

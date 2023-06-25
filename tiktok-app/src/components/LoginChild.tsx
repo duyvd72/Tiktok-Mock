@@ -1,19 +1,17 @@
 import FooterLoginSignup from '@/components/FooterLoginSignup';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { ILoggingUser } from '@/interfaces/interfaces';
-import useLoginSignUpUser from '@/hooks/useLoginSignUpUser'
+import useLoginSignUpUser from '@/hooks/useLoginSignUpUser';
 import LoadingSpinner from '@/components/LoadingSpinner';
 function LoginChild() {
-  const { isLoading, userLogin } = useLoginSignUpUser()
+  const { isLoading, userLogin } = useLoginSignUpUser();
   const initialValues = {
     username: '',
     password: '',
   };
 
   const handleSubmit = (values: ILoggingUser) => {
-
-    userLogin(values)
-
+    userLogin(values);
   };
 
   const validateForm = (values: any) => {
@@ -49,10 +47,7 @@ function LoginChild() {
           >
             <Form className="w-full flex flex-col text-white gap-5">
               <div className="flex flex-col gap-2">
-                <label
-                  className="inline-block me-2"
-                  htmlFor="username"
-                >
+                <label className="inline-block me-2" htmlFor="username">
                   Username
                 </label>
                 <Field
@@ -68,10 +63,7 @@ function LoginChild() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label
-                  className="inline-block me-2"
-                  htmlFor="password"
-                >
+                <label className="inline-block me-2" htmlFor="password">
                   Password
                 </label>
                 <Field
@@ -90,7 +82,7 @@ function LoginChild() {
                 type="submit"
                 className="font-bold px-6 py-3 bg-[#fe2c55] rounded-[4px] flex justify-center"
               >
-                {isLoading.loading ? <LoadingSpinner height={8} /> : "Đăng nhập"}
+                {isLoading.loading ? <LoadingSpinner /> : 'Đăng nhập'}
               </button>
             </Form>
           </Formik>
