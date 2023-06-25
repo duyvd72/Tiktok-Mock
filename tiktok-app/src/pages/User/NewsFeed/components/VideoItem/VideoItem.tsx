@@ -1,15 +1,23 @@
 import ButtonGroup from '@/pages/User/NewsFeed/components/ButtonGroup/ButtonGroup';
 import { IVideo } from '@/interfaces/interfaces';
 import defaultAva from '@/assets/images/default-ava.png';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setVideoTimestamp } from '../../redux/videoTimeStampSlice';
+import { useLocation } from 'react-router-dom';
 
+
+
+/* Linh ---------------------------------------------------------------------- starts */
 interface IProps {
   video: IVideo;
-}
+  autoplay: boolean;
+  videoIndex: number;
+};
+/* Linh ---------------------------------------------------------------------- ends */
 
 const VideoItem = (props: IProps) => {
-  const { video } = props;
-  const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1);
 
@@ -35,6 +43,72 @@ const VideoItem = (props: IProps) => {
       setVolume(0);
     }
   };
+
+  /* Linh ---------------------------------------------------------------------- starts */
+  const [pauseVideo, setPauseVideo] = useState<boolean>(false);
+  const { video, autoplay, videoIndex } = props;
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const navigate = useNavigate();
+  const handleNavigate = (videoId: string) => {
+    // console.log("Da paused");
+    // console.log("videoTimeStamp: ", videoTimeStamp);
+    navigate(`/videodetails/${videoId}`);
+    setPauseVideo(true);
+  };
+
+  const dispatch = useAppDispatch();
+  const videoTimeStamp = useAppSelector(state => state.videoTimeStamp.videoTimestamp);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    let currentTimestamp: number = 0;
+    const startTracking = () => {
+      currentTimestamp = Math.round((videoElement?.currentTime ?? 0) * 1000);
+      // console.log("currentTimestamp useEffect: ", currentTimestamp);
+      dispatch(setVideoTimestamp(currentTimestamp));
+    };
+    const handleBeforeUnload = () => {
+      videoElement?.pause();
+      currentTimestamp = Math.round((videoElement?.currentTime ?? 0) * 1000);
+      dispatch(setVideoTimestamp(currentTimestamp));
+    };
+    // if(videoElement) {
+    //   videoElement.addEventListener("play", startTracking);
+    //   videoElement.addEventListener("loadedmetadata", function() {
+    //     this.currentTime = videoTimeStamp;
+    //   });
+    // };
+    if(pauseVideo) {
+      window.addEventListener('beforeunload', handleBeforeUnload);
+      if(videoElement) {
+        videoElement.addEventListener("loadedmetadata", function() {
+          this.currentTime = videoTimeStamp;
+          // console.log("Da paused trong useEffect: ", videoTimeStamp);
+        });
+      }
+    } else {
+      if(videoElement) {
+        videoElement.addEventListener("play", startTracking);
+        videoElement.addEventListener("loadedmetadata", function () {
+          // console.log("Playing trong useEffect: ", videoTimeStamp);
+          this.currentTime = videoTimeStamp;
+        });
+      };
+    };
+    
+
+    return () => {
+      if (videoElement) {
+        videoElement.removeEventListener("play", startTracking);
+        videoElement.removeEventListener("loadedmetadata", function() {
+          this.currentTime = videoTimeStamp;
+        });
+        // window.removeEventListener('beforeunload', handleBeforeUnload);
+      }
+    };
+  }, [pauseVideo, videoRef]);
+  /* Linh ---------------------------------------------------------------------- ends */
 
   return (
     <div className="w-[80%] mx-auto">
@@ -82,15 +156,20 @@ const VideoItem = (props: IProps) => {
                 </div>
               </div>
               <video
-                className="min-w-[320px] min-h-[570px] rounded-lg bg-black"
+                className="min-w-[320px] min-h-[570px] rounded-lg bg-black cursor-pointer"
                 ref={videoRef}
-                loop
+                loop={true}
+                autoPlay={true}
+                // autoPlay={autoplay}
+                controls={true}
+                muted={true}
+                onClick={() => handleNavigate(video._id)}
               >
                 <source src={video.videoUrl} type="video/mp4" />
               </video>
             </div>
             <div className="mt-auto">
-              <ButtonGroup />
+              <ButtonGroup handleNavigate={() => handleNavigate(video._id)}/>
             </div>
           </div>
         </div>
