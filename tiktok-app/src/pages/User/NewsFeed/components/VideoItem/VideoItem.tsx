@@ -1,53 +1,67 @@
 import ButtonGroup from '@/pages/User/NewsFeed/components/ButtonGroup/ButtonGroup';
 import { IVideo } from '@/interfaces/interfaces';
 import defaultAva from '@/assets/images/default-ava.png';
-import { useRef, useState, useEffect } from 'react';
+import { ChangeEvent, useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setVideoTimestamp } from '../../redux/videoTimeStampSlice';
 import { useLocation } from 'react-router-dom';
 
-
-
 /* Linh ---------------------------------------------------------------------- starts */
 interface IProps {
   video: IVideo;
-  autoplay: boolean;
-  videoIndex: number;
-};
+}
 /* Linh ---------------------------------------------------------------------- ends */
 
 const VideoItem = (props: IProps) => {
+  const { video } = props;
+  const videoRef = useRef<any>();
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1);
 
   const handlePlayBtn = () => {
-    const video: any = videoRef.current;
-    if (video.paused) {
-      video.play();
-      setIsPlaying(true);
-    } else {
-      video.pause();
-      setIsPlaying(false);
+    const video = videoRef.current;
+    if (video) {
+      if (video.paused) {
+        video.play();
+        setIsPlaying(true);
+      } else {
+        video.pause();
+        setIsPlaying(false);
+      }
+    }
+  };
+
+  const handleVolumeRange = (e: ChangeEvent<HTMLInputElement>) => {
+    const video = videoRef.current;
+    const newVolume = Number(e.target.value);
+    setVolume(newVolume);
+
+    if (video) {
+      if (newVolume === 0) {
+        video.muted = true;
+      } else {
+        video.muted = false;
+        video.volume = newVolume;
+      }
     }
   };
 
   const handleVolumeBtn = () => {
-    const video: any = videoRef.current;
-    if (video.volume === 0) {
-      video.volume = 1;
-      setVolume(1);
-      setVolume(1);
-    } else {
-      video.volume = 0;
-      setVolume(0);
+    const video = videoRef.current;
+    if (video) {
+      if (volume === 0) {
+        video.muted = false;
+        setVolume(video.volume);
+      } else {
+        video.muted = true;
+        setVolume(0);
+      }
     }
   };
 
   /* Linh ---------------------------------------------------------------------- starts */
   const [pauseVideo, setPauseVideo] = useState<boolean>(false);
-  const { video, autoplay, videoIndex } = props;
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   const navigate = useNavigate();
   const handleNavigate = (videoId: string) => {
@@ -58,11 +72,13 @@ const VideoItem = (props: IProps) => {
   };
 
   const dispatch = useAppDispatch();
-  const videoTimeStamp = useAppSelector(state => state.videoTimeStamp.videoTimestamp);
+  const videoTimeStamp = useAppSelector(
+    (state) => state.videoTimeStamp.videoTimestamp
+  );
 
   useEffect(() => {
-    const videoElement = videoRef.current;
-    let currentTimestamp: number = 0;
+    const videoElement = videoRef.current as HTMLVideoElement;
+    let currentTimestamp = 0;
     const startTracking = () => {
       currentTimestamp = Math.round((videoElement?.currentTime ?? 0) * 1000);
       // console.log("currentTimestamp useEffect: ", currentTimestamp);
@@ -79,29 +95,28 @@ const VideoItem = (props: IProps) => {
     //     this.currentTime = videoTimeStamp;
     //   });
     // };
-    if(pauseVideo) {
+    if (pauseVideo) {
       window.addEventListener('beforeunload', handleBeforeUnload);
-      if(videoElement) {
-        videoElement.addEventListener("loadedmetadata", function() {
+      if (videoElement) {
+        videoElement.addEventListener('loadedmetadata', function () {
           this.currentTime = videoTimeStamp;
           // console.log("Da paused trong useEffect: ", videoTimeStamp);
         });
       }
     } else {
-      if(videoElement) {
-        videoElement.addEventListener("play", startTracking);
-        videoElement.addEventListener("loadedmetadata", function () {
+      if (videoElement) {
+        videoElement.addEventListener('play', startTracking);
+        videoElement.addEventListener('loadedmetadata', function () {
           // console.log("Playing trong useEffect: ", videoTimeStamp);
           this.currentTime = videoTimeStamp;
         });
-      };
-    };
-    
+      }
+    }
 
     return () => {
       if (videoElement) {
-        videoElement.removeEventListener("play", startTracking);
-        videoElement.removeEventListener("loadedmetadata", function() {
+        videoElement.removeEventListener('play', startTracking);
+        videoElement.removeEventListener('loadedmetadata', function () {
           this.currentTime = videoTimeStamp;
         });
         // window.removeEventListener('beforeunload', handleBeforeUnload);
@@ -132,7 +147,7 @@ const VideoItem = (props: IProps) => {
             </p>
           </div>
           <div className="flex gap-5 mt-3  w-[70%]">
-            <div className="relative">
+            <div className="relative z-10">
               <div
                 className="absolute z-50 w-full bottom-8 opacity-100 
             hover:opacity-100 transition-opacity ease-in-out"
@@ -145,31 +160,43 @@ const VideoItem = (props: IProps) => {
                       <i className="fas fa-pause"></i>
                     )}
                   </button>
-
-                  <button className="p-2 text-white" onClick={handleVolumeBtn}>
-                    {volume ? (
-                      <i className="fas fa-volume-up"></i>
-                    ) : (
-                      <i className="fas fa-volume-mute"></i>
-                    )}
-                  </button>
+                  <div className="group">
+                    <div className="text-white relative w-[85%] mx-auto">
+                      <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step={0.1}
+                        value={volume}
+                        onChange={handleVolumeRange}
+                        className="absolute w-[70px] right-[-17.5px] bottom-8 cursor-pointer
+                        rotate-[270deg] accent-slate-200 opacity-0 group-hover:opacity-100"
+                      />
+                    </div>
+                    <button
+                      className="p-2 text-white"
+                      onClick={handleVolumeBtn}
+                    >
+                      {volume ? (
+                        <i className="fas fa-volume-up"></i>
+                      ) : (
+                        <i className="fas fa-volume-mute"></i>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
               <video
                 className="min-w-[320px] min-h-[570px] rounded-lg bg-black cursor-pointer"
                 ref={videoRef}
                 loop={true}
-                autoPlay={true}
-                // autoPlay={autoplay}
-                controls={true}
-                muted={true}
                 onClick={() => handleNavigate(video._id)}
               >
                 <source src={video.videoUrl} type="video/mp4" />
               </video>
             </div>
             <div className="mt-auto">
-              <ButtonGroup handleNavigate={() => handleNavigate(video._id)}/>
+              <ButtonGroup handleNavigate={() => handleNavigate(video._id)} />
             </div>
           </div>
         </div>

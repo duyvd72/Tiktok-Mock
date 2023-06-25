@@ -1,5 +1,6 @@
 import { uploadVideoAPI } from '@/api/userAPIs';
 import UploadButton from '@/components/UploadButton';
+import useModal from '@/hooks/useModal';
 import { Field, Formik, Form, ErrorMessage } from 'formik';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +12,10 @@ const UploadVideo = () => {
   const [videoUrl, setVideoUrl] = useState('');
   const [fileName, setFileName] = useState('Chưa chọn file nào');
   const [process, setProcess] = useState(0);
+
+  const logedUser = useModal();
+
+  const { currentUser } = logedUser;
 
   const navigate = useNavigate();
 
@@ -25,7 +30,7 @@ const UploadVideo = () => {
       videoTitle: values.title,
       videoHastag: values.hashtag,
       videoUrl: videoUrl,
-      userId: '6493181bf3dba4052fba2d6f',
+      userId: currentUser.id,
     };
 
     console.log('uploadingVideo', uploadingVideo);

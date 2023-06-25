@@ -2,6 +2,7 @@ import logo from '../assets/images/logo.png';
 import { NavLink, useNavigate } from 'react-router-dom';
 import useModal from '@/hooks/useModal';
 import defaultAva from '@/assets/images/default-ava.png';
+import { removeAccessToken } from '@/utils/accessTokenLS';
 
 const Navbar = () => {
   const { setModalIsOpen } = useModal();
@@ -22,6 +23,12 @@ const Navbar = () => {
 
   const onChat = () => {
     navigate('/chat');
+  };
+
+  const handleLogout = () => {
+    removeAccessToken();
+    navigate('/');
+    location.reload();
   };
 
   return (
@@ -67,11 +74,17 @@ const Navbar = () => {
             </button>
             <div className="relative group">
               <img src={defaultAva} alt="" className="w-[40px] h-[40px]" />
-              <div className="absolute right-0 w-[100px] bg-red-400 hidden group-hover:block rounded-md">
+              <div
+                className="absolute right-0 w-[100px] hidden group-hover:block 
+                  rounded-md bg-white border shadow-md"
+              >
                 <button className="p-2" onClick={handleProfileBtn}>
                   My Profile
                 </button>
-                <button className="p-2">Logout</button>
+                <div className="w-full border-t-[1px]"></div>
+                <button className="p-2" onClick={handleLogout}>
+                  Logout
+                </button>
               </div>
             </div>
           </div>
