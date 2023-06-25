@@ -29,9 +29,13 @@ const UserDetailVideos = () => {
         return (
           <div key={id}>
             <div className="relative">
-              <div className="grid rounded-md bg-neutral-950 h-80 content-center">
+              <div
+                className="grid rounded-md bg-neutral-950 content-center"
+                style={{ width: "fit-content" }}
+              >
                 <video
-                  className="w-full max-h-80"
+                  className="w-full rounded-md"
+                  style={{ height: "340px", minWidth: "191px" }}
                   onMouseOver={handleOnMouseOver}
                   onMouseOut={handleOnMouseOut}
                   muted

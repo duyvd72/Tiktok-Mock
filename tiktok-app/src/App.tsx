@@ -27,7 +27,7 @@ function App() {
         >
           <Route path="/" element={<NewsFeed />}></Route>
           <Route path="/videodetails/:videoId" element={<VideoDetails />} />
-          <Route path="/userId" element={<UserDetail />}></Route>
+          <Route path="/:userId" element={<UserDetail />}></Route>
           <Route path="/following" element={<NewsFeed />} />
           <Route path="/explore" element={<ComingSoon />}></Route>
           <Route path="/chat" element={<Chat />}></Route>
