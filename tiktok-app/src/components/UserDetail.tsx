@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import img from '../assets/images/comingsoon.png';
+import img from '@/assets/images/default-ava.png';
 import styles from '@/styles/userDetail.module.css';
 import UserDetailVideos from './UserDetailVideos';
 import EditUserInfor from './EditUserInfor';
@@ -43,7 +43,7 @@ const UserDetail = () => {
           bio: response.data.bio,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, [currentUser]);
 
   return (
@@ -52,7 +52,7 @@ const UserDetail = () => {
         <div className="flex flex-row">
           <div className="flex flex-row items-center w-2/5">
             <img
-              src={img}
+              src={initialValues.avatarUrl ? initialValues.avatarUrl : img}
               alt="avatar"
               className="w-28 h-28 rounded-full cursor-pointer"
             />

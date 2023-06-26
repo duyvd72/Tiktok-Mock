@@ -31,7 +31,7 @@ function Chat() {
         const response = await axiosInstance.get('/accounts');
         setListUser(response.data);
       } catch (error) {
-        console.log('Error fetching users:', error);
+        console.error('Error fetching users:', error);
       }
     };
 
@@ -56,10 +56,11 @@ function Chat() {
                 if (user?._id !== currentUser?._id) {
                   return (
                     <section
-                      className={`${currentUserChat._id == user._id
-                        ? `bg-slate-200`
-                        : `hover:bg-slate-100 `
-                        }`}
+                      className={`${
+                        currentUserChat._id == user._id
+                          ? `bg-slate-200`
+                          : `hover:bg-slate-100 `
+                      }`}
                       key={user?._id}
                       onClick={() => {
                         setCurrentUserChat(user);

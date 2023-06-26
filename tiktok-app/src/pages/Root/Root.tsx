@@ -5,6 +5,7 @@ import LoginModal from '@/components/LoginModal';
 import useModal from '@/hooks/useModal';
 const Root = () => {
   const { modalIsOpen } = useModal();
+  console.log('render root');
 
   return (
     <div>

@@ -10,7 +10,7 @@ const UserDetailVideos = () => {
       .then((response) => {
         setVideoUrlList(response.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, []);
 
   const handleOnMouseOver = (e: React.MouseEvent<HTMLVideoElement>) => {
