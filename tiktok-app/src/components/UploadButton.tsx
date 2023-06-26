@@ -36,7 +36,7 @@ const UploadButton = (props: IProps) => {
         setProcess(progress);
       },
       (error) => {
-        console.log(error);
+        console.error(error);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((videoUrl) => {

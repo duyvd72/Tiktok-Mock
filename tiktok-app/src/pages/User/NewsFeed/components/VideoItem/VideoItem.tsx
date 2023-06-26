@@ -1,17 +1,14 @@
 import ButtonGroup from '@/pages/User/NewsFeed/components/ButtonGroup/ButtonGroup';
 import { IVideo } from '@/interfaces/interfaces';
 import defaultAva from '@/assets/images/default-ava.png';
-import { ChangeEvent, useRef, useState, useEffect } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { setVideoTimestamp } from '../../redux/videoTimeStampSlice';
-import { useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import useModal from '@/hooks/useModal';
 
-/* Linh ---------------------------------------------------------------------- starts */
 interface IProps {
   video: IVideo;
 }
-/* Linh ---------------------------------------------------------------------- ends */
 
 const VideoItem = (props: IProps) => {
   const { video } = props;
@@ -60,70 +57,10 @@ const VideoItem = (props: IProps) => {
     }
   };
 
-  /* Linh ---------------------------------------------------------------------- starts */
-  const [pauseVideo, setPauseVideo] = useState<boolean>(false);
-
   const navigate = useNavigate();
   const handleNavigate = (videoId: string) => {
-    // console.log("Da paused");
-    // console.log("videoTimeStamp: ", videoTimeStamp);
     navigate(`/videodetails/${videoId}`);
-    setPauseVideo(true);
   };
-
-  const dispatch = useAppDispatch();
-  const videoTimeStamp = useAppSelector(
-    (state) => state.videoTimeStamp.videoTimestamp
-  );
-
-  useEffect(() => {
-    const videoElement = videoRef.current as HTMLVideoElement;
-    let currentTimestamp = 0;
-    const startTracking = () => {
-      currentTimestamp = Math.round((videoElement?.currentTime ?? 0) * 1000);
-      // console.log("currentTimestamp useEffect: ", currentTimestamp);
-      dispatch(setVideoTimestamp(currentTimestamp));
-    };
-    const handleBeforeUnload = () => {
-      videoElement?.pause();
-      currentTimestamp = Math.round((videoElement?.currentTime ?? 0) * 1000);
-      dispatch(setVideoTimestamp(currentTimestamp));
-    };
-    // if(videoElement) {
-    //   videoElement.addEventListener("play", startTracking);
-    //   videoElement.addEventListener("loadedmetadata", function() {
-    //     this.currentTime = videoTimeStamp;
-    //   });
-    // };
-    if (pauseVideo) {
-      window.addEventListener('beforeunload', handleBeforeUnload);
-      if (videoElement) {
-        videoElement.addEventListener('loadedmetadata', function () {
-          this.currentTime = videoTimeStamp;
-          // console.log("Da paused trong useEffect: ", videoTimeStamp);
-        });
-      }
-    } else {
-      if (videoElement) {
-        videoElement.addEventListener('play', startTracking);
-        videoElement.addEventListener('loadedmetadata', function () {
-          // console.log("Playing trong useEffect: ", videoTimeStamp);
-          this.currentTime = videoTimeStamp;
-        });
-      }
-    }
-
-    return () => {
-      if (videoElement) {
-        videoElement.removeEventListener('play', startTracking);
-        videoElement.removeEventListener('loadedmetadata', function () {
-          this.currentTime = videoTimeStamp;
-        });
-        // window.removeEventListener('beforeunload', handleBeforeUnload);
-      }
-    };
-  }, [pauseVideo, videoRef]);
-  /* Linh ---------------------------------------------------------------------- ends */
 
   return (
     <div className="w-[80%] mx-auto">
@@ -137,13 +74,15 @@ const VideoItem = (props: IProps) => {
         </div>
         <div className="w-[50%]">
           <div className="flex items-center gap-2">
-            <p className="font-bold">{video.ownerVideo.nickname}</p>
+            <NavLink className="font-bold" to={`/${video.ownerVideo._id}`}>
+              {video.ownerVideo.nickname}
+            </NavLink>
             <p className="text-sm">{video.ownerVideo.fullname}</p>
           </div>
           <div>
             <p>
               {video.videoTitle}
-              <strong>{video.videoHastag}</strong>
+              <strong> {video.videoHashtag}</strong>
             </p>
           </div>
           <div className="flex gap-5 mt-3  w-[70%]">
@@ -196,12 +135,30 @@ const VideoItem = (props: IProps) => {
               </video>
             </div>
             <div className="mt-auto">
-              <ButtonGroup handleNavigate={() => handleNavigate(video._id)} />
+              <ButtonGroup
+                handleNavigate={() => handleNavigate(video._id)}
+                video={video}
+              />
             </div>
           </div>
         </div>
         <div>
-          <button className="border px-1">Đang Follow</button>
+          {/* {currentUser.following.includes(video.ownerVideo._id) ? (
+            <button className="border px-1">Đang Follow</button>
+          ) : (
+            <button
+              className="border border-[#fe2c55] px-1 text-[#fe2c55]
+                font-bold rounded-[4px] px-4 hover:bg-[#fe2c550f]"
+            >
+              Follow
+            </button>
+          )} */}
+          <button
+            className="border border-[#fe2c55] px-1 text-[#fe2c55]
+                font-bold rounded-[4px] px-4 hover:bg-[#fe2c550f]"
+          >
+            Follow
+          </button>
         </div>
       </div>
       <hr className="my-5 w-[70%] mx-auto" />

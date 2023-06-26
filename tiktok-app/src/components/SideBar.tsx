@@ -23,7 +23,7 @@ const SideBar = () => {
           setUser(reponse.data);
           setMaxFollowing(reponse.data.following.length);
         } catch (error) {
-          console.log('res', error);
+          console.error('error', error);
         }
       })();
     }

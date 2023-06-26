@@ -13,9 +13,7 @@ const UploadVideo = () => {
   const [fileName, setFileName] = useState('Chưa chọn file nào');
   const [process, setProcess] = useState(0);
 
-  const logedUser = useModal();
-
-  const { currentUser } = logedUser;
+  const { currentUser } = useModal();
 
   const navigate = useNavigate();
 
@@ -32,8 +30,6 @@ const UploadVideo = () => {
       videoUrl: videoUrl + currentUser._id,
       userId: currentUser._id,
     };
-
-    console.log('uploadingVideo', uploadingVideo);
 
     uploadVideoAPI(uploadingVideo)
       .then(() => {

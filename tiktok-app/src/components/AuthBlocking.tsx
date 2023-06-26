@@ -2,99 +2,94 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getAccessToken, setAccessToken } from '@/utils/accessTokenLS';
 import useModal from '@/hooks/useModal';
-import Navbar from './Navbar';
 import NewsFeed from '@/pages/User/NewsFeed/NewsFeed';
-import SideBar from './SideBar';
 import jwt from 'jwt-decode';
-import LoginModal from './LoginModal';
-
+import { useLocation } from 'react-router-dom';
 interface IUser {
-    id: string;
-    refreshToken: string;
-    role: string;
+  id: string;
+  refreshToken: string;
+  role: string;
 }
 
 interface IAuthBlocking {
-    children: React.ReactNode;
+  children: React.ReactNode;
+  whenRefresh?: boolean
 }
 
 interface IError {
-    status: string;
-    error: {
-        name: string;
-        message: string;
-    };
-    [key: string]: any;
+  status: string;
+  error: {
+    name: string;
+    message: string;
+  };
+  [key: string]: any;
 }
 
-const AuthBlocking: React.FC<IAuthBlocking> = ({ children }) => {
-    const [auth, setAuth] = useState(false);
-    const { setCurrentUser, modalIsOpen } = useModal();
-
-    const validateToken = (token: string) => {
-        axios
-            .get(`${import.meta.env.VITE_BACKEND_URL}/accounts/validatetoken`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+const AuthBlocking: React.FC<IAuthBlocking> = ({ children, whenRefresh }) => {
+  const [auth, setAuth] = useState(false);
+  const { setCurrentUser, setModalIsOpen } = useModal();
+  const location = useLocation()
+  const validateToken = (token: string) => {
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_URL}/accounts/validatetoken`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setCurrentUser(res.data);
+        setAuth(true);
+      })
+      .catch((err: IError) => {
+        if (
+          err.response &&
+          err.response.data.error.message !== 'invalid token'
+        ) {
+          const currentToken: IUser = jwt(token);
+          axios
+            .get(`${import.meta.env.VITE_BACKEND_URL}/accounts/refreshToken`, {
+              headers: {
+                Authorization: `Bearer ${currentToken.refreshToken}`,
+              },
             })
             .then((res) => {
-                setCurrentUser(res.data);
-                setAuth(true);
+              setModalIsOpen(false)
+              setAccessToken(res.data.accessToken);
+              setCurrentUser(res.data.user);
+              setAuth(true);
             })
-            .catch((err: IError) => {
-                console.log('err', err);
-
-                if (
-                    err.response &&
-                    err.response.data.error.message !== 'invalid token'
-                ) {
-                    const currentToken: IUser = jwt(token);
-                    axios
-                        .get(`${import.meta.env.VITE_BACKEND_URL}/accounts/refreshToken`, {
-                            headers: {
-                                Authorization: `Bearer ${currentToken.refreshToken}`,
-                            },
-                        })
-                        .then((res) => {
-                            setAccessToken(res.data.accessToken);
-                            setCurrentUser(res.data.user);
-                            setAuth(true);
-                        })
-                        .catch((err) => {
-                            setCurrentUser(null);
-                            setAuth(false);
-                        });
-                } else {
-                    setCurrentUser(null);
-                    setAuth(false);
-                }
+            .catch(() => {
+              if (!whenRefresh) {
+                setModalIsOpen(true)
+              }
+              setCurrentUser(null);
+              setAuth(false);
             });
-    };
-
-    useEffect(() => {
-        const token = getAccessToken();
-        if (token) {
-            validateToken(token);
+        } else {
+          if (!whenRefresh) {
+            setModalIsOpen(true)
+          }
+          setCurrentUser(null);
+          setAuth(false);
         }
-    }, []);
+      });
+  };
 
-    if (!auth) {
-        return (
-            <div>
-                <Navbar />
-                <div className="flex h-[calc(100vh-66px)] mt-[66px]">
-                    <SideBar />
-                    <div className="p-5 relative ms-[260px] w-full">
-                        <NewsFeed />
-                    </div>
-                    {modalIsOpen && <LoginModal />}
-                </div>
-            </div>
-        );
+  useEffect(() => {
+    const token = getAccessToken();
+    if (token) {
+      validateToken(token);
+    } else {
+      if (!whenRefresh)
+        setModalIsOpen(true)
     }
+  }, [location]);
 
-    return <main>{children}</main>;
+  if (!auth) {
+    return (<NewsFeed />)
+  }
+
+  return <main>{children}</main>;
 };
 
 export default AuthBlocking;
