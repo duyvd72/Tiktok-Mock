@@ -26,10 +26,13 @@ export const loginUserAPI = createAsyncThunk(
   async (loggingUser: ILoggingUser): Promise<ICurrentUser> => {
     try {
       const response = await axiosInstance.post('accounts/login', loggingUser);
+      if (response.data.message == 'invalid username' || response.data.message == 'invalid password') {
+        return response.data
+      }
 
-      setAccessToken(response.data.token);
+      setAccessToken(response.data.data.token);
 
-      return response.data;
+      return response.data.data;
     } catch (error) {
       throw new Error('Login Failed');
     }

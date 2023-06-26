@@ -9,7 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Chat from '@/components/Chat';
 import AuthBlocking from './components/AuthBlocking';
-import UserPrivateRoutes from './routes/UserPrivateRoutes';
 
 function App() {
   return (
@@ -19,25 +18,40 @@ function App() {
           path="/"
           element={
             <WrapperApp>
-              <AuthBlocking>
-                <Root />
-              </AuthBlocking>
+              <Root />
             </WrapperApp>
           }
         >
-          <Route path="/" element={<NewsFeed />}></Route>
-          <Route path="/videodetails/:videoId" element={<VideoDetails />} />
-          <Route path="/:userId" element={<UserDetail />}></Route>
-          <Route
-            path="/following"
-            element={
-              // <UserPrivateRoutes>
+          <Route path="/" element={
+            <AuthBlocking whenRefresh>
               <NewsFeed />
-              // </UserPrivateRoutes>
-            }
+            </AuthBlocking>
+          }
+          ></Route>
+
+          <Route path="/videodetails/:videoId" element={
+            <AuthBlocking>
+              <VideoDetails />
+            </AuthBlocking>
+          }
           />
-          <Route path="/chat" element={<Chat />}></Route>
-          <Route path="/upload" element={<UploadVideo />} />
+          <Route path="/:userId" element={
+            <AuthBlocking>
+              <UserDetail />
+            </AuthBlocking>
+          }
+          ></Route>
+          <Route path="/following" element={<NewsFeed />} />
+          <Route path="/chat" element={
+            <AuthBlocking>
+              <Chat />
+            </AuthBlocking>
+          }></Route>
+          <Route path="/upload" element={
+            <AuthBlocking>
+              <UploadVideo />
+            </AuthBlocking>
+          } />
         </Route>
       </Routes>
       <ToastContainer autoClose={500} />

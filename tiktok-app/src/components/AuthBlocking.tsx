@@ -2,12 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getAccessToken, setAccessToken } from '@/utils/accessTokenLS';
 import useModal from '@/hooks/useModal';
-import Navbar from './Navbar';
 import NewsFeed from '@/pages/User/NewsFeed/NewsFeed';
-import SideBar from './SideBar';
 import jwt from 'jwt-decode';
-import LoginModal from './LoginModal';
-
+import { useLocation } from 'react-router-dom';
 interface IUser {
   id: string;
   refreshToken: string;
@@ -16,6 +13,7 @@ interface IUser {
 
 interface IAuthBlocking {
   children: React.ReactNode;
+  whenRefresh?: boolean
 }
 
 interface IError {
@@ -27,10 +25,10 @@ interface IError {
   [key: string]: any;
 }
 
-const AuthBlocking: React.FC<IAuthBlocking> = ({ children }) => {
+const AuthBlocking: React.FC<IAuthBlocking> = ({ children, whenRefresh }) => {
   const [auth, setAuth] = useState(false);
-  const { setCurrentUser, modalIsOpen } = useModal();
-
+  const { setCurrentUser, setModalIsOpen } = useModal();
+  const location = useLocation()
   const validateToken = (token: string) => {
     axios
       .get(`${import.meta.env.VITE_BACKEND_URL}/accounts/validatetoken`, {
@@ -43,8 +41,6 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children }) => {
         setAuth(true);
       })
       .catch((err: IError) => {
-        console.error('error', err);
-
         if (
           err.response &&
           err.response.data.error.message !== 'invalid token'
@@ -57,15 +53,22 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children }) => {
               },
             })
             .then((res) => {
+              setModalIsOpen(false)
               setAccessToken(res.data.accessToken);
               setCurrentUser(res.data.user);
               setAuth(true);
             })
-            .catch((err) => {
+            .catch(() => {
+              if (!whenRefresh) {
+                setModalIsOpen(true)
+              }
               setCurrentUser(null);
               setAuth(false);
             });
         } else {
+          if (!whenRefresh) {
+            setModalIsOpen(true)
+          }
           setCurrentUser(null);
           setAuth(false);
         }
@@ -76,22 +79,14 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children }) => {
     const token = getAccessToken();
     if (token) {
       validateToken(token);
+    } else {
+      if (!whenRefresh)
+        setModalIsOpen(true)
     }
-  }, []);
+  }, [location]);
 
   if (!auth) {
-    return (
-      <div>
-        <Navbar />
-        <div className="flex h-[calc(100vh-66px)] mt-[66px]">
-          <SideBar />
-          <div className="p-5 relative ms-[260px] w-full">
-            <NewsFeed />
-          </div>
-          {modalIsOpen && <LoginModal />}
-        </div>
-      </div>
-    );
+    return (<NewsFeed />)
   }
 
   return <main>{children}</main>;

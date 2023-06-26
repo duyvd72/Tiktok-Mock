@@ -60,7 +60,7 @@ const VideoInfo = (props: IVideoInfoProps) => {
     ''
   );
   const { setModalIsOpen, currentUser } = useModal();
-  const currentUserId = currentUser._id;
+  const currentUserId = currentUser && currentUser._id;
   // console.log("Current user nickname: ", currentUser.nickname);
   // console.log("Current user ID: ", currentUserId);
 
@@ -268,11 +268,10 @@ const VideoInfo = (props: IVideoInfoProps) => {
             <button
               className={`border border-customedPink hover:bg-[#fe2c550f] 
               hover:ease-in-out transition duration-300 rounded-lg bg-transparent 
-              font-semibold text-customedPink ${
-                followingAccount.includes(currentUserId)
+              font-semibold text-customedPink ${followingAccount.includes(currentUserId)
                   ? 'bg-customedPink text-white'
                   : ''
-              } px-8 flex-wrap sm:text-sm xs:text-xs`}
+                } px-8 flex-wrap sm:text-sm xs:text-xs`}
               onClick={() => handleFollowingButton(currentVideoId)}
             >
               Follow
@@ -334,11 +333,10 @@ const VideoInfo = (props: IVideoInfoProps) => {
                 onClick={() => handleLikeVideoClick(currentVideoId)}
               >
                 <i
-                  className={`fas fa-heart ${
-                    likedVideo.includes(currentVideoId)
-                      ? 'text-customedPink'
-                      : ''
-                  }`}
+                  className={`fas fa-heart ${likedVideo.includes(currentVideoId)
+                    ? 'text-customedPink'
+                    : ''
+                    }`}
                 ></i>
               </button>
             ) : (
@@ -393,7 +391,7 @@ const VideoInfo = (props: IVideoInfoProps) => {
               numberOfLikesOnSingleComment={numberOfLikesOnSingleComment}
               replyContentArr={replyContentArr}
               numberOfLikeOnSingleReply={numberOfLikeOnSingleReply}
-              // commentArrayOnSingleVideo={commentArrayOnSingleVideo}
+            // commentArrayOnSingleVideo={commentArrayOnSingleVideo}
             />
           </div>
         </div>

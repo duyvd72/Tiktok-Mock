@@ -12,7 +12,6 @@ const NewsFeed = () => {
   const videoList = useAppSelector((state) => state.newsFeed.videoList);
 
   const location = useLocation();
-  console.log('render news feed');
 
   // videoList = useMemo(() => shuffleVideo(videoList), []);
 
