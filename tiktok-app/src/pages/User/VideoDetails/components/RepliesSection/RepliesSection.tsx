@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import logoIcon from '@/assets/images/logo-icon.png';
 import { NavLink, useParams } from 'react-router-dom';
 import {
@@ -8,7 +8,6 @@ import {
 } from '@/api/VideoDetails/apiSlice';
 import { IActiveFunctionality } from '../../VideoInfo/VideoInfo';
 import useModal from '@/hooks/useModal';
-import LoadingSpinner from '@/components/LoadingSpinner';
 
 interface IRepliesSectionProps {
   activeFunctionality: IActiveFunctionality;
@@ -18,6 +17,7 @@ interface IRepliesSectionProps {
   numberOfLikesOnSingleComment: number | undefined;
   replyContentArr: [] | undefined;
   numberOfLikeOnSingleReply: number | undefined;
+  repliesSectionRef: React.RefObject<HTMLDivElement> | null
 }
 interface ICommentContentUser {
   _id: string;
@@ -77,9 +77,10 @@ const RepliesSection = (props: IRepliesSectionProps) => {
     numberOfLikesOnSingleComment,
     replyContentArr,
     numberOfLikeOnSingleReply,
+    repliesSectionRef,
+
   } = props;
-  let loading: JSX.Element;
-  const [showReplies, setShowReplies] = useState<string | null>(null);
+  const [showReplies, setShowReplies] = useState<string[]>([]);
   const [likedComments, setLikedComments] = useState<string[]>([]);
   const [likedReply, setLikeReply] = useState<string[]>([]);
   const { currentUser } = useModal();
@@ -94,15 +95,22 @@ const RepliesSection = (props: IRepliesSectionProps) => {
   } = useGetAllVideosByUserIdQuery(currentUserId);
   // console.log("userInfo: >>>", userInfo);
   const nicknameComment = userInfo?.nickname;
+  // console.log("nicknameComment: ", nicknameComment)
 
   const { data: userComments } = useGetVideoByVideoIdQuery(videoId);
   // console.log("userComments: >>>", userComments);
   const userCommentsArr = userComments?.comment;
   // console.log("userCommentsArr: ", userCommentsArr);
 
+
   const handleViewMoreReplies = (currentCommentId: string) => {
-    setShowReplies((prevState) =>
-      prevState === currentCommentId ? null : currentCommentId
+    setShowReplies((prevState) => {
+        if (prevState.includes(currentCommentId)) {
+          return prevState.filter((id) => id !== currentCommentId);
+        } else {
+          return [...prevState, currentCommentId];
+        }
+      }
     );
     setCurrentCommentId(currentCommentId);
   };
@@ -140,32 +148,32 @@ const RepliesSection = (props: IRepliesSectionProps) => {
   return (
     <>
       {/* Comment 1 */}
-      <div className="flex flex-col mb-2 flex-wrap">
+      <div className="flex flex-col mb-2 flex-wrap" ref={repliesSectionRef}>
         {/* Header */}
         {userCommentsArr &&
           userCommentsArr.length > 0 &&
           userCommentsArr.map((comment: ICommentContent, index: number) => (
             <div className="flex flex-col items-start" key={comment._id}>
               {/* Left header */}
-              <div className="flex gap-2 items-center justify-between max-w-[300px]">
+              <div className="flex gap-2 items-center max-w-full w-full pl-5">
                 {/* Avatar */}
                 <NavLink
-                  to="/userId"
-                  className="bg-black w-10 h-10 rounded-full line-height flex items-center justify-center mt-[-10px]"
+                  to={`/${comment.user._id}`}
+                  className="bg-black w-10 h-10 rounded-full line-height flex items-center justify-center mt-[-10px] min-w-[40px] min-h-[20px]"
                 >
-                  <img src={logoIcon} alt="avatar" className="p-2" />
+                  <img src={ logoIcon } alt="avatar" className="p-2" />
                 </NavLink>
                 {/* account & username */}
-                <div className="flex-grow">
-                  <NavLink to="/" className="">
+                <div className="max-w-full min-w-[150px] w-[350px] max-h-[250px] self-start justify-start">
+                  <NavLink to={`/${comment.user._id}`} className="">
                     <p className="font-semibold text-md text-black hover:underline mt-10">
                       {comment.user.nickname}
                     </p>
                   </NavLink>
                   <span className="text-sm text-black mr-5">19/12</span>
-                  <div className="max-w-[350px]">
+                  <div className="max-w-[350px] max-h-[200px] text-wrap">
                     <span className="text-sm text-black mr-5">
-                      {comment.content}
+                      {comment.content} 
                     </span>
                   </div>
                   <div>
@@ -173,7 +181,7 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                     <button
                       className="text-sm text-[#a19d9d]"
                       onClick={() =>
-                        handleReplyToComment(comment._id, nicknameComment)
+                        handleReplyToComment(comment._id, comment.user.nickname)
                       }
                     >
                       Reply
@@ -191,56 +199,63 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                       }`}
                     ></i>
                   </button>
-                  <span className="text-xs text-black">
+                  {/* <span className="text-xs text-black">
                     {numberOfLikesOnSingleComment}
-                  </span>
+                  </span> */}
                 </div>
               </div>
               {/* View more replies */}
-              <div className="flex items-center pl-12 mt-2">
-                <button
-                  className="text-sm text-black hover:underline"
-                  onClick={() => handleViewMoreReplies(comment._id)}
-                >
-                  Xem các câu trả lời khác
-                  <span className="text-sm text-black">
-                    {' '}
-                    {`(${comment.reply.length})`}
-                  </span>
-                  <i className="fas fa-chevron-down self-center ml-2"></i>
-                </button>
+              <div className="flex items-center ml-12 mt-2 ">
+                {
+                  comment.reply.length && comment.reply.length > 0 
+                  ?
+                  <button
+                    className="text-sm text-black hover:underline ml-5"
+                    onClick={() => handleViewMoreReplies(comment._id)}
+                  >
+                    View more replies
+                    <span className="text-xs text-black">
+                      {""}
+                      {`(${comment.reply.length})`}
+                    </span>
+                    <i className="fas fa-chevron-down self-center ml-2"></i>
+                  </button>
+                  :
+                  null
+                }
               </div>
               {/* Replies List */}
-              {showReplies === comment._id &&
-                replyContentArr &&
+              {replyContentArr &&
                 replyContentArr.length > 0 &&
                 replyContentArr.map((reply: IReplyContent, index: number) => (
                   <div
-                    className="bg-customedGrey p-2 pt-0 text-black flex flex-col 
-                                justify-center items-center w-full"
+                    className={`p-2 pt-0 text-black flex items-start 
+                              justify-center ml-10 min-w-[80%] max-w-full ${showReplies.includes(comment._id)
+                                ? "opacity-100 transition-all duration-300 ease-in-out"
+                                : "hidden"}`}
                     key={reply._id}
                   >
-                    <div className="flex flex-col items-start">
+                    <div className="flex gap-2 items-center w-full ml-20">
                       {/* Left header */}
-                      <div className="flex gap-2 items-center justify-between w-full">
+                      <div className="self-start justify-start flex gap-2 items-center max-w-full">
                         {/* Avatar */}
                         <NavLink
-                          to="/userId"
-                          className="bg-black w-10 h-10 rounded-full line-height flex items-center justify-center mt-[-10px]"
+                          to={`/${reply.user._id}`}
+                          className="bg-black w-10 h-10 rounded-full line-height flex items-center justify-center mt-[-10px] min-w-[40px] min-h-[20px]"
                         >
                           <img src={logoIcon} alt="avatar" className="p-2" />
                         </NavLink>
                         {/* account & username */}
-                        <div className="flex-grow">
-                          <NavLink to="/" className="">
+                        <div className="grow">
+                          <NavLink to={`/${reply.user._id}`} className="">
                             <p className="font-semibold text-md text-black hover:underline mt-10">
-                              {reply.user.nickname}
+                              { reply.user.nickname }
                             </p>
                           </NavLink>
                           <span className="text-sm text-black mr-5">19/12</span>
                           <div className="max-w-[350px]">
                             <span className="text-sm text-black mr-5">
-                              {reply.content}
+                              { reply.content }
                             </span>
                           </div>
                           <div>
@@ -261,39 +276,21 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                           </div>
                         </div>
                         {/* Right header */}
-                        <div className="flex flex-col items-center">
+                        <div className="flex flex-col items-center ml-[130px]">
                           <button onClick={() => handleLikeReply(reply._id)}>
                             <i
                               className={`fas fa-heart text-black ${
                                 likedReply.includes(reply._id)
-                                  ? 'text-customedPink'
-                                  : ''
+                                  ? "text-customedPink"
+                                  : ""
                               }`}
                             ></i>
                           </button>
-                          <span className="text-xs text-black">
+                          {/* <span className="text-xs text-black">
                             {numberOfLikeOnSingleReply}
-                          </span>
+                          </span> */}
                         </div>
                       </div>
-                      {/* View more replies */}
-                      {/* <div className="flex items-center pl-12 mt-2">
-                              <button
-                                className="text-sm text-black hover:underline"
-                                onClick={() => handleViewMoreReplies(comment._id)}
-
-                              >
-                                View more
-                                <span className="text-sm text-black">
-                                  {" "}
-                                  {`(${comment.reply.length})`}
-                                </span>
-                                <span className="text-sm text-black">(10)</span>
-                                <i className="fas fa-chevron-down self-center ml-2"></i>
-                              </button>
-                            </div> */}
-                      {/* Replies List */}
-                      {/* {showReplies === comment._id && <RepliesList />} */}
                     </div>
                   </div>
                 ))}

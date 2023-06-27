@@ -13,7 +13,7 @@ interface IOwnerVideo {
 interface IVideoByIdInfo {
   _id: string;
   videoUrl: string;
-  videoHastag: string;
+  videoHashtag: string;
   videoTitle: string;
   like: [];
   comment: [];
@@ -27,7 +27,7 @@ export interface IMyVideoInfo {
   _id: string;
   videoUrl: string;
   videoTitle: string;
-  videoHastag: string;
+  videoHashtag: string;
   ownerVideo: string;
   like: [];
   comment: [];
@@ -104,7 +104,7 @@ type prepareHeaders = (
     getState: () => unknown;
     extra: unknown;
     endpoint: string;
-    type: 'query' | 'mutation';
+    type: "query" | "mutation";
     forced: boolean | undefined;
   }
 ) => Headers | void;
@@ -147,15 +147,15 @@ interface IFollowingAccountResponse {
   __v: 0;
 }
 // token
-const token = localStorage.getItem('token');
+const token = localStorage.getItem("token");
 // Create API
 export const VideoDetailsApi = createApi({
-  reducerPath: 'videoDetailsApi',
+  reducerPath: "videoDetailsApi",
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
     prepareHeaders: (headers) => {
-      headers.set('Authorization', `Bearer ${token}`);
-      headers.set('Content-Type', 'application/json');
+      headers.set("Authorization", `Bearer ${token}`);
+      headers.set("Content-Type", "application/json");
       return headers;
     },
   }),
@@ -225,11 +225,11 @@ export const VideoDetailsApi = createApi({
     // }),
     putFollowing: builder.mutation<IFollowingAccountResponse, IFollowingParam>({
       query: (data) => ({
-        url: 'accounts/follow',
-        method: 'PUT',
+        url: "accounts/follow",
+        method: "PUT",
         body: data,
       }),
-      invalidatesTags: ['videoDetails'],
+      invalidatesTags: ["videoDetails"],
     }),
   }),
 });
