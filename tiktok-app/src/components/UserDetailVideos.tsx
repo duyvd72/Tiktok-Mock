@@ -8,9 +8,9 @@ const UserDetailVideos = () => {
     axios
       .get(`${import.meta.env.VITE_BACKEND_URL}/videos/getAllVideo`)
       .then((response) => {
-        setVideoUrlList(response.data);
+        setVideoUrlList(response.data.video);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, []);
 
   const handleOnMouseOver = (e: React.MouseEvent<HTMLVideoElement>) => {

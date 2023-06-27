@@ -5,6 +5,7 @@ import { useEffect, useState, useMemo } from 'react';
 import axiosInstance from '@/libs/axios/axiosConfig';
 import { ICurrentUser, IAccountItem } from '@/interfaces/interfaces';
 import AccountItem from './AccountItem';
+import { getAccessToken } from '@/utils/accessTokenLS';
 
 const SideBar = () => {
   const { setModalIsOpen, currentUser } = useModal();
@@ -23,7 +24,7 @@ const SideBar = () => {
           setUser(reponse.data);
           setMaxFollowing(reponse.data.following.length);
         } catch (error) {
-          console.log('res', error);
+          console.error('error', error);
         }
       })();
     }
@@ -63,7 +64,7 @@ const SideBar = () => {
         </NavLink>
       </div>
       <div className="p-3 flex flex-col gap-3 border-t-[1px]">
-        {currentUser?._id ? (
+        {currentUser?._id || getAccessToken() ? (
           <>
             <p
               className="text-sm font-semibold relative left-[-10px] "

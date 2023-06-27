@@ -6,7 +6,6 @@ import useModal from '@/hooks/useModal';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { loginUserAPI } from '@/api/userAPIs';
-import jwt from 'jwt-decode';
 import authenticationSlice from '@/pages/User/Authentication/redux/authenticationSlice';
 
 function useLoginSignUpUser() {
@@ -38,8 +37,7 @@ function useLoginSignUpUser() {
       isLoading.data?.response?.message !== 'invalid password' &&
       isLoading.data?.type !== 'signup'
     ) {
-      const user = jwt(isLoading.data?.response?.token!);
-      setCurrentUser(user);
+      setCurrentUser(isLoading.data?.response.user);
       setModalIsOpen(false);
       setModalState('login');
       dispatch(authenticationSlice.actions.resetLoading());

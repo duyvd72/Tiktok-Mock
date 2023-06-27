@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import Root from './pages/Root/Root';
 import NewsFeed from './pages/User/NewsFeed/NewsFeed';
-import ComingSoon from './components/ComingSoon';
 import UserDetail from './components/UserDetail';
 import WrapperApp from '@/context/WrapperApp';
 import UploadVideo from '@/pages/User/UploadVideo/UploadVideo';
@@ -19,20 +18,40 @@ function App() {
           path="/"
           element={
             <WrapperApp>
-              <AuthBlocking>
-                <Root />
-              </AuthBlocking>
+              <Root />
             </WrapperApp>
           }
         >
-          <Route path="/" element={<NewsFeed />}></Route>
-          <Route path="/videodetails/:videoId" element={<VideoDetails />} />
-          <Route path="/:userId" element={<UserDetail />}></Route>
-          <Route path="/following" element={<NewsFeed />} />
-          <Route path="/explore" element={<ComingSoon />}></Route>
-          <Route path="/chat" element={<Chat />}></Route>
-          <Route path="/live" element={<ComingSoon />}></Route>
-          <Route path="/upload" element={<UploadVideo />} />
+          <Route path="/" element={
+            <AuthBlocking whenRefresh>
+              <NewsFeed />
+            </AuthBlocking>
+          }
+          ></Route>
+
+          <Route path="/videodetails/:videoId" element={
+            <AuthBlocking>
+              <VideoDetails />
+            </AuthBlocking>
+          }
+          />
+          <Route path="/:userId" element={
+            <AuthBlocking>
+              <UserDetail />
+            </AuthBlocking>
+          }
+          ></Route>
+          {/* <Route path="/following" element={<NewsFeed />} /> */}
+          <Route path="/chat" element={
+            <AuthBlocking>
+              <Chat />
+            </AuthBlocking>
+          }></Route>
+          <Route path="/upload" element={
+            <AuthBlocking>
+              <UploadVideo />
+            </AuthBlocking>
+          } />
         </Route>
       </Routes>
       <ToastContainer autoClose={500} />

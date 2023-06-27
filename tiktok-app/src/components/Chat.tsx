@@ -31,7 +31,7 @@ function Chat() {
         const response = await axiosInstance.get('/accounts');
         setListUser(response.data);
       } catch (error) {
-        console.log('Error fetching users:', error);
+        console.error('Error fetching users:', error);
       }
     };
 
@@ -47,10 +47,9 @@ function Chat() {
           <div className="flex items-center justify-between p-3">
             <p className="font-bold text-xl ps-2">Tin nhắn</p>
             <p className="text-2xl">
-              <i className="fas fa-cog "></i>
             </p>
           </div>
-          <div className="flex-1 max-h-[520px] overflow-y-auto">
+          <div className="flex-1 min-h-[520px] max-h-[520px] overflow-y-auto">
             {listUser &&
               listUser.map((user: any) => {
                 if (user?._id !== currentUser?._id) {

@@ -1,16 +1,18 @@
-import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
-import VideoDisplay from "@/pages/User/VideoDetails/components/VideoDisplay";
-import { useGetAllVideosByUserIdQuery, useGetAllVideosQuery, useGetVideoByVideoIdQuery } from "@/api/VideoDetails/apiSlice";
-// import IVideo from "@/interfaces/interfaces";
-import { useEffect, useRef, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setVideoTimestamp } from "../../NewsFeed/redux/videoTimeStampSlice";
+import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom';
+import VideoDisplay from '@/pages/User/VideoDetails/components/VideoDisplay';
 import {
-  IMyVideoInfo
-} from "@/api/VideoDetails/apiSlice";
+  useGetAllVideosByUserIdQuery,
+  useGetAllVideosQuery,
+  useGetVideoByVideoIdQuery,
+} from '@/api/VideoDetails/apiSlice';
+// import IVideo from "@/interfaces/interfaces";
+import { useEffect, useRef, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setVideoTimestamp } from '../../NewsFeed/redux/videoTimeStampSlice';
+import { IMyVideoInfo } from '@/api/VideoDetails/apiSlice';
 interface ICommentCreateAt {
   createdAt: string;
-};
+}
 
 interface IMyVideoList {
   _id: string;
@@ -22,26 +24,25 @@ interface IMyVideoList {
   videoTitle: string;
   videoUrl: string;
   __v: number;
-};
+}
 
 interface IMyMainVideoProps {
   myVideoListArr: IMyVideoInfo[] | undefined;
   currentVideoId: string | undefined;
-};
+}
 
 const MainVideo = (props: IMyMainVideoProps) => {
   const { myVideoListArr, currentVideoId } = props;
 
   const navigate = useNavigate();
   const [videoIndex, setVideoIndex] = useState<number>(0);
-  
+
   const nextButtonRef = useRef<HTMLButtonElement>(null);
   const prevButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleCloseBtn = () => {
-    navigate("/");
+    navigate('/');
   };
-
 
   useEffect(() => {
     const prevButtonEl = prevButtonRef.current;
@@ -49,24 +50,24 @@ const MainVideo = (props: IMyMainVideoProps) => {
 
     if (prevButtonEl) {
       if (videoIndex === 0) {
-        prevButtonEl.style.display = "none";
+        prevButtonEl.style.display = 'none';
       } else {
-        prevButtonEl.style.display = "block";
+        prevButtonEl.style.display = 'block';
       }
-    };
-    if(nextButtonEl && myVideoListArr) {
-      if(videoIndex === myVideoListArr.length - 1) {
-        nextButtonEl.style.display = "none";
+    }
+    if (nextButtonEl && myVideoListArr) {
+      if (videoIndex === myVideoListArr.length - 1) {
+        nextButtonEl.style.display = 'none';
       } else {
-        nextButtonEl.style.display = "block";
+        nextButtonEl.style.display = 'block';
       }
-    };
+    }
     return () => {
       if (prevButtonEl) {
-        prevButtonEl.style.display = "";
+        prevButtonEl.style.display = '';
       }
       if (nextButtonEl) {
-        nextButtonEl.style.display = "";
+        nextButtonEl.style.display = '';
       }
     };
   }, [videoIndex, myVideoListArr]);
@@ -74,7 +75,9 @@ const MainVideo = (props: IMyMainVideoProps) => {
   useEffect(() => {
     // find current video index
     if (myVideoListArr && currentVideoId) {
-      const selectedIndex = myVideoListArr.findIndex((video) => video._id === currentVideoId);
+      const selectedIndex = myVideoListArr.findIndex(
+        (video) => video._id === currentVideoId
+      );
       if (selectedIndex !== -1) {
         setVideoIndex(selectedIndex);
       }
@@ -82,23 +85,20 @@ const MainVideo = (props: IMyMainVideoProps) => {
   }, [myVideoListArr, currentVideoId]);
 
   const nextVideoClick = () => {
-    if(myVideoListArr && videoIndex < myVideoListArr.length - 1) {
+    if (myVideoListArr && videoIndex < myVideoListArr.length - 1) {
       setVideoIndex(videoIndex + 1);
       const nextVideoId = myVideoListArr[videoIndex + 1]._id;
       navigate(`/videodetails/${nextVideoId}`);
-    } 
+    }
   };
 
   const prevVideoClick = () => {
-    if(myVideoListArr && videoIndex > 0) {
+    if (myVideoListArr && videoIndex > 0) {
       setVideoIndex(videoIndex - 1);
       const nextVideoId = myVideoListArr[videoIndex - 1]._id;
       navigate(`/videodetails/${nextVideoId}`);
-    } 
+    }
   };
-
-
-
 
   return (
     <>
@@ -114,28 +114,25 @@ const MainVideo = (props: IMyMainVideoProps) => {
           </div>
           {/* Arrow left*/}
           <div className="flex flex-col flex-grow justify-center items-center gap-3">
-            <button 
-            className="w-10 h-10 rounded-full bg-[#252525]"
-            onClick={prevVideoClick}
-            ref={prevButtonRef}
+            <button
+              className="w-10 h-10 rounded-full bg-[#252525]"
+              onClick={prevVideoClick}
+              ref={prevButtonRef}
             >
               <i className="fas fa-chevron-left text-white ml-2"></i>
             </button>
           </div>
         </div>
-        
-        <div
-          className="col-span-4 max-w-[500px] max-h-screen text-white overflow-hidden autoplay"
-        >
+
+        <div className="col-span-4 max-w-[500px] max-h-screen text-white overflow-hidden autoplay">
           {/* Video */}
-          {
-            myVideoListArr && myVideoListArr.length > 0 &&
+          {myVideoListArr && myVideoListArr.length > 0 && (
             <VideoDisplay
               key={myVideoListArr[videoIndex]._id}
               videoUrl={myVideoListArr[videoIndex].videoUrl}
             />
-          }
-        </div> 
+          )}
+        </div>
         {/* Right component */}
         <div className="col-span-2 flex flex-col items-center">
           <div className="self-start mt-2 mr-4">
@@ -146,10 +143,10 @@ const MainVideo = (props: IMyMainVideoProps) => {
           </div>
           {/* Arrow right*/}
           <div className="flex flex-col flex-grow justify-center items-center gap-3">
-            <button 
-            className="w-10 h-10 rounded-full bg-[#252525]"
-            onClick={nextVideoClick}
-            ref={nextButtonRef}
+            <button
+              className="w-10 h-10 rounded-full bg-[#252525]"
+              onClick={nextVideoClick}
+              ref={nextButtonRef}
             >
               <i className="fas fa-chevron-right text-white"></i>
             </button>

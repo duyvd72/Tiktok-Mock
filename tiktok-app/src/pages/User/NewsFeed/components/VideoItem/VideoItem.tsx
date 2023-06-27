@@ -1,33 +1,57 @@
 import ButtonGroup from '@/pages/User/NewsFeed/components/ButtonGroup/ButtonGroup';
 import { IVideo } from '@/interfaces/interfaces';
 import defaultAva from '@/assets/images/default-ava.png';
-import { ChangeEvent, useRef, useState, useEffect } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { setVideoTimestamp } from '../../redux/videoTimeStampSlice';
-import { useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import useModal from '@/hooks/useModal';
 
-/* Linh ---------------------------------------------------------------------- starts */
 interface IProps {
   video: IVideo;
 }
-/* Linh ---------------------------------------------------------------------- ends */
 
 const VideoItem = (props: IProps) => {
   const { video } = props;
   const videoRef = useRef<any>();
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(1);
+  const [volume, setVolume] = useState(0);
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+
+    if (videoRef.current) {
+      const callback: IntersectionObserverCallback = (entries) => {
+        const [entry] = entries
+        setVisible(entry.isIntersecting)
+      }
+      const observer = new IntersectionObserver(callback, {
+        root: null, rootMargin: '0px', threshold: 0.5
+      })
+      observer.observe(videoRef.current)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (visible) {
+      videoRef.current?.play()
+      setIsPlaying(true)
+    } else {
+      videoRef.current?.pause()
+      setIsPlaying(false)
+    }
+  }, [visible])
 
   const handlePlayBtn = () => {
     const video = videoRef.current;
     if (video) {
-      if (video.paused) {
-        video.play();
-        setIsPlaying(true);
-      } else {
-        video.pause();
-        setIsPlaying(false);
+      if (visible) {
+        if (video.paused) {
+          video.play();
+          setIsPlaying(true);
+        } else {
+          video.pause();
+          setIsPlaying(false);
+        }
       }
     }
   };
@@ -38,11 +62,13 @@ const VideoItem = (props: IProps) => {
     setVolume(newVolume);
 
     if (video) {
-      if (newVolume === 0) {
-        video.muted = true;
-      } else {
-        video.muted = false;
-        video.volume = newVolume;
+      if (visible) {
+        if (newVolume === 0) {
+          video.muted = true;
+        } else {
+          video.muted = false;
+          video.volume = newVolume;
+        }
       }
     }
   };
@@ -60,70 +86,10 @@ const VideoItem = (props: IProps) => {
     }
   };
 
-  /* Linh ---------------------------------------------------------------------- starts */
-  const [pauseVideo, setPauseVideo] = useState<boolean>(false);
-
   const navigate = useNavigate();
   const handleNavigate = (videoId: string) => {
-    // console.log("Da paused");
-    // console.log("videoTimeStamp: ", videoTimeStamp);
     navigate(`/videodetails/${videoId}`);
-    setPauseVideo(true);
   };
-
-  const dispatch = useAppDispatch();
-  const videoTimeStamp = useAppSelector(
-    (state) => state.videoTimeStamp.videoTimestamp
-  );
-
-  useEffect(() => {
-    const videoElement = videoRef.current as HTMLVideoElement;
-    let currentTimestamp = 0;
-    const startTracking = () => {
-      currentTimestamp = Math.round((videoElement?.currentTime ?? 0) * 1000);
-      // console.log("currentTimestamp useEffect: ", currentTimestamp);
-      dispatch(setVideoTimestamp(currentTimestamp));
-    };
-    const handleBeforeUnload = () => {
-      videoElement?.pause();
-      currentTimestamp = Math.round((videoElement?.currentTime ?? 0) * 1000);
-      dispatch(setVideoTimestamp(currentTimestamp));
-    };
-    // if(videoElement) {
-    //   videoElement.addEventListener("play", startTracking);
-    //   videoElement.addEventListener("loadedmetadata", function() {
-    //     this.currentTime = videoTimeStamp;
-    //   });
-    // };
-    if (pauseVideo) {
-      window.addEventListener('beforeunload', handleBeforeUnload);
-      if (videoElement) {
-        videoElement.addEventListener('loadedmetadata', function () {
-          this.currentTime = videoTimeStamp;
-          // console.log("Da paused trong useEffect: ", videoTimeStamp);
-        });
-      }
-    } else {
-      if (videoElement) {
-        videoElement.addEventListener('play', startTracking);
-        videoElement.addEventListener('loadedmetadata', function () {
-          // console.log("Playing trong useEffect: ", videoTimeStamp);
-          this.currentTime = videoTimeStamp;
-        });
-      }
-    }
-
-    return () => {
-      if (videoElement) {
-        videoElement.removeEventListener('play', startTracking);
-        videoElement.removeEventListener('loadedmetadata', function () {
-          this.currentTime = videoTimeStamp;
-        });
-        // window.removeEventListener('beforeunload', handleBeforeUnload);
-      }
-    };
-  }, [pauseVideo, videoRef]);
-  /* Linh ---------------------------------------------------------------------- ends */
 
   return (
     <div className="w-[80%] mx-auto">
@@ -137,13 +103,15 @@ const VideoItem = (props: IProps) => {
         </div>
         <div className="w-[50%]">
           <div className="flex items-center gap-2">
-            <p className="font-bold">{video.ownerVideo.nickname}</p>
+            <p className="font-bold cursor-pointer" onClick={() => navigate(`/${video.ownerVideo._id}`)} >
+              {video.ownerVideo.nickname}
+            </p>
             <p className="text-sm">{video.ownerVideo.fullname}</p>
           </div>
           <div>
             <p>
               {video.videoTitle}
-              <strong>{video.videoHastag}</strong>
+              <strong> {video.videoHashtag}</strong>
             </p>
           </div>
           <div className="flex gap-5 mt-3  w-[70%]">
@@ -169,8 +137,8 @@ const VideoItem = (props: IProps) => {
                         step={0.1}
                         value={volume}
                         onChange={handleVolumeRange}
-                        className="absolute w-[70px] right-[-17.5px] bottom-8 cursor-pointer
-                        rotate-[270deg] accent-slate-200 opacity-0 group-hover:opacity-100"
+                        className="absolute w-[70px] right-[-20px] bottom-8 cursor-pointer
+                        rotate-[270deg] accent-white opacity-0 group-hover:opacity-100 "
                       />
                     </div>
                     <button
@@ -189,19 +157,39 @@ const VideoItem = (props: IProps) => {
               <video
                 className="min-w-[320px] min-h-[570px] rounded-lg bg-black cursor-pointer"
                 ref={videoRef}
-                loop={true}
+                muted
+                autoPlay
+                loop
                 onClick={() => handleNavigate(video._id)}
               >
                 <source src={video.videoUrl} type="video/mp4" />
               </video>
             </div>
             <div className="mt-auto">
-              <ButtonGroup handleNavigate={() => handleNavigate(video._id)} />
+              <ButtonGroup
+                handleNavigate={() => handleNavigate(video._id)}
+                video={video}
+              />
             </div>
           </div>
         </div>
         <div>
-          <button className="border px-1">Đang Follow</button>
+          {/* {currentUser.following.includes(video.ownerVideo._id) ? (
+            <button className="border px-1">Đang Follow</button>
+          ) : (
+            <button
+              className="border border-[#fe2c55] px-1 text-[#fe2c55]
+                font-bold rounded-[4px] px-4 hover:bg-[#fe2c550f]"
+            >
+              Follow
+            </button>
+          )} */}
+          <button
+            className="border border-[#fe2c55] px-1 text-[#fe2c55]
+                font-bold rounded-[4px] px-4 hover:bg-[#fe2c550f]"
+          >
+            Follow
+          </button>
         </div>
       </div>
       <hr className="my-5 w-[70%] mx-auto" />

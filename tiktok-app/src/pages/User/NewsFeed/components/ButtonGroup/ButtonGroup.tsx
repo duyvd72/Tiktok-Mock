@@ -1,28 +1,45 @@
-import React from 'react';
 import CircleButton from '@/components/CircleButton';
-
+import { IVideo } from '@/interfaces/interfaces';
+import { useState } from 'react';
+import useModal from '@/hooks/useModal';
 interface INavigateProps {
   handleNavigate: () => void;
-};
+  video: IVideo;
+}
 
 const ButtonGroup = (props: INavigateProps) => {
-
-  const { handleNavigate } = props;
+  const { handleNavigate, video } = props;
+  const { currentUser } = useModal()
+  const [isLike, setIsLike] = useState(currentUser ? video.like.includes(currentUser._id) : false)
+  const [numberLike, setNumberLike] = useState(video.like.length)
 
   return (
     <div className="flex flex-col gap-4">
-      <CircleButton>
-        <i className="fas fa-heart"></i>
+      <CircleButton
+        numberOfAction={numberLike}
+        onClick={() => {
+          if (isLike) {
+            setNumberLike((prev: number) => prev - 1)
+          } else {
+            setNumberLike((prev: number) => prev + 1)
+          }
+          setIsLike(!isLike)
+        }}
+      >
+        <i className={`fas fa-heart ${isLike ? 'text-red-500' : ''}`}></i>
       </CircleButton>
-      <CircleButton>
-        <i className="fas fa-comment-dots" onClick={handleNavigate}></i>
+      <CircleButton
+        numberOfAction={video.comment.length}
+        onClick={handleNavigate}
+      >
+        <i className="fas fa-comment-dots"></i>
       </CircleButton>
-      <CircleButton>
+      {/* <CircleButton numberOfAction={20}>
         <i className="fas fa-bookmark"></i>
       </CircleButton>
-      <CircleButton>
+      <CircleButton numberOfAction={20}>
         <i className="fas fa-share"></i>
-      </CircleButton>
+      </CircleButton> */}
     </div>
   );
 };
