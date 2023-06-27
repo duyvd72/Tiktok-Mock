@@ -1,14 +1,12 @@
 import ScrollToTop from '@/components/ScrollToTop';
 import VideoItem from './components/VideoItem/VideoItem';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getVideoListAPI } from '@/api/userAPIs';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { IVideo } from '@/interfaces/interfaces';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import useModal from '@/hooks/useModal';
-import { shuffleVideo } from '@/utils/shuffleVideo';
+// import { shuffleVideo } from '@/utils/shuffleVideo';
 
-let count = 0
 const NewsFeed = () => {
   const dispatch = useAppDispatch();
   const videoList = useAppSelector((state) => state.newsFeed.videoList);

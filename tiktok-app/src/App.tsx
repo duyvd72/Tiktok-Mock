@@ -22,13 +22,13 @@ function App() {
             </WrapperApp>
           }
         >
+          <Route path="/following" element={<NewsFeed />} />
           <Route path="/" element={
             <AuthBlocking whenRefresh>
               <NewsFeed />
             </AuthBlocking>
           }
           ></Route>
-
           <Route path="/videodetails/:videoId" element={
             <AuthBlocking>
               <VideoDetails />
@@ -41,7 +41,6 @@ function App() {
             </AuthBlocking>
           }
           ></Route>
-          {/* <Route path="/following" element={<NewsFeed />} /> */}
           <Route path="/chat" element={
             <AuthBlocking>
               <Chat />

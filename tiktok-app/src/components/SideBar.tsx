@@ -5,7 +5,6 @@ import { useEffect, useState, useMemo } from 'react';
 import axiosInstance from '@/libs/axios/axiosConfig';
 import { ICurrentUser, IAccountItem } from '@/interfaces/interfaces';
 import AccountItem from './AccountItem';
-import { getAccessToken } from '@/utils/accessTokenLS';
 
 const SideBar = () => {
   const { setModalIsOpen, currentUser } = useModal();
@@ -88,7 +87,7 @@ const SideBar = () => {
                 className="text-[#fe2c55] font-bold text-sm cursor-pointer"
                 onClick={onLoadMore}
               >
-                {seeLess ? 'See less' : 'See more'}
+                {seeLess ? 'See less' : maxFollowing < loadMore ? "" : 'See more'}
               </p>
             ) : (
               <p>Bạn vẫn chưa theo dõi ai !</p>

@@ -5,6 +5,7 @@ export interface IVideo {
   videoHashtag: string;
   ownerVideo: {
     _id: string;
+    follow: string[]
     avatarUrl: string;
     nickname: string;
     fullname: string;
