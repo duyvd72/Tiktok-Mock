@@ -64,7 +64,7 @@ const SideBar = () => {
         </NavLink>
       </div>
       <div className="p-3 flex flex-col gap-3 border-t-[1px]">
-        {currentUser?._id || getAccessToken() ? (
+        {currentUser?._id ? (
           <>
             <p
               className="text-sm font-semibold relative left-[-10px] "

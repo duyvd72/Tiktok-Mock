@@ -31,6 +31,8 @@ const Navbar = () => {
     location.reload();
   };
 
+  console.log('cur', currentUser)
+
   return (
     <div className="flex justify-between items-center p-3 border-b-[1px] bg-white fixed w-full z-50 top-0">
       <div className="flex-1">
@@ -59,15 +61,7 @@ const Navbar = () => {
           <i className="fas fa-plus me-3"></i>Tải lên
         </button>
 
-        {token === 'undefined' || token === 'null' || token == null ? (
-          <button
-            className="border px-2 py-1 rounded-[4px]
-            bg-[#fe2c55] hover:bg-[#e32b50] text-white font-bold"
-            onClick={() => onSignIn()}
-          >
-            Đăng nhập
-          </button>
-        ) : (
+        {currentUser && currentUser._id ? (
           <div className="flex items-center gap-5">
             <button onClick={onChat}>
               <i className="far fa-comment-alt text-xl"></i>
@@ -76,7 +70,7 @@ const Navbar = () => {
               <img src={defaultAva} alt="" className="w-[40px] h-[40px]" />
               <div
                 className="absolute right-0 w-[100px] hidden group-hover:block 
-                  rounded-md bg-white border shadow-md"
+                 rounded-md bg-white border shadow-md"
               >
                 <button className="p-2" onClick={handleProfileBtn}>
                   My Profile
@@ -88,6 +82,14 @@ const Navbar = () => {
               </div>
             </div>
           </div>
+        ) : (
+          <button
+            className="border px-2 py-1 rounded-[4px]
+            bg-[#fe2c55] hover:bg-[#e32b50] text-white font-bold"
+            onClick={() => onSignIn()}
+          >
+            Đăng nhập
+          </button>
         )}
       </div>
     </div>

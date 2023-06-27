@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import axios from 'axios';
 import { getAccessToken, setAccessToken } from '@/utils/accessTokenLS';
 import useModal from '@/hooks/useModal';
@@ -30,7 +30,9 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children, whenRefresh }) => {
   const { setCurrentUser, setModalIsOpen } = useModal();
   const navigate = useNavigate()
   const location = useLocation()
+
   const validateToken = (token: string) => {
+
     axios
       .get(`${import.meta.env.VITE_BACKEND_URL}/accounts/validatetoken`, {
         headers: {
@@ -38,13 +40,13 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children, whenRefresh }) => {
         },
       })
       .then((res) => {
+
         setCurrentUser(res.data);
         setAuth(true);
       })
       .catch((err: IError) => {
         if (
-          err.response &&
-          err.response.data.error.message !== 'invalid token'
+          err.response.data.error.message == 'jwt expired'
         ) {
           const currentToken: IUser = jwt(token);
           axios
@@ -61,16 +63,16 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children, whenRefresh }) => {
             })
             .catch(() => {
               if (!whenRefresh) {
-                navigate('/')
                 setModalIsOpen(true)
+                navigate('/')
               }
               setCurrentUser(null);
               setAuth(false);
             });
         } else {
           if (!whenRefresh) {
-            navigate('/')
             setModalIsOpen(true)
+            navigate('/')
           }
           setCurrentUser(null);
           setAuth(false);
@@ -90,11 +92,10 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children, whenRefresh }) => {
     }
   }, [location]);
 
-  if (!auth && !getAccessToken()) {
+  if (!auth) {
     return <NewsFeed />
   }
-
   return <main>{children}</main>;
 };
 
-export default AuthBlocking;
+export default memo(AuthBlocking);
