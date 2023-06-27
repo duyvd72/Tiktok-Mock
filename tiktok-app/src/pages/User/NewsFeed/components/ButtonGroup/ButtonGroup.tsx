@@ -1,6 +1,7 @@
 import CircleButton from '@/components/CircleButton';
 import { IVideo } from '@/interfaces/interfaces';
-
+import { useState } from 'react';
+import useModal from '@/hooks/useModal';
 interface INavigateProps {
   handleNavigate: () => void;
   video: IVideo;
@@ -8,14 +9,24 @@ interface INavigateProps {
 
 const ButtonGroup = (props: INavigateProps) => {
   const { handleNavigate, video } = props;
+  const { currentUser } = useModal()
+  const [isLike, setIsLike] = useState(currentUser ? video.like.includes(currentUser._id) : false)
+  const [numberLike, setNumberLike] = useState(video.like.length)
 
   return (
     <div className="flex flex-col gap-4">
       <CircleButton
-        numberOfAction={video.like.length}
-        onClick={() => console.log('like')}
+        numberOfAction={numberLike}
+        onClick={() => {
+          if (isLike) {
+            setNumberLike((prev: number) => prev - 1)
+          } else {
+            setNumberLike((prev: number) => prev + 1)
+          }
+          setIsLike(!isLike)
+        }}
       >
-        <i className="fas fa-heart"></i>
+        <i className={`fas fa-heart ${isLike ? 'text-red-500' : ''}`}></i>
       </CircleButton>
       <CircleButton
         numberOfAction={video.comment.length}

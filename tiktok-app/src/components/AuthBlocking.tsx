@@ -4,7 +4,7 @@ import { getAccessToken, setAccessToken } from '@/utils/accessTokenLS';
 import useModal from '@/hooks/useModal';
 import NewsFeed from '@/pages/User/NewsFeed/NewsFeed';
 import jwt from 'jwt-decode';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 interface IUser {
   id: string;
   refreshToken: string;
@@ -28,6 +28,7 @@ interface IError {
 const AuthBlocking: React.FC<IAuthBlocking> = ({ children, whenRefresh }) => {
   const [auth, setAuth] = useState(false);
   const { setCurrentUser, setModalIsOpen } = useModal();
+  const navigate = useNavigate()
   const location = useLocation()
   const validateToken = (token: string) => {
     axios
@@ -60,6 +61,7 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children, whenRefresh }) => {
             })
             .catch(() => {
               if (!whenRefresh) {
+                navigate('/')
                 setModalIsOpen(true)
               }
               setCurrentUser(null);
@@ -67,6 +69,7 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children, whenRefresh }) => {
             });
         } else {
           if (!whenRefresh) {
+            navigate('/')
             setModalIsOpen(true)
           }
           setCurrentUser(null);
@@ -80,13 +83,15 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children, whenRefresh }) => {
     if (token) {
       validateToken(token);
     } else {
-      if (!whenRefresh)
+      if (!whenRefresh) {
+        navigate('/')
         setModalIsOpen(true)
+      }
     }
   }, [location]);
 
-  if (!auth) {
-    return (<NewsFeed />)
+  if (!auth && !getAccessToken()) {
+    return <NewsFeed />
   }
 
   return <main>{children}</main>;

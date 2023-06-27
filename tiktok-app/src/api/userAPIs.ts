@@ -11,9 +11,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const getVideoListAPI = createAsyncThunk(
   'videoList/fetchVideoList',
-  async (): Promise<IVideo[]> => {
+  async (condition: { page: number; limit: number }): Promise<{ video: IVideo[], totalPage: number }> => {
     try {
-      const response = await axiosInstance.get('videos/getAllVideo');
+      const response = await axiosInstance.get(`videos/getAllVideo/?page=${condition.page}&limit=${condition.limit}`);
       return response.data;
     } catch (error) {
       throw new Error('Failed to get video list!');

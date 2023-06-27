@@ -2,15 +2,13 @@ import { signUpUserAPI, loginUserAPI } from '@/api/userAPIs';
 import { ICurrentUser } from '@/interfaces/interfaces';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type Combine = ICurrentUser & { message: string };
-
 interface IAuthenticationState {
   isLoading: {
     loading: boolean;
     state: 'success' | 'error' | 'none';
     data?: {
       type: string;
-      response?: Partial<Combine> | null;
+      response?: any;
     };
   };
 }

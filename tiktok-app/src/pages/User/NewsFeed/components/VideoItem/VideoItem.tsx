@@ -1,7 +1,7 @@
 import ButtonGroup from '@/pages/User/NewsFeed/components/ButtonGroup/ButtonGroup';
 import { IVideo } from '@/interfaces/interfaces';
 import defaultAva from '@/assets/images/default-ava.png';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import useModal from '@/hooks/useModal';
@@ -14,17 +14,44 @@ const VideoItem = (props: IProps) => {
   const { video } = props;
   const videoRef = useRef<any>();
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(1);
+  const [volume, setVolume] = useState(0);
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+
+    if (videoRef.current) {
+      const callback: IntersectionObserverCallback = (entries) => {
+        const [entry] = entries
+        setVisible(entry.isIntersecting)
+      }
+      const observer = new IntersectionObserver(callback, {
+        root: null, rootMargin: '0px', threshold: 0.5
+      })
+      observer.observe(videoRef.current)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (visible) {
+      videoRef.current?.play()
+      setIsPlaying(true)
+    } else {
+      videoRef.current?.pause()
+      setIsPlaying(false)
+    }
+  }, [visible])
 
   const handlePlayBtn = () => {
     const video = videoRef.current;
     if (video) {
-      if (video.paused) {
-        video.play();
-        setIsPlaying(true);
-      } else {
-        video.pause();
-        setIsPlaying(false);
+      if (visible) {
+        if (video.paused) {
+          video.play();
+          setIsPlaying(true);
+        } else {
+          video.pause();
+          setIsPlaying(false);
+        }
       }
     }
   };
@@ -35,11 +62,13 @@ const VideoItem = (props: IProps) => {
     setVolume(newVolume);
 
     if (video) {
-      if (newVolume === 0) {
-        video.muted = true;
-      } else {
-        video.muted = false;
-        video.volume = newVolume;
+      if (visible) {
+        if (newVolume === 0) {
+          video.muted = true;
+        } else {
+          video.muted = false;
+          video.volume = newVolume;
+        }
       }
     }
   };
@@ -74,9 +103,9 @@ const VideoItem = (props: IProps) => {
         </div>
         <div className="w-[50%]">
           <div className="flex items-center gap-2">
-            <NavLink className="font-bold" to={`/${video.ownerVideo._id}`}>
+            <p className="font-bold cursor-pointer" onClick={() => navigate(`/${video.ownerVideo._id}`)} >
               {video.ownerVideo.nickname}
-            </NavLink>
+            </p>
             <p className="text-sm">{video.ownerVideo.fullname}</p>
           </div>
           <div>
@@ -108,8 +137,8 @@ const VideoItem = (props: IProps) => {
                         step={0.1}
                         value={volume}
                         onChange={handleVolumeRange}
-                        className="absolute w-[70px] right-[-17.5px] bottom-8 cursor-pointer
-                        rotate-[270deg] accent-slate-200 opacity-0 group-hover:opacity-100"
+                        className="absolute w-[70px] right-[-20px] bottom-8 cursor-pointer
+                        rotate-[270deg] accent-white opacity-0 group-hover:opacity-100 "
                       />
                     </div>
                     <button
@@ -128,7 +157,9 @@ const VideoItem = (props: IProps) => {
               <video
                 className="min-w-[320px] min-h-[570px] rounded-lg bg-black cursor-pointer"
                 ref={videoRef}
-                loop={true}
+                muted
+                autoPlay
+                loop
                 onClick={() => handleNavigate(video._id)}
               >
                 <source src={video.videoUrl} type="video/mp4" />

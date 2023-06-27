@@ -41,7 +41,7 @@ function App() {
             </AuthBlocking>
           }
           ></Route>
-          <Route path="/following" element={<NewsFeed />} />
+          {/* <Route path="/following" element={<NewsFeed />} /> */}
           <Route path="/chat" element={
             <AuthBlocking>
               <Chat />
