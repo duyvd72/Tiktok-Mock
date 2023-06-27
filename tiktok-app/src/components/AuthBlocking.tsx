@@ -92,7 +92,7 @@ const AuthBlocking: React.FC<IAuthBlocking> = ({ children, whenRefresh }) => {
     }
   }, [location]);
 
-  if (!auth) {
+  if (!auth && !getAccessToken()) {
     return <NewsFeed />
   }
   return <main>{children}</main>;
