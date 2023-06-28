@@ -13,6 +13,7 @@ import AdminRoot from './pages/Admin/components/AdminRoot';
 import AdminHome from './pages/Admin/components/AdminHome';
 import UserManagement from './pages/Admin/UserManagement/components/UserManagement';
 import UserInDetailAdmin from './pages/Admin/UserManagement/components/UserInDetailAdmin';
+import AdminPrivateRoutes from './routes/AdminPrivateRoutes';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             </WrapperApp>
           }
         >
+<<<<<<< Updated upstream
           <Route path="/following" element={
             <AuthBlocking whenRefresh>
               <NewsFeed />
@@ -43,6 +45,24 @@ function App() {
               <VideoDetails />
             </AuthBlocking>
           }
+=======
+          <Route
+            path="/"
+            element={
+              <AuthBlocking whenRefresh>
+                <NewsFeed />
+              </AuthBlocking>
+            }
+          ></Route>
+
+          <Route
+            path="/videodetails/:videoId"
+            element={
+              <AuthBlocking>
+                <VideoDetails />
+              </AuthBlocking>
+            }
+>>>>>>> Stashed changes
           />
           <Route
             path="/:userId"
@@ -52,6 +72,7 @@ function App() {
               </AuthBlocking>
             }
           ></Route>
+<<<<<<< Updated upstream
           <Route path="/chat" element={
             <AuthBlocking>
               <Chat />
@@ -62,8 +83,34 @@ function App() {
               <UploadVideo />
             </AuthBlocking>
           } />
+=======
+          <Route path="/following" element={<NewsFeed />} />
+          <Route
+            path="/chat"
+            element={
+              <AuthBlocking>
+                <Chat />
+              </AuthBlocking>
+            }
+          ></Route>
+          <Route
+            path="/upload"
+            element={
+              <AuthBlocking>
+                <UploadVideo />
+              </AuthBlocking>
+            }
+          />
+>>>>>>> Stashed changes
         </Route>
-        <Route path="admin" element={<AdminRoot />}>
+        <Route
+          path="admin"
+          element={
+            <AdminPrivateRoutes>
+              <AdminRoot />
+            </AdminPrivateRoutes>
+          }
+        >
           <Route path="" element={<Navigate to="home" />} />
           <Route path="home" element={<AdminHome />} />
           <Route path="user-management" element={<UserManagement />} />

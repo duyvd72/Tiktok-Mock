@@ -11,9 +11,14 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const getVideoListAPI = createAsyncThunk(
   'videoList/fetchVideoList',
-  async (condition: { page: number; limit: number }): Promise<{ video: IVideo[], totalPage: number }> => {
+  async (condition: {
+    page: number;
+    limit: number;
+  }): Promise<{ video: IVideo[]; totalPage: number }> => {
     try {
-      const response = await axiosInstance.get(`videos/getAllVideo/?page=${condition.page}&limit=${condition.limit}`);
+      const response = await axiosInstance.get(
+        `videos/getAllVideo/?page=${condition.page}&limit=${condition.limit}`
+      );
       return response.data;
     } catch (error) {
       throw new Error('Failed to get video list!');
@@ -26,11 +31,16 @@ export const loginUserAPI = createAsyncThunk(
   async (loggingUser: ILoggingUser): Promise<ICurrentUser> => {
     try {
       const response = await axiosInstance.post('accounts/login', loggingUser);
-      if (response.data.message == 'invalid username' || response.data.message == 'invalid password') {
-        return response.data
+      if (
+        response.data.message == 'invalid username' ||
+        response.data.message == 'invalid password'
+      ) {
+        return response.data;
       }
 
-      setAccessToken(response.data.data.token);
+      const token = response.data.data.token;
+
+      setAccessToken(token);
 
       return response.data.data;
     } catch (error) {
