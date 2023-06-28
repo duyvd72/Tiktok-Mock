@@ -372,12 +372,12 @@ const VideoInfo = (props: IVideoInfoProps) => {
             <span className="text-xs font-semibold">
               { commentNumberOnSingleVideo }
             </span>
-            <button
+            {/* <button
               className="flex justify-center items-center bg-slate-100 w-5 h-5 rounded-full p-4 cursor-pointer"
               onClick={() => onSignIn()}
             >
               <i className="fas fa-bookmark"></i>
-            </button>
+            </button> */}
             {/* <span className="text-xs font-semibold">{numberOfShareVideo}k</span> */}
           </span>
           {/* Social platforms */}

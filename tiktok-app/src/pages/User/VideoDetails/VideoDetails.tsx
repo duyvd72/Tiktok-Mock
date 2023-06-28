@@ -22,7 +22,7 @@ const VideoDetails = () => {
   const videoOwnerId = videoById?.ownerVideo._id;
   const commentNumberOnSingleVideo = videoById?.comment.length;
   const commentArrayOnSingleVideo = videoById?.comment;
-  console.log("commentArrayOnSingleVideo: ", commentArrayOnSingleVideo)
+  // console.log("commentArrayOnSingleVideo: ", commentArrayOnSingleVideo);
   const likeNumberOnSingleVideo = videoById?.like.length;
   const likeIdByVideoArr = videoById?.like;
   // const userFullname = videoById?.ownerVideo.fullname;
