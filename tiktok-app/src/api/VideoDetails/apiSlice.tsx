@@ -98,16 +98,16 @@ interface IPostRepliesResponse {
   success: boolean;
 }
 // type prepareHeaders
-type prepareHeaders = (
-  headers: Headers,
-  api: {
-    getState: () => unknown;
-    extra: unknown;
-    endpoint: string;
-    type: 'query' | 'mutation';
-    forced: boolean | undefined;
-  }
-) => Headers | void;
+// type prepareHeaders = (
+//   headers: Headers,
+//   api: {
+//     getState: () => unknown;
+//     extra: unknown;
+//     endpoint: string;
+//     type: 'query' | 'mutation';
+//     forced: boolean | undefined;
+//   }
+// ) => Headers | void;
 // put like video / comment
 interface ILikeParam {
   likedVideoId: string;
@@ -127,8 +127,8 @@ interface ILikeResponse {
 }
 // put follow account
 interface IFollowingParam {
-  followedUser: string; // get from videoOwnerId
-  userFollow: string; // get from useModal()
+  followedUser: string | undefined; // get from videoOwnerId
+  userFollow: string | undefined; // get from useModal()
 }
 interface IFollowingAccountResponse {
   _id: string;

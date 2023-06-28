@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import logoIcon from '@/assets/images/logo-icon.png';
 import { NavLink, useParams } from 'react-router-dom';
 import {
-  useGetAllRepliesByCommentIdQuery,
-  useGetAllVideosByUserIdQuery,
+  // useGetAllRepliesByCommentIdQuery,
+  // useGetAllVideosByUserIdQuery,
   useGetVideoByVideoIdQuery,
 } from '@/api/VideoDetails/apiSlice';
 import { IActiveFunctionality } from '../../VideoInfo/VideoInfo';
-import useModal from '@/hooks/useModal';
+// import useModal from '@/hooks/useModal';
 
 interface IRepliesSectionProps {
   activeFunctionality: IActiveFunctionality;
@@ -18,7 +18,7 @@ interface IRepliesSectionProps {
   replyContentArr: [] | undefined;
   numberOfLikeOnSingleReply: number | undefined;
   repliesSectionRef: React.RefObject<HTMLDivElement> | null
-}
+};
 interface ICommentContentUser {
   _id: string;
   fullname: string;
@@ -32,7 +32,7 @@ interface ICommentContentUser {
   updatedAt: string;
   videoliked: [];
   __v: number;
-}
+};
 interface ICommentContent {
   _id: string;
   content: string;
@@ -41,7 +41,7 @@ interface ICommentContent {
   updatedAt: string;
   createdAt: string;
   user: ICommentContentUser;
-}
+};
 interface IUserReply {
   _id: string;
   createdAt: string;
@@ -56,7 +56,7 @@ interface IUserReply {
   nickname: string;
   fullname: string;
   __v: number;
-}
+};
 interface IReplyContent {
   _id: string;
   content: string;
@@ -66,35 +66,35 @@ interface IReplyContent {
   updatedAt: string;
   user: IUserReply;
   __v: number;
-}
+};
 
 const RepliesSection = (props: IRepliesSectionProps) => {
   const {
-    activeFunctionality,
+    // activeFunctionality,
     setActiveFunctionality,
-    currentCommentId,
+    // currentCommentId,
     setCurrentCommentId,
-    numberOfLikesOnSingleComment,
+    // numberOfLikesOnSingleComment,
     replyContentArr,
-    numberOfLikeOnSingleReply,
+    // numberOfLikeOnSingleReply,
     repliesSectionRef,
 
   } = props;
   const [showReplies, setShowReplies] = useState<string[]>([]);
-  const [likedComments, setLikedComments] = useState<string[]>([]);
-  const [likedReply, setLikeReply] = useState<string[]>([]);
-  const { currentUser } = useModal();
-  const currentUserId = currentUser._id;
+  // const [likedComments, setLikedComments] = useState<string[]>([]);
+  // const [likedReply, setLikeReply] = useState<string[]>([]);
+  // const { currentUser } = useModal();
+  // const currentUserId = currentUser._id;
   const { videoId } = useParams();
-  const {
-    data: userInfo,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useGetAllVideosByUserIdQuery(currentUserId);
+  // const {
+  //   data: userInfo,
+  //   isLoading,
+  //   isSuccess,
+  //   isError,
+  //   error,
+  // } = useGetAllVideosByUserIdQuery(currentUserId);
   // console.log("userInfo: >>>", userInfo);
-  const nicknameComment = userInfo?.nickname;
+  // const nicknameComment = userInfo?.nickname;
   // console.log("nicknameComment: ", nicknameComment)
 
   const { data: userComments } = useGetVideoByVideoIdQuery(videoId);
@@ -115,32 +115,27 @@ const RepliesSection = (props: IRepliesSectionProps) => {
     setCurrentCommentId(currentCommentId);
   };
 
-  const handleLikeComment = (currentCommentId: string) => {
-    setLikedComments((prevLikedComments) => {
-      if (prevLikedComments.includes(currentCommentId)) {
-        return prevLikedComments.filter((id) => id !== currentCommentId);
-      } else {
-        return [...prevLikedComments, currentCommentId];
-      }
-    });
-  };
+  // const handleLikeComment = (currentCommentId: string) => {
+  //   setLikedComments((prevLikedComments) => {
+  //     if (prevLikedComments.includes(currentCommentId)) {
+  //       return prevLikedComments.filter((id) => id !== currentCommentId);
+  //     } else {
+  //       return [...prevLikedComments, currentCommentId];
+  //     }
+  //   });
+  // };
 
-  const handleLikeReply = (currentReplyId: string) => {
-    setLikeReply((prevLikedComments) => {
-      if (prevLikedComments.includes(currentReplyId)) {
-        return prevLikedComments.filter((id) => id !== currentReplyId);
-      } else {
-        return [...prevLikedComments, currentReplyId];
-      }
-    });
-  };
+  // const handleLikeReply = (currentReplyId: string) => {
+  //   setLikeReply((prevLikedComments) => {
+  //     if (prevLikedComments.includes(currentReplyId)) {
+  //       return prevLikedComments.filter((id) => id !== currentReplyId);
+  //     } else {
+  //       return [...prevLikedComments, currentReplyId];
+  //     }
+  //   });
+  // };
 
-  const handleReplyToComment = (
-    currentCommentId: string,
-    nickname: string | undefined
-  ) => {
-    // console.log('reply button clicked!');
-    // console.log('currentCommentId: ', currentCommentId);
+  const handleReplyToComment = (currentCommentId: string, nickname: string | undefined) => {
     setActiveFunctionality({ mode: 'reply', nickname: nickname });
     setCurrentCommentId(currentCommentId);
   };
@@ -152,7 +147,7 @@ const RepliesSection = (props: IRepliesSectionProps) => {
         {/* Header */}
         {userCommentsArr &&
           userCommentsArr.length > 0 &&
-          userCommentsArr.map((comment: ICommentContent, index: number) => (
+          userCommentsArr.map((comment: ICommentContent) => (
             <div className="flex flex-col items-start" key={comment._id}>
               {/* Left header */}
               <div className="flex gap-2 items-center max-w-full w-full pl-5">
@@ -190,8 +185,10 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                   </div>
                 </div>
                 {/* Right header */}
-                <div className="flex flex-col items-center">
-                  <button onClick={() => handleLikeComment(comment._id)}>
+                {/* <div className="flex flex-col items-center">
+                  <button 
+                  onClick={() => handleLikeComment(comment._id)}
+                  >
                     <i
                       className={`fas fa-heart text-black ${
                         likedComments.includes(comment._id)
@@ -200,10 +197,10 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                       }`}
                     ></i>
                   </button>
-                  {/* <span className="text-xs text-black">
+                  <span className="text-xs text-black">
                     {numberOfLikesOnSingleComment}
-                  </span> */}
-                </div>
+                  </span>
+                </div> */}
               </div>
               {/* View more replies */}
               <div className="flex items-center ml-12 mt-2 ">
@@ -228,10 +225,10 @@ const RepliesSection = (props: IRepliesSectionProps) => {
               {/* Replies List */}
               {replyContentArr &&
                 replyContentArr.length > 0 &&
-                replyContentArr.map((reply: IReplyContent, index: number) => (
+                replyContentArr.map((reply: IReplyContent) => (
                   <div
                     className={`p-2 pt-0 text-black flex items-start 
-                              justify-center ml-10 min-w-[80%] max-w-full ${showReplies.includes(comment._id)
+                              justify-center ml-5 min-w-[80%] max-w-full ${showReplies.includes(comment._id)
                                 ? "opacity-100 transition-all duration-300 ease-in-out"
                                 : "hidden"}`}
                     key={reply._id}
@@ -242,12 +239,13 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                         {/* Avatar */}
                         <NavLink
                           to={`/${reply.user._id}`}
-                          className="bg-black w-10 h-10 rounded-full line-height flex items-center justify-center mt-[-10px] min-w-[40px] min-h-[20px]"
+                          className="bg-black w-10 h-10 rounded-full line-height flex items-center justify-center 
+                          mt-[-10px] min-w-[40px] min-h-[20px]"
                         >
                           <img src={logoIcon} alt="avatar" className="p-2" />
                         </NavLink>
                         {/* account & username */}
-                        <div className="grow">
+                        <div className="flex-1">
                           <NavLink to={`/${reply.user._id}`} className="">
                             <p className="font-semibold text-md text-black hover:underline mt-10">
                               { reply.user.nickname }
@@ -277,7 +275,7 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                           </div>
                         </div>
                         {/* Right header */}
-                        <div className="flex flex-col items-center ml-[130px]">
+                        {/* <div className="flex flex-col items-center ml-[130px]">
                           <button onClick={() => handleLikeReply(reply._id)}>
                             <i
                               className={`fas fa-heart text-black ${
@@ -287,10 +285,10 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                               }`}
                             ></i>
                           </button>
-                          {/* <span className="text-xs text-black">
+                          <span className="text-xs text-black">
                             {numberOfLikeOnSingleReply}
-                          </span> */}
-                        </div>
+                          </span>
+                        </div> */}
                       </div>
                     </div>
                   </div>

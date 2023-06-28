@@ -10,9 +10,8 @@ import {
   usePutFollowingMutation,
   usePutLikeVideoMutation,
 } from '@/api/VideoDetails/apiSlice';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { IPostComment, IRepliesContent } from '@/api/VideoDetails/apiSlice';
-import { toast } from 'react-toastify';
 import useDebounce from '@/hooks/useDebounce';
 
 interface IVideoInfoProps {
@@ -42,11 +41,8 @@ const VideoInfo = (props: IVideoInfoProps) => {
     avatarUrl,
     commentNumberOnSingleVideo,
     likeNumberOnSingleVideo,
-    numberOfShareVideo,
     currentVideoId,
-    myVideoListArr,
     commentArrayOnSingleVideo,
-    likeIdByVideoArr,
     videoOwnerId,
 
 
@@ -144,8 +140,8 @@ const VideoInfo = (props: IVideoInfoProps) => {
         // Post comment functionality
         // console.log("Post functionality!!");
         const response = await postComment(payload);
-        commentArrayOnSingleVideo?.unshift(payload);
-        console.log(response.data);
+        commentArrayOnSingleVideo?.unshift(payload as never);
+        console.log(response);
         // handle if post a comment successfully
         // if (isSuccess) {
         //   commentArrayOnSingleVideo?.unshift(payload);
@@ -160,8 +156,8 @@ const VideoInfo = (props: IVideoInfoProps) => {
           commentId: currentCommentId,
         };
         const response = await postReply(payload);
-        replyContentArr?.unshift(payload);
-        console.log(response.data);
+        replyContentArr?.unshift(payload as never);
+        console.log(response);
         // handle if post a reply to a commentId successfully
         // if (isSuccess) {
         //   // commentArrayOnSingleVideo?.unshift(payload);
@@ -169,8 +165,6 @@ const VideoInfo = (props: IVideoInfoProps) => {
         //   toast.success("Nice reply!!");
         // }
       }
-      // setCommentContent("");
-      // setActiveFunctionality({ mode: "comment", nickname: "" });
     } catch (error) {
       setCommentContent("");
       setActiveFunctionality({ mode: "comment", nickname: "" });
@@ -197,7 +191,7 @@ const VideoInfo = (props: IVideoInfoProps) => {
         userFollow: currentUserId,
       };
       const response = await putFollowing(payload);
-      console.log(response.data);
+      console.log(response);
       // const userLikeVideoArr = response.data.like;
       // const isIncluded = userLikeVideoArr?.every((id: string) => likeIdByVideoArr?.includes(id))
       // if(isIncluded) {
@@ -211,7 +205,6 @@ const VideoInfo = (props: IVideoInfoProps) => {
 
   const handleLikeVideoClick = async (currentVideoId: string) => {
     // console.log(currentVideoId);
-
     setLikedVideo((prevLikedVideo) => {
       if (prevLikedVideo.includes(currentVideoId)) {
         return prevLikedVideo.filter((id) => id !== currentVideoId);
@@ -225,7 +218,7 @@ const VideoInfo = (props: IVideoInfoProps) => {
         userLikeId: currentUserId,
       };
       const response = await putLikeVideo(payload);
-      // console.log(response.data);
+      console.log(response);
       // const userLikeVideoArr = response.data.like;
       // const isIncluded = userLikeVideoArr?.every((id: string) => likeIdByVideoArr?.includes(id))
       // if(isIncluded) {
@@ -255,8 +248,9 @@ const VideoInfo = (props: IVideoInfoProps) => {
   //   localStorage.setItem('followingAccount', JSON.stringify(followingAccount));
   // }, [likedVideo, followingAccount]);
   
+  // Declare useDebounce hooks
   const useDebounceHandleLikeVideoClick = useDebounce(handleLikeVideoClick, 300);
-  const useDebounceHandlePostClick = useDebounce(handlePostClick, 300);
+  // const useDebounceHandlePostClick = useDebounce(handlePostClick, 300);
   
   return (
     <>
@@ -285,15 +279,14 @@ const VideoInfo = (props: IVideoInfoProps) => {
             </div>
           </div>
           {/* Right header*/}
-          {currentUserId && currentVideoId ? (
+          {currentUserId && videoOwnerId ? (
             <button
-              className={`border border-customedPink hover:bg-[#fe2c550f] 
-              hover:ease-in-out transition duration-300 rounded-lg bg-transparent 
-              font-semibold text-customedPink ${followingAccount.includes(currentVideoId)
+              className={`border border-customedPink ${followingAccount.includes(videoOwnerId)
                   ? "bg-customedPink text-white"
-                  : ""
-                } px-4 flex-wrap sm:text-sm xs:text-xs min-w-[120px] min-h-[50px] w-[120px] h-[50px]`}
-              onClick={() => handleFollowingButton(currentVideoId)}
+                  : ""} hover:bg-[#fe2c550f] hover:ease-in-out transition duration-300 rounded-lg 
+                  font-semibold text-customedPink px-4 flex-wrap sm:text-sm xs:text-xs min-w-[120px] min-h-[50px] w-[120px] h-[50px]`
+              }
+              onClick={() => handleFollowingButton(videoOwnerId)}
             >
               Follow
             </button>
@@ -385,7 +378,7 @@ const VideoInfo = (props: IVideoInfoProps) => {
             >
               <i className="fas fa-bookmark"></i>
             </button>
-            <span className="text-xs font-semibold">{numberOfShareVideo}k</span>
+            {/* <span className="text-xs font-semibold">{numberOfShareVideo}k</span> */}
           </span>
           {/* Social platforms */}
           {/* <span className="flex gap-2 items-center">

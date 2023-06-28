@@ -24,7 +24,7 @@ export const store = configureStore({
     // Add middlewares for RTK query
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(VideoDetailsApi.middleware),
 
-
+    
     //----------------------Linh ends------------------------------------------------
 
 });

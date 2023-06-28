@@ -1,35 +1,29 @@
-import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import VideoDisplay from '@/pages/User/VideoDetails/components/VideoDisplay';
-import {
-  useGetAllVideosByUserIdQuery,
-  useGetAllVideosQuery,
-  useGetVideoByVideoIdQuery,
-} from '@/api/VideoDetails/apiSlice';
 // import IVideo from "@/interfaces/interfaces";
 import { useEffect, useRef, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { setVideoTimestamp } from '../../NewsFeed/redux/videoTimeStampSlice';
 import { IMyVideoInfo } from '@/api/VideoDetails/apiSlice';
-interface ICommentCreateAt {
-  createdAt: string;
-}
 
-interface IMyVideoList {
-  _id: string;
-  like: [];
-  comment: ICommentCreateAt[];
-  ownerVideo: string;
-  updatedAt: string;
-  videoHastag: string;
-  videoTitle: string;
-  videoUrl: string;
-  __v: number;
-}
+// interface ICommentCreateAt {
+//   createdAt: string;
+// };
+
+// interface IMyVideoList {
+//   _id: string;
+//   like: [];
+//   comment: ICommentCreateAt[];
+//   ownerVideo: string;
+//   updatedAt: string;
+//   videoHastag: string;
+//   videoTitle: string;
+//   videoUrl: string;
+//   __v: number;
+// };
 
 interface IMyMainVideoProps {
   myVideoListArr: IMyVideoInfo[] | undefined;
   currentVideoId: string | undefined;
-}
+};
 
 const MainVideo = (props: IMyMainVideoProps) => {
   const { myVideoListArr, currentVideoId } = props;
@@ -95,8 +89,8 @@ const MainVideo = (props: IMyMainVideoProps) => {
   const prevVideoClick = () => {
     if (myVideoListArr && videoIndex > 0) {
       setVideoIndex(videoIndex - 1);
-      const nextVideoId = myVideoListArr[videoIndex - 1]._id;
-      navigate(`/videodetails/${nextVideoId}`);
+      const prevVideoId = myVideoListArr[videoIndex - 1]._id;
+      navigate(`/videodetails/${prevVideoId}`);
     }
   };
 
