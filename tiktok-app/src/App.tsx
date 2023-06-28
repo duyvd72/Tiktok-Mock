@@ -27,25 +27,14 @@ function App() {
             </WrapperApp>
           }
         >
-<<<<<<< Updated upstream
-          <Route path="/following" element={
-            <AuthBlocking whenRefresh>
-              <NewsFeed />
-            </AuthBlocking>
-          }
+          <Route
+            path="/following"
+            element={
+              <AuthBlocking whenRefresh>
+                <NewsFeed />
+              </AuthBlocking>
+            }
           />
-          <Route path="/" element={
-            <AuthBlocking whenRefresh>
-              <NewsFeed />
-            </AuthBlocking>
-          }
-          ></Route>
-          <Route path="/videodetails/:videoId" element={
-            <AuthBlocking>
-              <VideoDetails />
-            </AuthBlocking>
-          }
-=======
           <Route
             path="/"
             element={
@@ -54,7 +43,6 @@ function App() {
               </AuthBlocking>
             }
           ></Route>
-
           <Route
             path="/videodetails/:videoId"
             element={
@@ -62,7 +50,6 @@ function App() {
                 <VideoDetails />
               </AuthBlocking>
             }
->>>>>>> Stashed changes
           />
           <Route
             path="/:userId"
@@ -72,19 +59,6 @@ function App() {
               </AuthBlocking>
             }
           ></Route>
-<<<<<<< Updated upstream
-          <Route path="/chat" element={
-            <AuthBlocking>
-              <Chat />
-            </AuthBlocking>
-          }></Route>
-          <Route path="/upload" element={
-            <AuthBlocking>
-              <UploadVideo />
-            </AuthBlocking>
-          } />
-=======
-          <Route path="/following" element={<NewsFeed />} />
           <Route
             path="/chat"
             element={
@@ -101,7 +75,6 @@ function App() {
               </AuthBlocking>
             }
           />
->>>>>>> Stashed changes
         </Route>
         <Route
           path="admin"
