@@ -3,8 +3,7 @@ import { IVideo } from '@/interfaces/interfaces';
 import defaultAva from '@/assets/images/default-ava.png';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { NavLink } from 'react-router-dom';
-import useModal from '@/hooks/useModal';
+import FollowButton from '../FollowButton/FollowButton';
 
 interface IProps {
   video: IVideo;
@@ -22,7 +21,9 @@ const VideoItem = (props: IProps) => {
     if (videoRef.current) {
       const callback: IntersectionObserverCallback = (entries) => {
         const [entry] = entries
+
         setVisible(entry.isIntersecting)
+
       }
       const observer = new IntersectionObserver(callback, {
         root: null, rootMargin: '0px', threshold: 0.5
@@ -174,22 +175,7 @@ const VideoItem = (props: IProps) => {
           </div>
         </div>
         <div>
-          {/* {currentUser.following.includes(video.ownerVideo._id) ? (
-            <button className="border px-1">Đang Follow</button>
-          ) : (
-            <button
-              className="border border-[#fe2c55] px-1 text-[#fe2c55]
-                font-bold rounded-[4px] px-4 hover:bg-[#fe2c550f]"
-            >
-              Follow
-            </button>
-          )} */}
-          <button
-            className="border border-[#fe2c55] px-1 text-[#fe2c55]
-                font-bold rounded-[4px] px-4 hover:bg-[#fe2c550f]"
-          >
-            Follow
-          </button>
+          <FollowButton video={video} />
         </div>
       </div>
       <hr className="my-5 w-[70%] mx-auto" />

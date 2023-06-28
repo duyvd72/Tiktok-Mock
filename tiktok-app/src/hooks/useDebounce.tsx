@@ -4,14 +4,15 @@ type SomeFunction = (...args: any[]) => void;
 type Timer = ReturnType<typeof setTimeout>;
 
 const useDebounce = <Func extends SomeFunction>(func: Func, delay: number) => {
-  const [timer, setTimer] = useState<Timer>(); 
+  const [timer, setTimer] = useState<Timer>();
 
   const debouncedFunction = ((...args) => {
+    console.log('log', ...args)
     const newTimer = setTimeout(() => {
       func(...args);
     }, delay);
-    clearTimeout(timer); 
-    setTimer(newTimer); 
+    clearTimeout(timer);
+    setTimer(newTimer);
   }) as Func;
 
   return debouncedFunction;
