@@ -44,9 +44,9 @@ const VideoInfo = (props: IVideoInfoProps) => {
     likeNumberOnSingleVideo,
     numberOfShareVideo,
     currentVideoId,
-    // myVideoListArr,
+    myVideoListArr,
     commentArrayOnSingleVideo,
-    // likeIdByVideoArr,
+    likeIdByVideoArr,
     videoOwnerId,
   } = props;
   const repliesSectionRef = useRef<HTMLDivElement | null>(null);
@@ -113,7 +113,6 @@ const VideoInfo = (props: IVideoInfoProps) => {
         setCommentContent(content);
       }
     } else if (
-      // eslint-disable-next-line no-dupe-else-if
       activeFunctionality.mode === 'reply' &&
       !content.includes(`@${nickname}`)
     ) {
@@ -127,10 +126,10 @@ const VideoInfo = (props: IVideoInfoProps) => {
   };
 
   //Call API
-  // const [postComment] = usePostCommentMutation();
-  // const [postReply] = usePostReplyMutation();
-  // const [putLikeVideo] = usePutLikeVideoMutation();
-  // const [putFollowing] = usePutFollowingMutation();
+  const [postComment] = usePostCommentMutation();
+  const [postReply] = usePostReplyMutation();
+  const [putLikeVideo] = usePutLikeVideoMutation();
+  const [putFollowing] = usePutFollowingMutation();
 
   const handlePostClick = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -138,16 +137,16 @@ const VideoInfo = (props: IVideoInfoProps) => {
     // debugger;
     try {
       if (activeFunctionality.mode === 'comment') {
-        // const payload: IPostComment = {
-        //   comment: commentContent,
-        //   userId: currentUserId,
-        //   videoId: currentVideoId,
-        // };
+        const payload: IPostComment = {
+          comment: commentContent,
+          userId: currentUserId,
+          videoId: currentVideoId,
+        };
         // Post comment functionality
         // console.log("Post functionality!!");
-        // const response = await postComment(payload);
-        // commentArrayOnSingleVideo?.unshift(payload);
-        // console.log(response.data);
+        const response = await postComment(payload);
+        commentArrayOnSingleVideo?.unshift(payload);
+        console.log(response.data);
         // handle if post a comment successfully
         // if (isSuccess) {
         //   commentArrayOnSingleVideo?.unshift(payload);
@@ -156,14 +155,14 @@ const VideoInfo = (props: IVideoInfoProps) => {
       } else if (activeFunctionality.mode === 'reply') {
         // Post reply to single comment functionality
         // console.log("Reply functionality: ");
-        // const payload: IRepliesContent = {
-        //   userId: currentUserId,
-        //   replyComment: commentContent,
-        //   commentId: currentCommentId,
-        // };
-        // const response = await postReply(payload);
-        // replyContentArr?.unshift(payload);
-        // console.log(response.data);
+        const payload: IRepliesContent = {
+          userId: currentUserId,
+          replyComment: commentContent,
+          commentId: currentCommentId,
+        };
+        const response = await postReply(payload);
+        replyContentArr?.unshift(payload);
+        console.log(response.data);
         // handle if post a reply to a commentId successfully
         // if (isSuccess) {
         //   // commentArrayOnSingleVideo?.unshift(payload);
@@ -194,12 +193,12 @@ const VideoInfo = (props: IVideoInfoProps) => {
       }
     });
     try {
-      // const payload = {
-      //   followedUser: videoOwnerId,
-      //   userFollow: currentUserId,
-      // };
-      // const response = await putFollowing(payload);
-      // console.log(response.data);
+      const payload = {
+        followedUser: videoOwnerId,
+        userFollow: currentUserId,
+      };
+      const response = await putFollowing(payload);
+      console.log(response.data);
       // const userLikeVideoArr = response.data.like;
       // const isIncluded = userLikeVideoArr?.every((id: string) => likeIdByVideoArr?.includes(id))
       // if(isIncluded) {
@@ -222,11 +221,11 @@ const VideoInfo = (props: IVideoInfoProps) => {
       }
     });
     try {
-      // const payload = {
-      //   likedVideoId: currentVideoId,
-      //   userLikeId: currentUserId,
-      // };
-      // const response = await putLikeVideo(payload);
+      const payload = {
+        likedVideoId: currentVideoId,
+        userLikeId: currentUserId,
+      };
+      const response = await putLikeVideo(payload);
       // console.log(response.data);
       // const userLikeVideoArr = response.data.like;
       // const isIncluded = userLikeVideoArr?.every((id: string) => likeIdByVideoArr?.includes(id))
@@ -261,7 +260,7 @@ const VideoInfo = (props: IVideoInfoProps) => {
     handleLikeVideoClick,
     300
   );
-  // const useDebounceHandlePostClick = useDebounce(handlePostClick, 300);
+  const useDebounceHandlePostClick = useDebounce(handlePostClick, 300);
 
   return (
     <>
