@@ -1,13 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import logoIcon from '@/assets/images/logo-icon.png';
 import { NavLink, useParams } from 'react-router-dom';
-import {
-  useGetAllRepliesByCommentIdQuery,
-  useGetAllVideosByUserIdQuery,
-  useGetVideoByVideoIdQuery,
-} from '@/api/VideoDetails/apiSlice';
+import { useGetVideoByVideoIdQuery } from '@/api/VideoDetails/apiSlice';
 import { IActiveFunctionality } from '../../VideoInfo/VideoInfo';
-import useModal from '@/hooks/useModal';
 
 interface IRepliesSectionProps {
   activeFunctionality: IActiveFunctionality;
