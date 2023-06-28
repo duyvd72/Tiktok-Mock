@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import video from '@/assets/video/Download.mp4';
-import useModal from '@/hooks/useModal';
-import LikeModal from './LikeModal';
 
 interface IProps {
   setIsLikeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;

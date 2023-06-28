@@ -98,16 +98,16 @@ interface IPostRepliesResponse {
   success: boolean;
 }
 // type prepareHeaders
-type prepareHeaders = (
-  headers: Headers,
-  api: {
-    getState: () => unknown;
-    extra: unknown;
-    endpoint: string;
-    type: 'query' | 'mutation';
-    forced: boolean | undefined;
-  }
-) => Headers | void;
+// type prepareHeaders = (
+//   headers: Headers,
+//   api: {
+//     getState: () => unknown;
+//     extra: unknown;
+//     endpoint: string;
+//     type: 'query' | 'mutation';
+//     forced: boolean | undefined;
+//   }
+// ) => Headers | void;
 // put like video / comment
 interface ILikeParam {
   likedVideoId: string;

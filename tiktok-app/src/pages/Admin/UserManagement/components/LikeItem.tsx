@@ -1,4 +1,3 @@
-import React from 'react';
 import defaultAva from '@/assets/images/default-ava.png';
 
 const LikeItem = () => {

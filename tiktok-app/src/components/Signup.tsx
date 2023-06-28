@@ -1,11 +1,10 @@
 import FooterLoginSignup from '@/components/FooterLoginSignup';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { ISignUpUser } from '@/interfaces/interfaces'
+import { ISignUpUser } from '@/interfaces/interfaces';
 import useLoginSignUpUser from '@/hooks/useLoginSignUpUser';
-import LoadingSpinner from '@/components/LoadingSpinner'
+import LoadingSpinner from '@/components/LoadingSpinner';
 const Signup = (): JSX.Element => {
-
-  const { userSignUp, isLoading } = useLoginSignUpUser()
+  const { userSignUp, isLoading } = useLoginSignUpUser();
 
   const initialValues = {
     username: '',
@@ -15,9 +14,7 @@ const Signup = (): JSX.Element => {
   };
 
   const handleSubmit = async (values: ISignUpUser) => {
-
-    userSignUp(values)
-
+    userSignUp(values);
   };
 
   const validateForm = (values: any) => {
@@ -67,11 +64,8 @@ const Signup = (): JSX.Element => {
             onSubmit={handleSubmit}
           >
             <Form className="w-full flex-col text-center text-white">
-              <div className='flex flex-col gap-2'>
-                <label
-                  className=" me-2 text-left"
-                  htmlFor="nickname"
-                >
+              <div className="flex flex-col gap-2">
+                <label className=" me-2 text-left" htmlFor="nickname">
                   Nickname
                 </label>
                 <Field
@@ -86,11 +80,8 @@ const Signup = (): JSX.Element => {
                 </ErrorMessage>
               </div>
 
-              <div className='flex flex-col gap-2'>
-                <label
-                  className="me-2 text-left"
-                  htmlFor="fullname"
-                >
+              <div className="flex flex-col gap-2">
+                <label className="me-2 text-left" htmlFor="fullname">
                   Fullname
                 </label>
                 <Field
@@ -105,11 +96,8 @@ const Signup = (): JSX.Element => {
                 </ErrorMessage>
               </div>
 
-              <div className='flex flex-col gap-2'>
-                <label
-                  className="me-2 text-left"
-                  htmlFor="username"
-                >
+              <div className="flex flex-col gap-2">
+                <label className="me-2 text-left" htmlFor="username">
                   Username
                 </label>
                 <Field
@@ -125,10 +113,7 @@ const Signup = (): JSX.Element => {
               </div>
 
               <div className="flex flex-col gap-2 mb-5">
-                <label
-                  className="me-2 text-left "
-                  htmlFor="password"
-                >
+                <label className="me-2 text-left " htmlFor="password">
                   Password
                 </label>
                 <Field
@@ -144,7 +129,7 @@ const Signup = (): JSX.Element => {
               </div>
 
               <button type="submit" className="font-bold px-6 py-2 bg-red-500">
-                {isLoading.loading ? <LoadingSpinner width={2} height={2} /> : "Đăng ký"}
+                {isLoading.loading ? <LoadingSpinner /> : 'Đăng ký'}
               </button>
             </Form>
           </Formik>

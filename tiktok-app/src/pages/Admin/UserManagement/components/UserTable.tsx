@@ -1,19 +1,19 @@
-import React, { ChangeEvent, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { ChangeEvent, useState } from 'react';
+// import { useNavigate } from 'react-router';
 import UserTableItem from './UserTableItem';
 
 const UserTable = () => {
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const navigate = useNavigate();
+  // const [searchKeyword, setSearchKeyword] = useState('');
+  // const navigate = useNavigate();
 
   const defaultFormQuantity = 2;
   const [quantity, setQuantity] = useState(defaultFormQuantity);
 
   const [activePage, setActivePage] = useState(1);
 
-  const handlePageClick = (pageQuantity: number) => {
-    setActivePage(pageQuantity);
-  };
+  // const handlePageClick = (pageQuantity: number) => {
+  //   setActivePage(pageQuantity);
+  // };
 
   // const filteredFormList = covidFormList.filter((form: any) => {
   //   return (
@@ -26,8 +26,8 @@ const UserTable = () => {
   //   );
   // });
 
-  const startIndex = (activePage - 1) * quantity;
-  const endIndex = startIndex + quantity;
+  // const startIndex = (activePage - 1) * quantity;
+  // const endIndex = startIndex + quantity;
   // const customList = filteredFormList.slice(startIndex, endIndex);
 
   // const pageQuantity = Math.ceil(filteredFormList.length / quantity);
@@ -60,10 +60,10 @@ const UserTable = () => {
   //   }
   // };
 
-  const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchKeyword(e.target.value);
-    setActivePage(1);
-  };
+  // const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setSearchKeyword(e.target.value);
+  //   setActivePage(1);
+  // };
 
   const hanldeChangeQuantity = (e: ChangeEvent<HTMLSelectElement>) => {
     setQuantity(Number(e.target.value));
