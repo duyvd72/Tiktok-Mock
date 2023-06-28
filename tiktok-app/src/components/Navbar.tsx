@@ -3,11 +3,24 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import useModal from '@/hooks/useModal';
 import defaultAva from '@/assets/images/default-ava.png';
 import { removeAccessToken } from '@/utils/accessTokenLS';
+import AccountItem from './AccountItem';
+import { useState } from 'react';
+import useDebounce from '@/hooks/useDebounce';
+import axiosInstance from '@/libs/axios/axiosConfig';
+import LoadingSpinner from './LoadingSpinner';
 
 const Navbar = () => {
   const { setModalIsOpen, currentUser } = useModal();
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [searchValue, setSearchValue] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(false)
+  const debounce = useDebounce(async (search) => {
+    setIsLoading(true)
+    const response = await axiosInstance.get(`/accounts/search/${search}`)
+    setIsLoading(false)
+    setSearchResults(response.data)
+  }, 500)
 
   const handleUploadBtn = () => {
     navigate('/upload');
@@ -31,7 +44,14 @@ const Navbar = () => {
     location.reload();
   };
 
-  console.log('cur', currentUser)
+  const handleSearch = (e: any) => {
+    setSearchValue(e.target.value)
+    if (!e.target.value) {
+      setSearchResults([])
+    } else {
+      debounce(e.target.value)
+    }
+  }
 
   return (
     <div className="flex justify-between items-center p-3 border-b-[1px] bg-white fixed w-full z-50 top-0">
@@ -40,18 +60,31 @@ const Navbar = () => {
           <img className="w-auto h-[35px]" src={logo} alt="" />
         </NavLink>
       </div>
-      <div className="flex flex-1 justify-center">
+      <div className="flex flex-1 justify-center relative">
         <input
           className="rounded-s-full py-1.5 px-4 bg-gray-200 outline-none w-full"
           type="text"
+          value={searchValue}
+          onChange={(e) => handleSearch(e)}
           placeholder="Tìm kiếm"
         />
+        <p className='bg-gray-200'>
+          {isLoading && <LoadingSpinner />}
+        </p>
         <button
           className="bg-gray-200 text-gray-400 border-s-[1px]
           border-gray-300 rounded-e-full px-4 hover:bg-gray-300 hover:text-black"
         >
           <i className="fas fa-search "></i>
         </button>
+        <section className='absolute top-[50px] bg-slate-200 rounded-md w-full max-h-[250px] overflow-auto max-w-[500px] flex flex-col break-words'>
+          {searchResults && searchResults.length > 0 && searchValue && searchResults.map(item =>
+          (
+            <>
+              <AccountItem userId={item._id} nickname={item.nickname} fullname={item.fullname} avatarUrl={item.avatarUrl} search />
+            </>
+          ))}
+        </section>
       </div>
       <div className="flex flex-1 gap-5 justify-end">
         <button

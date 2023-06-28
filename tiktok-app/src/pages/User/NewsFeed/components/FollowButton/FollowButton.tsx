@@ -28,10 +28,10 @@ function FollowButton({ video }: { video: IVideo }) {
             onClick={() => handleFollow()}
             className={`${currentUser && currentUser._id == video.ownerVideo._id ? "" : followed
                 ? `font-bold border border-[rgba(22, 24, 35, 0.12)] hover:bg-[#f8f8f8] rounded-[4px] px-4`
-                : `border border-[#fe2c55] px-1 text-[#fe2c55] font-bold rounded-[4px] px-4 hover:bg-[#fe2c550f]`}
+                : `border border-[#fe2c55] px-1 text-[#fe2c55] font-bold rounded-[4px] px-8 hover:bg-[#fe2c550f]`}
             `}
         >
-            {currentUser && currentUser._id == video.ownerVideo._id ? '' : followed ? 'Following' : 'Follow'}
+            {currentUser && currentUser._id == video.ownerVideo._id ? <p className='pe-28'></p> : followed ? 'Following' : 'Follow'}
         </button>
     )
 }
