@@ -51,6 +51,8 @@ export interface IAccountItem {
   avatarUrl: string;
   nickname: string;
   fullname: string;
+  userId: string;
+  search?: boolean
   _id?: string;
 }
 

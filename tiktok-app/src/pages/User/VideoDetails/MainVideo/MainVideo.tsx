@@ -115,7 +115,7 @@ const MainVideo = (props: IMyMainVideoProps) => {
           {/* Arrow left*/}
           <div className="flex flex-col flex-grow justify-center items-center gap-3">
             <button
-              className="w-10 h-10 rounded-full bg-[#252525]"
+              className="w-10 h-10 rounded-full bg-[#252525] flex justify-center items-center"
               onClick={prevVideoClick}
               ref={prevButtonRef}
             >
@@ -135,20 +135,20 @@ const MainVideo = (props: IMyMainVideoProps) => {
         </div>
         {/* Right component */}
         <div className="col-span-2 flex flex-col items-center">
-          <div className="self-start mt-2 mr-4">
+          {/* <div className="self-start mt-2 mr-4">
             <button className="rounded-xl bg-stone-700 hover:bg-[#545353] hover:ease-in-out transition duration-300 text-white text-sm flex gap-2 items-center py-2 px-3 mt-1">
               <i className="fas fa-flag "></i>
               Report
             </button>
-          </div>
+          </div> */}
           {/* Arrow right*/}
           <div className="flex flex-col flex-grow justify-center items-center gap-3">
             <button
-              className="w-10 h-10 rounded-full bg-[#252525]"
+              className="w-10 h-10 rounded-full bg-[#252525] flex justify-center items-center"
               onClick={nextVideoClick}
               ref={nextButtonRef}
             >
-              <i className="fas fa-chevron-right text-white"></i>
+              <i className="fas fa-chevron-right text-white items-center"></i>
             </button>
           </div>
         </div>

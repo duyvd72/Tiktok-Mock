@@ -7,7 +7,6 @@ const useDebounce = <Func extends SomeFunction>(func: Func, delay: number) => {
   const [timer, setTimer] = useState<Timer>();
 
   const debouncedFunction = ((...args) => {
-    console.log('log', ...args)
     const newTimer = setTimeout(() => {
       func(...args);
     }, delay);

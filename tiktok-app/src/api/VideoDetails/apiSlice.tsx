@@ -13,7 +13,7 @@ interface IOwnerVideo {
 interface IVideoByIdInfo {
   _id: string;
   videoUrl: string;
-  videoHastag: string;
+  videoHashtag: string;
   videoTitle: string;
   like: [];
   comment: [];
@@ -27,7 +27,7 @@ export interface IMyVideoInfo {
   _id: string;
   videoUrl: string;
   videoTitle: string;
-  videoHastag: string;
+  videoHashtag: string;
   ownerVideo: string;
   like: [];
   comment: [];
@@ -76,7 +76,7 @@ interface IPostCommentResponse {
     _id: string;
     videoUrl: string;
     videoTitle: string;
-    videoHastag: string;
+    videoHashtag: string;
     ownerVideo: string;
     like: [];
     comment: [];
@@ -117,7 +117,7 @@ interface ILikeResponse {
   _id: string;
   videoUrl: string;
   videoTitle: string;
-  videoHastag: string;
+  videoHashtag: string;
   ownerVideo: string;
   like: [];
   comment: [];
