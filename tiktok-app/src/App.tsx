@@ -26,8 +26,12 @@ function App() {
             </WrapperApp>
           }
         >
-<<<<<<< HEAD
-          <Route path="/following" element={<NewsFeed />} />
+          <Route path="/following" element={
+            <AuthBlocking whenRefresh>
+              <NewsFeed />
+            </AuthBlocking>
+          }
+          />
           <Route path="/" element={
             <AuthBlocking whenRefresh>
               <NewsFeed />
@@ -39,24 +43,6 @@ function App() {
               <VideoDetails />
             </AuthBlocking>
           }
-=======
-          <Route
-            path="/"
-            element={
-              <AuthBlocking whenRefresh>
-                <NewsFeed />
-              </AuthBlocking>
-            }
-          ></Route>
-
-          <Route
-            path="/videodetails/:videoId"
-            element={
-              <AuthBlocking>
-                <VideoDetails />
-              </AuthBlocking>
-            }
->>>>>>> features/admin
           />
           <Route
             path="/:userId"
@@ -66,7 +52,6 @@ function App() {
               </AuthBlocking>
             }
           ></Route>
-<<<<<<< HEAD
           <Route path="/chat" element={
             <AuthBlocking>
               <Chat />
@@ -77,24 +62,6 @@ function App() {
               <UploadVideo />
             </AuthBlocking>
           } />
-=======
-          <Route path="/following" element={<NewsFeed />} />
-          <Route
-            path="/chat"
-            element={
-              <AuthBlocking>
-                <Chat />
-              </AuthBlocking>
-            }
-          ></Route>
-          <Route
-            path="/upload"
-            element={
-              <AuthBlocking>
-                <UploadVideo />
-              </AuthBlocking>
-            }
-          />
         </Route>
         <Route path="admin" element={<AdminRoot />}>
           <Route path="" element={<Navigate to="home" />} />
@@ -105,7 +72,6 @@ function App() {
             element={<UserInDetailAdmin />}
           />
           <Route path="*" element={<Navigate to="home" />} />
->>>>>>> features/admin
         </Route>
       </Routes>
       <ToastContainer autoClose={500} />
