@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Root from './pages/Root/Root';
 import NewsFeed from './pages/User/NewsFeed/NewsFeed';
 import UserDetail from './components/UserDetail';
@@ -9,6 +9,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Chat from '@/components/Chat';
 import AuthBlocking from './components/AuthBlocking';
+import AdminRoot from './pages/Admin/components/AdminRoot';
+import AdminHome from './pages/Admin/components/AdminHome';
+import UserManagement from './pages/Admin/UserManagement/components/UserManagement';
+import UserInDetailAdmin from './pages/Admin/UserManagement/components/UserInDetailAdmin';
 
 function App() {
   return (
@@ -22,6 +26,7 @@ function App() {
             </WrapperApp>
           }
         >
+<<<<<<< HEAD
           <Route path="/following" element={<NewsFeed />} />
           <Route path="/" element={
             <AuthBlocking whenRefresh>
@@ -34,13 +39,34 @@ function App() {
               <VideoDetails />
             </AuthBlocking>
           }
-          />
-          <Route path="/:userId" element={
-            <AuthBlocking>
-              <UserDetail />
-            </AuthBlocking>
-          }
+=======
+          <Route
+            path="/"
+            element={
+              <AuthBlocking whenRefresh>
+                <NewsFeed />
+              </AuthBlocking>
+            }
           ></Route>
+
+          <Route
+            path="/videodetails/:videoId"
+            element={
+              <AuthBlocking>
+                <VideoDetails />
+              </AuthBlocking>
+            }
+>>>>>>> features/admin
+          />
+          <Route
+            path="/:userId"
+            element={
+              <AuthBlocking>
+                <UserDetail />
+              </AuthBlocking>
+            }
+          ></Route>
+<<<<<<< HEAD
           <Route path="/chat" element={
             <AuthBlocking>
               <Chat />
@@ -51,6 +77,35 @@ function App() {
               <UploadVideo />
             </AuthBlocking>
           } />
+=======
+          <Route path="/following" element={<NewsFeed />} />
+          <Route
+            path="/chat"
+            element={
+              <AuthBlocking>
+                <Chat />
+              </AuthBlocking>
+            }
+          ></Route>
+          <Route
+            path="/upload"
+            element={
+              <AuthBlocking>
+                <UploadVideo />
+              </AuthBlocking>
+            }
+          />
+        </Route>
+        <Route path="admin" element={<AdminRoot />}>
+          <Route path="" element={<Navigate to="home" />} />
+          <Route path="home" element={<AdminHome />} />
+          <Route path="user-management" element={<UserManagement />} />
+          <Route
+            path="user-management/:userId"
+            element={<UserInDetailAdmin />}
+          />
+          <Route path="*" element={<Navigate to="home" />} />
+>>>>>>> features/admin
         </Route>
       </Routes>
       <ToastContainer autoClose={500} />
