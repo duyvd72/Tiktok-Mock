@@ -1,25 +1,32 @@
 import ScrollToTop from '@/components/ScrollToTop';
 import VideoItem from './components/VideoItem/VideoItem';
 import { useEffect, useRef, useState } from 'react';
-import { getVideoListAPI } from '@/api/userAPIs';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import axiosInstance from '@/libs/axios/axiosConfig';
 import { IVideo } from '@/interfaces/interfaces';
 import LoadingSpinner from '@/components/LoadingSpinner';
-// import { shuffleVideo } from '@/utils/shuffleVideo';
 
 const NewsFeed = () => {
-  const dispatch = useAppDispatch();
-  const videoList = useAppSelector((state) => state.newsFeed.videoList);
-  const isLoading = useAppSelector((state) => state.newsFeed.loading);
-  const totalPage = useAppSelector((state) => state.newsFeed.totalPage);
-  const lastVideoElement = useRef<HTMLDivElement>(null)
-  const [page, setPage] = useState(0)
-  const [maxLoad, setMaxLoad] = useState(false)
   const [limit] = useState(3)
-  // videoList = useMemo(() => shuffleVideo(videoList), []);
+  const [page, setPage] = useState(0)
+  const [totalPage, setTotalPage] = useState<number>(0)
+  const [maxLoad, setMaxLoad] = useState(false)
+  const [videoList, setVideoList] = useState<IVideo[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const lastVideoElement = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    dispatch(getVideoListAPI({ page, limit }));
+    (async () => {
+      try {
+        setIsLoading(true)
+        const response = await axiosInstance.get(`videos/getAllVideo/?page=${page}&limit=${limit}`);
+        setIsLoading(false)
+        setVideoList(prev => [...prev, ...response.data.video])
+        setTotalPage(response.data.totalPage)
+      } catch (error) {
+        setIsLoading(false)
+        throw new Error('Failed to get video list!');
+      }
+    })()
   }, [page]);
 
   useEffect(() => {

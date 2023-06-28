@@ -16,7 +16,6 @@ function FollowButton({ video }: { video: IVideo }) {
             }
         }
     }, [currentUser])
-
     const handleFollow = () => {
         axiosInstance.put('/accounts/follow', {
             followedUser: video.ownerVideo._id,
