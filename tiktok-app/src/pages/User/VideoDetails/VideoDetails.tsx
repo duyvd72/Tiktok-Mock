@@ -17,6 +17,7 @@ const VideoDetails = () => {
     isError,
     error,
   } = useGetVideoByVideoIdQuery(videoId);
+  // console.log("videoById", videoById);
   const currentVideoId = videoById?._id;
   const currentVideoUrl = videoById?.videoUrl;
   const videoOwnerId = videoById?.ownerVideo._id;
@@ -27,11 +28,12 @@ const VideoDetails = () => {
   const userFullname = videoById?.ownerVideo.fullname;
   const userNickName = videoById?.ownerVideo.nickname;
   const avatarUrl = videoById?.ownerVideo.avatarUrl;
-  const videoHashTag = videoById?.videoHastag;
+  const videoHashTag = videoById?.videoHashtag;
   const videoTitle = videoById?.videoTitle;
   const createAt = videoById?.createdAt;
   const updatedAt = videoById?.updatedAt;
   const numberOfShareVideo = Math.ceil(Math.random() * 10).toFixed(1);
+
 
   //Call API fetch user info by user id
   const { data: userById } = useGetAllVideosByUserIdQuery(videoOwnerId);
