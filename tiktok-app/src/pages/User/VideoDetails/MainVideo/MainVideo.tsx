@@ -23,7 +23,7 @@ import { IMyVideoInfo } from '@/api/VideoDetails/apiSlice';
 interface IMyMainVideoProps {
   myVideoListArr: IMyVideoInfo[] | undefined;
   currentVideoId: string | undefined;
-};
+}
 
 const MainVideo = (props: IMyMainVideoProps) => {
   const { myVideoListArr, currentVideoId } = props;

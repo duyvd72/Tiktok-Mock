@@ -34,7 +34,6 @@ const VideoDetails = () => {
   // const updatedAt = videoById?.updatedAt;
   const numberOfShareVideo = Math.ceil(Math.random() * 10).toFixed(1);
 
-
   //Call API fetch user info by user id
   const { data: userById } = useGetAllVideosByUserIdQuery(videoOwnerId);
   // const numberOfFollows = userById?.follow.length;
