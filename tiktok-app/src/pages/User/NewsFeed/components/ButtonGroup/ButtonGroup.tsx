@@ -1,9 +1,8 @@
 import CircleButton from '@/components/CircleButton';
 import { IVideo } from '@/interfaces/interfaces';
 import { useEffect, useState } from 'react';
-import axiosInstance from '@/libs/axios/axiosConfig';
 import useModal from '@/hooks/useModal';
-import useDebounce from '@/hooks/useDebounce'
+import { handleLike } from '@/api/userAPIs';
 interface INavigateProps {
   handleNavigate: () => void;
   video: IVideo;
@@ -14,12 +13,7 @@ const ButtonGroup = (props: INavigateProps) => {
   const { currentUser } = useModal()
   const [isLike, setIsLike] = useState(currentUser ? video.like.includes(currentUser._id) : false)
   const [numberLike, setNumberLike] = useState(video.like.length)
-  const debounce = useDebounce((video, currentUser) => {
-    axiosInstance.put('/accounts/like', {
-      likedVideoId: video._id,
-      userLikeId: currentUser._id
-    })
-  }, 500)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (currentUser) {
@@ -39,10 +33,12 @@ const ButtonGroup = (props: INavigateProps) => {
           } else {
             setNumberLike((prev: number) => prev + 1)
           }
-          debounce(video, currentUser)
           setIsLike(!isLike)
-
+          setIsLoading(true)
+          await handleLike(video._id, currentUser._id)
+          setIsLoading(false)
         }}
+        isLoading={isLoading}
       >
         <i className={`fas fa-heart ${isLike ? 'text-red-500' : ''}`}></i>
       </CircleButton>

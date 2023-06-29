@@ -12,6 +12,7 @@ import {
 } from '@/api/VideoDetails/apiSlice';
 import { useState, useRef } from 'react';
 import { IPostComment, IRepliesContent } from '@/api/VideoDetails/apiSlice';
+import ModalEditVideo from '../components/ModalEditVideo';
 import useDebounce from '@/hooks/useDebounce';
 
 interface IVideoInfoProps {
@@ -59,7 +60,10 @@ const VideoInfo = (props: IVideoInfoProps) => {
   const [currentCommentId, setCurrentCommentId] = useState<string | undefined>(
     ''
   );
+  const [titleVideo, setTitleVideo] = useState(videoTitle)
+  const [hashTagVideo, setHashTagVideo] = useState(videoHashTag)
   const { setModalIsOpen, currentUser } = useModal();
+  const [openModal, setOpenModal] = useState(false)
   const currentUserId = currentUser && currentUser._id;
   // console.log("Current user nickname: ", currentUser.nickname);
   // console.log("Current user ID: ", currentUserId);
@@ -76,7 +80,7 @@ const VideoInfo = (props: IVideoInfoProps) => {
       if (repliesSectionRef.current) {
         repliesSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-    }, 800); 
+    }, 800);
   };
 
   const onSignIn = () => {
@@ -107,7 +111,7 @@ const VideoInfo = (props: IVideoInfoProps) => {
       } else {
         setCommentContent(content);
       }
-    } 
+    }
     else if (
       activeFunctionality.mode === "reply" && !content.includes(`@${nickname}`)
     ) {
@@ -168,7 +172,7 @@ const VideoInfo = (props: IVideoInfoProps) => {
     } catch (error) {
       setCommentContent("");
       setActiveFunctionality({ mode: "comment", nickname: "" });
-      if(activeFunctionality.mode === "comment") {
+      if (activeFunctionality.mode === "comment") {
         scrollToTop();
       }
       console.error(error);
@@ -247,11 +251,11 @@ const VideoInfo = (props: IVideoInfoProps) => {
   //   localStorage.setItem('likedVideo', JSON.stringify(likedVideo));
   //   localStorage.setItem('followingAccount', JSON.stringify(followingAccount));
   // }, [likedVideo, followingAccount]);
-  
+
   // Declare useDebounce hooks
   const useDebounceHandleLikeVideoClick = useDebounce(handleLikeVideoClick, 300);
   // const useDebounceHandlePostClick = useDebounce(handlePostClick, 300);
-  
+
   return (
     <>
       {/* Video Info */}
@@ -265,16 +269,16 @@ const VideoInfo = (props: IVideoInfoProps) => {
               to={`/${videoOwnerId}`}
               className="bg-black w-[40px] h-[38px] rounded-full flex items-center justify-center self-start min-w-[40px] min-h-[20px] mt-2"
             >
-              <img src={ avatarUrl || logoIcon } alt="avatar" className="p-2 min-w-[20px] min-h-[20px]" />
+              <img src={avatarUrl || logoIcon} alt="avatar" className="p-2 min-w-[20px] min-h-[20px]" />
             </NavLink>
             {/* account & username */}
             <div className="leading-5 mr-2">
               <NavLink to={`/${videoOwnerId}`} className="">
                 <p className="font-semibold text-lg text-black hover:underline ">
-                  { userNickName }
+                  {userNickName}
                 </p>
               </NavLink>
-              <span className="text-sm text-black">{videoTitle}</span>
+              <span className="text-sm text-black">{titleVideo}</span>
               <div className="text-sm text-black mt-1">4d ago</div>
             </div>
           </div>
@@ -282,8 +286,8 @@ const VideoInfo = (props: IVideoInfoProps) => {
           {currentUserId && videoOwnerId ? (
             <button
               className={`border border-customedPink ${followingAccount.includes(videoOwnerId)
-                  ? "bg-customedPink text-white"
-                  : ""} hover:bg-[#fe2c550f] hover:ease-in-out transition duration-300 rounded-lg 
+                ? "bg-customedPink text-white"
+                : ""} hover:bg-[#fe2c550f] hover:ease-in-out transition duration-300 rounded-lg 
                   font-semibold text-customedPink px-4 flex-wrap sm:text-sm xs:text-xs min-w-[120px] min-h-[50px] w-[120px] h-[50px]`
               }
               onClick={() => handleFollowingButton(videoOwnerId)}
@@ -307,7 +311,7 @@ const VideoInfo = (props: IVideoInfoProps) => {
           <span>
             <NavLink to="/">
               <span className="text-black font-semibold hover:underline text-sm">
-                { videoHashTag }
+                {hashTagVideo}
               </span>
             </NavLink>
           </span>
@@ -364,14 +368,20 @@ const VideoInfo = (props: IVideoInfoProps) => {
               </button>
             )}
             <span className="text-xs font-semibold">
-              { likeNumberOnSingleVideo }
+              {likeNumberOnSingleVideo}
             </span>
             <span className="flex justify-center items-center bg-slate-100 w-5 h-5 rounded-full p-4 disabled">
               <i className="fas fa-comment-dots"></i>
             </span>
             <span className="text-xs font-semibold">
-              { commentNumberOnSingleVideo }
+              {commentNumberOnSingleVideo}
             </span>
+            {videoOwnerId == currentUser._id &&
+              < button
+                onClick={() => setOpenModal(prev => !prev)}
+                className='absolute right-5 p-2 rounded-md bg-slate-300 hover:bg-slate-200'
+              >Sửa Video</button>
+            }
             {/* <button
               className="flex justify-center items-center bg-slate-100 w-5 h-5 rounded-full p-4 cursor-pointer"
               onClick={() => onSignIn()}
@@ -423,7 +433,7 @@ const VideoInfo = (props: IVideoInfoProps) => {
                 >
                   <input
                     type="text"
-                    className="px-3 py-3 text-slate-600 bg-customedGrey bg-customedGrey 
+                    className="px-3 py-3 text-slate-600 bg-customedGrey
                   rounded text-sm border-0 shadow outline-none caret-customedPink w-full md:w-[350px]"
                     placeholder={
                       activeFunctionality.mode === 'reply'
@@ -459,8 +469,18 @@ const VideoInfo = (props: IVideoInfoProps) => {
               </button>
             )}
           </div>
+          {openModal ?
+            <ModalEditVideo
+              videoId={currentVideoId as string}
+              titleVideo={titleVideo as string}
+              hashtagVideo={hashTagVideo as string}
+              setOpenModal={setOpenModal}
+              setHashTagVideo={setHashTagVideo}
+              setTitleVideo={setTitleVideo}
+            />
+            : ''}
         </div>
-      </div>
+      </div >
     </>
   );
 };

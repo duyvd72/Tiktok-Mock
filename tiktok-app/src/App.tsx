@@ -27,29 +27,23 @@ function App() {
             </WrapperApp>
           }
         >
-          <Route
-            path="/following"
-            element={
-              <AuthBlocking whenRefresh>
-                <NewsFeed />
-              </AuthBlocking>
-            }
+          <Route path="/following" element={
+            <AuthBlocking whenRefresh>
+              <NewsFeed />
+            </AuthBlocking>
+          }
           />
-          <Route
-            path="/"
-            element={
-              <AuthBlocking whenRefresh>
-                <NewsFeed />
-              </AuthBlocking>
-            }
+          <Route path="/" element={
+            <AuthBlocking whenRefresh>
+              <NewsFeed />
+            </AuthBlocking>
+          }
           ></Route>
-          <Route
-            path="/videodetails/:videoId"
-            element={
-              <AuthBlocking>
-                <VideoDetails />
-              </AuthBlocking>
-            }
+          <Route path="/videodetails/:videoId" element={
+            <AuthBlocking>
+              <VideoDetails />
+            </AuthBlocking>
+          }
           />
           <Route
             path="/:userId"
@@ -59,22 +53,16 @@ function App() {
               </AuthBlocking>
             }
           ></Route>
-          <Route
-            path="/chat"
-            element={
-              <AuthBlocking>
-                <Chat />
-              </AuthBlocking>
-            }
-          ></Route>
-          <Route
-            path="/upload"
-            element={
-              <AuthBlocking>
-                <UploadVideo />
-              </AuthBlocking>
-            }
-          />
+          <Route path="/chat" element={
+            <AuthBlocking>
+              <Chat />
+            </AuthBlocking>
+          }></Route>
+          <Route path="/upload" element={
+            <AuthBlocking>
+              <UploadVideo />
+            </AuthBlocking>
+          } />
         </Route>
         <Route
           path="admin"

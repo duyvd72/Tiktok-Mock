@@ -75,3 +75,16 @@ export const uploadVideoAPI = async (
     throw new Error('Failed to upload video!');
   }
 };
+
+export const handleLike = async (videoId: string, currentUserId: string) => {
+  try {
+    const response = await axiosInstance.put('/accounts/like', {
+      likedVideoId: videoId,
+      userLikeId: currentUserId
+    })
+
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to like video');
+  }
+}
