@@ -1,9 +1,9 @@
-import newsFeedSlice from '@/pages/User/NewsFeed/redux/newsFeedSlice';
-import authenticationSlice from '@/pages/User/Authentication/redux/authenticationSlice';
+import newsFeedSlice from '@/modules/User/NewsFeed/redux/newsFeedSlice';
+import authenticationSlice from '@/modules/User/Authentication/redux/authenticationSlice';
 import { configureStore } from '@reduxjs/toolkit';
 import { VideoDetailsApi } from '@/api/VideoDetails/apiSlice';
-import { videoTimeStampReducer } from '@/pages/User/NewsFeed/redux/videoTimeStampSlice';
-import userManagementSlice from '@/pages/Admin/UserManagement/redux/userManagementSlice';
+import { videoTimeStampReducer } from '@/modules/User/NewsFeed/redux/videoTimeStampSlice';
+import userManagementSlice from '@/modules/Admin/UserManagement/redux/userManagementSlice';
 
 export const store = configureStore({
   reducer: {

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import VideoDisplay from '@/pages/User/VideoDetails/components/VideoDisplay';
+import VideoDisplay from '@/modules/User/VideoDetails/components/VideoDisplay';
 // import IVideo from "@/interfaces/interfaces";
 import { useEffect, useRef, useState } from 'react';
 import { IMyVideoInfo } from '@/api/VideoDetails/apiSlice';
