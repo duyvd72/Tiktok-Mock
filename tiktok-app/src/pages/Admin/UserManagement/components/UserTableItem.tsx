@@ -1,5 +1,5 @@
 import { ICurrentUser } from '@/interfaces/interfaces';
-import { convertDateFormat } from '@/utils/formateDate';
+import { formatDate } from '@/utils/formatDate';
 import { useNavigate } from 'react-router';
 
 interface IProps {
@@ -21,7 +21,7 @@ const UserTableItem = (props: IProps) => {
       </td>
       <td className="border">{user.nickname}</td>
       <td className="border">{user.fullname}</td>
-      <td className="border">{convertDateFormat(user.createdAt)}</td>
+      <td className="border">{formatDate(user.createdAt)}</td>
       <td className="border">{user.myVideo.length}</td>
       <td className="border">
         <button

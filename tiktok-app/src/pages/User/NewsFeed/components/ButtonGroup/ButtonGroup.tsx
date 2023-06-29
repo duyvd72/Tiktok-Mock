@@ -35,7 +35,7 @@ const ButtonGroup = (props: INavigateProps) => {
           }
           setIsLike(!isLike)
           setIsLoading(true)
-          await handleLike(video._id, currentUser._id)
+          await (video._id, currentUser._id)
           setIsLoading(false)
         }}
         isLoading={isLoading}

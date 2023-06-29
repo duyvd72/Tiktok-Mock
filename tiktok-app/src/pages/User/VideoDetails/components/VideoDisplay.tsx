@@ -12,6 +12,7 @@ const VideoDisplay = (props: IVideoUrlListProps) => {
       loop={true}
       autoPlay={true}
       controls={true}
+      muted={true}
     />
   );
 };

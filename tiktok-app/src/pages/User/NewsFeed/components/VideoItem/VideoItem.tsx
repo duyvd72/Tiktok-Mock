@@ -17,7 +17,6 @@ const VideoItem = (props: IProps) => {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-
     if (videoRef.current) {
       const callback: IntersectionObserverCallback = (entries) => {
         const [entry] = entries
