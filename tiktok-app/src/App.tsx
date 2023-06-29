@@ -43,20 +43,14 @@ function App() {
               </AuthBlocking>
             }
           ></Route>
-          <Route
-            path="/videodetails/:videoId"
-            element={
-              <AuthBlocking>
-                <VideoDetails />
-              </AuthBlocking>
-            }
+          <Route path="/videodetails/:videoId" element={
+            <VideoDetails />
+          }
           />
           <Route
             path="/:userId"
             element={
-              <AuthBlocking>
-                <UserDetail />
-              </AuthBlocking>
+              <UserDetail />
             }
           ></Route>
           <Route

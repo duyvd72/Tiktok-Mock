@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 
 function FollowButton({ video }: { video: IVideo }) {
 
-    const { currentUser } = useModal()
+    const { currentUser, setModalIsOpen } = useModal()
     const [followed, setFollowed] = useState(video.ownerVideo.follow.includes(currentUser && currentUser._id))
 
     useEffect(() => {
@@ -17,11 +17,15 @@ function FollowButton({ video }: { video: IVideo }) {
         }
     }, [currentUser])
     const handleFollow = () => {
-        axiosInstance.put('/accounts/follow', {
-            followedUser: video.ownerVideo._id,
-            userFollow: currentUser._id
-        })
-        setFollowed(!followed)
+        if (currentUser && currentUser._id) {
+            axiosInstance.put('/accounts/follow', {
+                followedUser: video.ownerVideo._id,
+                userFollow: currentUser._id
+            })
+            setFollowed(!followed)
+        } else {
+            setModalIsOpen(true)
+        }
     }
     return (
         <button

@@ -74,7 +74,7 @@ const UserDetail = () => {
               <p className="text-lg	font-medium cursor-pointer">
                 {initialValues?.fullname || ''}
               </p>
-              {currentUser._id === userId ? (
+              {currentUser?._id === userId ? (
                 <button
                   className="flex items-center border rounded border-slate-950 py-1 px-5 mt-3 cursor-pointer"
                   onClick={() => setClickEdit(true)}

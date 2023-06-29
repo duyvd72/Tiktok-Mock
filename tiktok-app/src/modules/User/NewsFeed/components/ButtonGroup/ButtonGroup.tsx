@@ -10,7 +10,7 @@ interface INavigateProps {
 
 const ButtonGroup = (props: INavigateProps) => {
   const { handleNavigate, video } = props;
-  const { currentUser } = useModal()
+  const { currentUser, setModalIsOpen } = useModal()
   const [isLike, setIsLike] = useState(currentUser ? video.like.includes(currentUser._id) : false)
   const [numberLike, setNumberLike] = useState(video.like.length)
   const [isLoading, setIsLoading] = useState(false)
@@ -28,15 +28,19 @@ const ButtonGroup = (props: INavigateProps) => {
       <CircleButton
         numberOfAction={numberLike}
         onClick={async () => {
-          if (isLike) {
-            setNumberLike((prev: number) => prev - 1)
+          if (currentUser && currentUser._id) {
+            if (isLike) {
+              setNumberLike((prev: number) => prev - 1)
+            } else {
+              setNumberLike((prev: number) => prev + 1)
+            }
+            setIsLike(!isLike)
+            setIsLoading(true)
+            await handleLike(video._id, currentUser._id)
+            setIsLoading(false)
           } else {
-            setNumberLike((prev: number) => prev + 1)
+            setModalIsOpen(true)
           }
-          setIsLike(!isLike)
-          setIsLoading(true)
-          await handleLike(video._id, currentUser._id)
-          setIsLoading(false)
         }}
         isLoading={isLoading}
       >

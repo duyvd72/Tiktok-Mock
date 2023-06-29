@@ -10,7 +10,7 @@ import {
   usePutFollowingMutation,
   usePutLikeVideoMutation,
 } from '@/api/VideoDetails/apiSlice';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { IPostComment, IRepliesContent } from '@/api/VideoDetails/apiSlice';
 import ModalEditVideo from '../components/ModalEditVideo';
 import useDebounce from '@/hooks/useDebounce';
@@ -66,13 +66,17 @@ const VideoInfo = (props: IVideoInfoProps) => {
   // console.log("Current user nickname: ", currentUser.nickname);
   // console.log("Current user ID: ", currentUserId);
 
+  useEffect(() => {
+    setTitleVideo(videoTitle)
+    setHashTagVideo(videoHashTag)
+  }, [videoTitle, videoHashTag])
+
   const { data: getAllReplies } =
     useGetAllRepliesByCommentIdQuery(currentCommentId);
   // console.log("getAllReplies: >>>", getAllReplies);
   const numberOfLikesOnSingleComment = getAllReplies?.commentReply.like.length;
   const replyContentArr = getAllReplies?.commentReply.reply;
   const numberOfLikeOnSingleReply = getAllReplies?.commentReply.like.length;
-
   const scrollToTop = () => {
     setTimeout(() => {
       if (repliesSectionRef.current) {
@@ -293,11 +297,10 @@ const VideoInfo = (props: IVideoInfoProps) => {
           {/* Right header*/}
           {currentUserId && videoOwnerId ? (
             <button
-              className={`border border-customedPink ${
-                followingAccount.includes(videoOwnerId)
+              className={`border border-customedPink ${followingAccount.includes(videoOwnerId)
                   ? 'bg-customedPink text-white'
                   : ''
-              } hover:bg-[#fe2c550f] hover:ease-in-out transition duration-300 rounded-lg 
+                } hover:bg-[#fe2c550f] hover:ease-in-out transition duration-300 rounded-lg 
                   font-semibold text-customedPink px-4 flex-wrap sm:text-sm xs:text-xs min-w-[120px] min-h-[50px] w-[120px] h-[50px]`}
               onClick={() => handleFollowingButton(videoOwnerId)}
             >
@@ -362,11 +365,10 @@ const VideoInfo = (props: IVideoInfoProps) => {
                 onClick={() => useDebounceHandleLikeVideoClick(currentVideoId)}
               >
                 <i
-                  className={`fas fa-heart ${
-                    likedVideo.includes(currentVideoId)
+                  className={`fas fa-heart ${likedVideo.includes(currentVideoId)
                       ? 'text-customedPink'
                       : ''
-                  }`}
+                    }`}
                 ></i>
               </button>
             ) : (
@@ -386,14 +388,12 @@ const VideoInfo = (props: IVideoInfoProps) => {
             <span className="text-xs font-semibold">
               {commentNumberOnSingleVideo}
             </span>
-            {videoOwnerId == currentUser._id && (
-              <button
-                onClick={() => setOpenModal((prev) => !prev)}
-                className="absolute right-5 p-2 rounded-md bg-slate-300 hover:bg-slate-200"
-              >
-                Sửa Video
-              </button>
-            )}
+            {videoOwnerId == currentUser?._id &&
+              < button
+                onClick={() => setOpenModal(prev => !prev)}
+                className='absolute right-5 p-2 rounded-md bg-slate-300 hover:bg-slate-200'
+              >Sửa Video</button>
+            }
             {/* <button
               className="flex justify-center items-center bg-slate-100 w-5 h-5 rounded-full p-4 cursor-pointer"
               onClick={() => onSignIn()}

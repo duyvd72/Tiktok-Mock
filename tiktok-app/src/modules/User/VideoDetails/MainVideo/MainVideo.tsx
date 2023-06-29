@@ -35,7 +35,7 @@ const MainVideo = (props: IMyMainVideoProps) => {
   const prevButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleCloseBtn = () => {
-    navigate('/');
+    location.href = '/'
   };
 
   useEffect(() => {
