@@ -1,9 +1,14 @@
 import { ChangeEvent, useState } from 'react';
 import VideoTableItem from './VideoTableItem';
 import LikeModal from './LikeModal';
+import { IVideo } from '@/interfaces/interfaces';
 
-const VideoTable = () => {
-  // const [searchKeyword, setSearchKeyword] = useState('');
+interface IProps {
+  videoList?: IVideo[];
+}
+
+const VideoTable = (props: IProps) => {
+  const { videoList } = props;
   const [isLikeModalOpen, setIsLikeModalOpen] = useState(false);
 
   const defaultFormQuantity = 2;
@@ -11,42 +16,33 @@ const VideoTable = () => {
 
   const [activePage, setActivePage] = useState(1);
 
-  // const handlePageClick = (pageQuantity: number) => {
-  //   setActivePage(pageQuantity);
-  // };
+  const handlePageClick = (pageQuantity: number) => {
+    setActivePage(pageQuantity);
+  };
 
-  // const filteredFormList = covidFormList.filter((form: any) => {
-  //   return (
-  //     form.id?.toUpperCase().includes(searchKeyword.toUpperCase()) ||
-  //     form.fullname.toUpperCase().includes(searchKeyword.toUpperCase()) ||
-  //     form.object.toUpperCase().includes(searchKeyword.toUpperCase()) ||
-  //     form.dateOfBirth.toUpperCase().includes(searchKeyword.toUpperCase()) ||
-  //     form.gender.toUpperCase().includes(searchKeyword.toUpperCase()) ||
-  //     form.province.toUpperCase().includes(searchKeyword.toUpperCase())
-  //   );
-  // });
+  const startIndex = (activePage - 1) * quantity;
+  const endIndex = startIndex + quantity;
+  const customList = videoList?.slice(startIndex, endIndex);
 
-  // const startIndex = (activePage - 1) * quantity;
-  // const endIndex = startIndex + quantity;
-  // const customList = filteredFormList.slice(startIndex, endIndex);
+  const pageQuantity = Math.ceil(Number(videoList?.length) / quantity);
+  const renderPageItems = () => {
+    return Array.from({ length: pageQuantity }, (_, index) => {
+      const pageNumber = index + 1;
+      const isActive = pageNumber === activePage;
 
-  // const pageQuantity = Math.ceil(filteredFormList.length / quantity);
-  // const renderPageItems = () => {
-  //   return Array.from({ length: pageQuantity }, (_, index) => {
-  //     const pageNumber = index + 1;
-  //     const isActive = pageNumber === activePage;
-
-  //     return (
-  //       <button
-  //         key={pageNumber}
-  //         // active={isActive}
-  //         onClick={() => handlePageClick(pageNumber)}
-  //       >
-  //         {pageNumber}
-  //       </button>
-  //     );
-  //   });
-  // };
+      return (
+        <button
+          key={pageNumber}
+          className={`${
+            isActive ? 'bg-blue-500 text-white' : 'text-black'
+          } font-bold px-2 rounded-sm border`}
+          onClick={() => handlePageClick(pageNumber)}
+        >
+          {pageNumber}
+        </button>
+      );
+    });
+  };
 
   const handlePreBtn = () => {
     if (activePage !== 1) {
@@ -54,16 +50,11 @@ const VideoTable = () => {
     }
   };
 
-  // const handleNextBtn = () => {
-  //   if (activePage !== pageQuantity) {
-  //     setActivePage(activePage + 1);
-  //   }
-  // };
-
-  // const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setSearchKeyword(e.target.value);
-  //   setActivePage(1);
-  // };
+  const handleNextBtn = () => {
+    if (activePage !== pageQuantity) {
+      setActivePage(activePage + 1);
+    }
+  };
 
   const hanldeChangeQuantity = (e: ChangeEvent<HTMLSelectElement>) => {
     setQuantity(Number(e.target.value));
@@ -76,34 +67,39 @@ const VideoTable = () => {
       <table className="w-full border border-gray-300 p-3">
         <thead>
           <tr className="table-success bg-gray-300">
-            <th className="text-center border w-[20%]">Video</th>
-            <th className="text-center border w-[20%]">Id</th>
-            <th className="text-center border w-[20%]">Ngày đăng</th>
-            <th className="text-center border w-[20%]">Số like (Ấn để xem)</th>
-            <th className="text-center border w-[20%]">
-              Số comment (Ấn để xem)
-            </th>
+            <th className="text-center border w-[25%]">Video</th>
+            <th className="text-center border w-[25%]">Id</th>
+            <th className="text-center border w-[25%]">Ngày đăng</th>
+            <th className="text-center border w-[25%]">Số like (Ấn để xem)</th>
           </tr>
         </thead>
         <tbody>
-          <VideoTableItem setIsLikeModalOpen={setIsLikeModalOpen} />
-          <VideoTableItem setIsLikeModalOpen={setIsLikeModalOpen} />
-          <VideoTableItem setIsLikeModalOpen={setIsLikeModalOpen} />
-          <VideoTableItem setIsLikeModalOpen={setIsLikeModalOpen} />
-          <VideoTableItem setIsLikeModalOpen={setIsLikeModalOpen} />
+          {customList?.map((video) => {
+            return (
+              <VideoTableItem
+                key={video._id}
+                video={video}
+                setIsLikeModalOpen={setIsLikeModalOpen}
+              />
+            );
+          })}
         </tbody>
       </table>
 
       <div className="flex mt-5 justify-center items-center gap-5">
-        <div className="mb-0">
-          <button disabled={activePage === 1} onClick={handlePreBtn}>
+        <div className="mb-0 flex gap-2">
+          <button
+            disabled={activePage === 1}
+            onClick={handlePreBtn}
+            className="border px-1 rounded-sm disabled:bg-gray-300 disabled:text-white"
+          >
             Trang trước
           </button>
-          {/* {renderPageItems()} */}
+          {renderPageItems()}
           <button
-
-          // disabled={activePage === pageQuantity}
-          // onClick={handleNextBtn}
+            className="border px-1 rounded-sm disabled:bg-gray-300 disabled:text-white"
+            disabled={activePage === pageQuantity}
+            onClick={handleNextBtn}
           >
             Trang tiếp
           </button>
@@ -116,6 +112,7 @@ const VideoTable = () => {
             value={quantity}
             onChange={hanldeChangeQuantity}
           >
+            <option value={1}>1</option>
             <option value={2}>2</option>
             <option value={4}>4</option>
             <option value={6}>6</option>

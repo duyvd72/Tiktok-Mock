@@ -1,12 +1,10 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import NewsFeed from './modules/User/NewsFeed/NewsFeed';
-import UserDetail from './components/UserDetail';
 import WrapperApp from '@/context/WrapperApp';
 import UploadVideo from '@/modules/User/UploadVideo/UploadVideo';
 import VideoDetails from '@/modules/User/VideoDetails/VideoDetails';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import Chat from '@/components/Chat';
 import AuthBlocking from './components/AuthBlocking';
 import AdminRoot from './modules/Admin/components/AdminRoot';
 import AdminHome from './modules/Admin/components/AdminHome';
@@ -14,6 +12,8 @@ import UserManagement from './modules/Admin/UserManagement/components/UserManage
 import UserInDetailAdmin from './modules/Admin/UserManagement/components/UserInDetailAdmin';
 import AdminPrivateRoutes from './routes/AdminPrivateRoutes';
 import Root from './modules/Root/Root';
+import UserDetail from './components/UserDetail';
+import Chat from './components/Chat';
 
 function App() {
   return (

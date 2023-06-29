@@ -1,12 +1,14 @@
 import React from 'react';
-import video from '@/assets/video/Download.mp4';
+import { IVideo } from '@/interfaces/interfaces';
+import { convertDateFormat } from '@/utils/formateDate';
 
 interface IProps {
+  video: IVideo;
   setIsLikeModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const VideoTableItem = (props: IProps) => {
-  const { setIsLikeModalOpen } = props;
+  const { video, setIsLikeModalOpen } = props;
   // const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 
   const handleLikeModal = () => {
@@ -17,21 +19,18 @@ const VideoTableItem = (props: IProps) => {
     <tr className="w-full text-center h-12">
       <td className="border flex justify-center">
         <div className="w-[200px] h-auto">
-          <video src={video}></video>
+          <video src={video.videoUrl}></video>
         </div>
       </td>
-      <td className="border">2134</td>
-      <td className="border">28/06/2023</td>
+      <td className="border">{video._id}</td>
+      <td className="border">{convertDateFormat(video.createdAt)}</td>
       <td className="border">
         <button
           className="hover:border-b-[1px] border-gray-500"
           onClick={handleLikeModal}
         >
-          100
+          {video.like.length}
         </button>
-      </td>
-      <td className="border">
-        <button className="hover:border-b-[1px] border-gray-500">200</button>
       </td>
     </tr>
   );

@@ -7,47 +7,38 @@ const UserTable = () => {
 
   const userListWithoutAdmin = userList.filter((user) => user.role !== 'admin');
 
-  const defaultFormQuantity = 2;
+  const defaultFormQuantity = 4;
   const [quantity, setQuantity] = useState(defaultFormQuantity);
 
   const [activePage, setActivePage] = useState(1);
 
-  // const handlePageClick = (pageQuantity: number) => {
-  //   setActivePage(pageQuantity);
-  // };
+  const handlePageClick = (pageQuantity: number) => {
+    setActivePage(pageQuantity);
+  };
 
-  // const filteredFormList = covidFormList.filter((form: any) => {
-  //   return (
-  //     form.id?.toUpperCase().includes(searchKeyword.toUpperCase()) ||
-  //     form.fullname.toUpperCase().includes(searchKeyword.toUpperCase()) ||
-  //     form.object.toUpperCase().includes(searchKeyword.toUpperCase()) ||
-  //     form.dateOfBirth.toUpperCase().includes(searchKeyword.toUpperCase()) ||
-  //     form.gender.toUpperCase().includes(searchKeyword.toUpperCase()) ||
-  //     form.province.toUpperCase().includes(searchKeyword.toUpperCase())
-  //   );
-  // });
+  const startIndex = (activePage - 1) * quantity;
+  const endIndex = startIndex + quantity;
+  const customList = userListWithoutAdmin.slice(startIndex, endIndex);
 
-  // const startIndex = (activePage - 1) * quantity;
-  // const endIndex = startIndex + quantity;
-  // const customList = filteredFormList.slice(startIndex, endIndex);
+  const pageQuantity = Math.ceil(userListWithoutAdmin.length / quantity);
+  const renderPageItems = () => {
+    return Array.from({ length: pageQuantity }, (_, index) => {
+      const pageNumber = index + 1;
+      const isActive = pageNumber === activePage;
 
-  // const pageQuantity = Math.ceil(filteredFormList.length / quantity);
-  // const renderPageItems = () => {
-  //   return Array.from({ length: pageQuantity }, (_, index) => {
-  //     const pageNumber = index + 1;
-  //     const isActive = pageNumber === activePage;
-
-  //     return (
-  //       <button
-  //         key={pageNumber}
-  //         // active={isActive}
-  //         onClick={() => handlePageClick(pageNumber)}
-  //       >
-  //         {pageNumber}
-  //       </button>
-  //     );
-  //   });
-  // };
+      return (
+        <button
+          key={pageNumber}
+          className={`${
+            isActive ? 'bg-blue-500 text-white' : 'text-black'
+          } font-bold px-2 rounded-sm border`}
+          onClick={() => handlePageClick(pageNumber)}
+        >
+          {pageNumber}
+        </button>
+      );
+    });
+  };
 
   const handlePreBtn = () => {
     if (activePage !== 1) {
@@ -55,11 +46,11 @@ const UserTable = () => {
     }
   };
 
-  // const handleNextBtn = () => {
-  //   if (activePage !== pageQuantity) {
-  //     setActivePage(activePage + 1);
-  //   }
-  // };
+  const handleNextBtn = () => {
+    if (activePage !== pageQuantity) {
+      setActivePage(activePage + 1);
+    }
+  };
 
   const hanldeChangeQuantity = (e: ChangeEvent<HTMLSelectElement>) => {
     setQuantity(Number(e.target.value));
@@ -82,22 +73,26 @@ const UserTable = () => {
           </tr>
         </thead>
         <tbody>
-          {userListWithoutAdmin.map((user) => {
+          {customList.map((user) => {
             return <UserTableItem key={user._id} user={user} />;
           })}
         </tbody>
       </table>
 
       <div className="flex mt-5 justify-center items-center gap-5">
-        <div className="mb-0">
-          <button disabled={activePage === 1} onClick={handlePreBtn}>
+        <div className="mb-0 flex gap-2">
+          <button
+            disabled={activePage === 1}
+            onClick={handlePreBtn}
+            className="border px-1 rounded-sm disabled:bg-gray-300 disabled:text-white"
+          >
             Trang trước
           </button>
-          {/* {renderPageItems()} */}
+          {renderPageItems()}
           <button
-
-          // disabled={activePage === pageQuantity}
-          // onClick={handleNextBtn}
+            className="border px-1 rounded-sm disabled:bg-gray-300 disabled:text-white"
+            disabled={activePage === pageQuantity}
+            onClick={handleNextBtn}
           >
             Trang tiếp
           </button>

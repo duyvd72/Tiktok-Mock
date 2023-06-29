@@ -5,7 +5,7 @@ export interface IVideo {
   videoHashtag: string;
   ownerVideo: {
     _id: string;
-    follow: string[]
+    follow: string[];
     avatarUrl: string;
     nickname: string;
     fullname: string;
@@ -52,7 +52,7 @@ export interface IAccountItem {
   nickname: string;
   fullname: string;
   userId: string;
-  search?: boolean
+  search?: boolean;
   _id?: string;
 }
 
@@ -61,4 +61,13 @@ export interface IUploadingVideo {
   videoTitle: string;
   videoHashtag: string;
   videoUrl: string;
+}
+
+export interface IDecodeToken {
+  exp: number;
+  iat: number;
+  id: string;
+  refreshToken: string;
+  role: string;
+  nickname: string;
 }

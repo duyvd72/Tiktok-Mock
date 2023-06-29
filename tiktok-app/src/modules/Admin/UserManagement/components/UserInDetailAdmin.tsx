@@ -62,7 +62,7 @@ const UserInDetailAdmin = () => {
           </div>
           <h1 className="mt-5 font-bold text-xl">Danh sách video</h1>
           <div className="p-5">
-            <VideoTable />
+            <VideoTable videoList={viewingUserInDetail?.myVideo} />
           </div>
         </>
       )}
