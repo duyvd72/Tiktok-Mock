@@ -28,10 +28,8 @@
 }
 
 .file {
-  width: 30px;
-  height: 30px;
+  width: 1px;
+  height: 1px;
+  visibility: hidden;
   position: absolute;
-  top: 0px;
-  right: 0px;
-  opacity: 0;
 }
