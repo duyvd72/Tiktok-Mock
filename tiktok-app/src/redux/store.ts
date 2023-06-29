@@ -25,6 +25,8 @@ export const store = configureStore({
     getDefaultMiddleware().concat(VideoDetailsApi.middleware),
 
   //----------------------Linh ends------------------------------------------------
+
+  //----------------------Linh ends------------------------------------------------
 });
 
 export type RootState = ReturnType<typeof store.getState>;

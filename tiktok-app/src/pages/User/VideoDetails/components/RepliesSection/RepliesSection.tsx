@@ -75,8 +75,8 @@ const RepliesSection = (props: IRepliesSectionProps) => {
     repliesSectionRef,
   } = props;
   const [showReplies, setShowReplies] = useState<string[]>([]);
-  const [likedComments, setLikedComments] = useState<string[]>([]);
-  const [likedReply, setLikeReply] = useState<string[]>([]);
+  // const [likedComments, setLikedComments] = useState<string[]>([]);
+  // const [likedReply, setLikeReply] = useState<string[]>([]);
   // const { currentUser } = useModal();
   // const currentUserId = currentUser._id;
   const { videoId } = useParams();
@@ -107,32 +107,30 @@ const RepliesSection = (props: IRepliesSectionProps) => {
     setCurrentCommentId(currentCommentId);
   };
 
-  const handleLikeComment = (currentCommentId: string) => {
-    setLikedComments((prevLikedComments) => {
-      if (prevLikedComments.includes(currentCommentId)) {
-        return prevLikedComments.filter((id) => id !== currentCommentId);
-      } else {
-        return [...prevLikedComments, currentCommentId];
-      }
-    });
-  };
+  // const handleLikeComment = (currentCommentId: string) => {
+  //   setLikedComments((prevLikedComments) => {
+  //     if (prevLikedComments.includes(currentCommentId)) {
+  //       return prevLikedComments.filter((id) => id !== currentCommentId);
+  //     } else {
+  //       return [...prevLikedComments, currentCommentId];
+  //     }
+  //   });
+  // };
 
-  const handleLikeReply = (currentReplyId: string) => {
-    setLikeReply((prevLikedComments) => {
-      if (prevLikedComments.includes(currentReplyId)) {
-        return prevLikedComments.filter((id) => id !== currentReplyId);
-      } else {
-        return [...prevLikedComments, currentReplyId];
-      }
-    });
-  };
+  // const handleLikeReply = (currentReplyId: string) => {
+  //   setLikeReply((prevLikedComments) => {
+  //     if (prevLikedComments.includes(currentReplyId)) {
+  //       return prevLikedComments.filter((id) => id !== currentReplyId);
+  //     } else {
+  //       return [...prevLikedComments, currentReplyId];
+  //     }
+  //   });
+  // };
 
   const handleReplyToComment = (
     currentCommentId: string,
     nickname: string | undefined
   ) => {
-    // console.log('reply button clicked!');
-    // console.log('currentCommentId: ', currentCommentId);
     setActiveFunctionality({ mode: 'reply', nickname: nickname });
     setCurrentCommentId(currentCommentId);
   };
@@ -182,8 +180,10 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                   </div>
                 </div>
                 {/* Right header */}
-                <div className="flex flex-col items-center">
-                  <button onClick={() => handleLikeComment(comment._id)}>
+                {/* <div className="flex flex-col items-center">
+                  <button 
+                  onClick={() => handleLikeComment(comment._id)}
+                  >
                     <i
                       className={`fas fa-heart text-black ${
                         likedComments.includes(comment._id)
@@ -192,10 +192,10 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                       }`}
                     ></i>
                   </button>
-                  {/* <span className="text-xs text-black">
+                  <span className="text-xs text-black">
                     {numberOfLikesOnSingleComment}
-                  </span> */}
-                </div>
+                  </span>
+                </div> */}
               </div>
               {/* View more replies */}
               <div className="flex items-center ml-12 mt-2 ">
@@ -219,7 +219,7 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                 replyContentArr.map((reply: IReplyContent) => (
                   <div
                     className={`p-2 pt-0 text-black flex items-start 
-                              justify-center ml-10 min-w-[80%] max-w-full ${
+                              justify-center ml-5 min-w-[80%] max-w-full ${
                                 showReplies.includes(comment._id)
                                   ? 'opacity-100 transition-all duration-300 ease-in-out'
                                   : 'hidden'
@@ -232,12 +232,13 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                         {/* Avatar */}
                         <NavLink
                           to={`/${reply.user._id}`}
-                          className="bg-black w-10 h-10 rounded-full line-height flex items-center justify-center mt-[-10px] min-w-[40px] min-h-[20px]"
+                          className="bg-black w-10 h-10 rounded-full line-height flex items-center justify-center 
+                          mt-[-10px] min-w-[40px] min-h-[20px]"
                         >
                           <img src={logoIcon} alt="avatar" className="p-2" />
                         </NavLink>
                         {/* account & username */}
-                        <div className="grow">
+                        <div className="flex-1">
                           <NavLink to={`/${reply.user._id}`} className="">
                             <p className="font-semibold text-md text-black hover:underline mt-10">
                               {reply.user.nickname}
@@ -267,7 +268,7 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                           </div>
                         </div>
                         {/* Right header */}
-                        <div className="flex flex-col items-center ml-[130px]">
+                        {/* <div className="flex flex-col items-center ml-[130px]">
                           <button onClick={() => handleLikeReply(reply._id)}>
                             <i
                               className={`fas fa-heart text-black ${
@@ -277,10 +278,10 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                               }`}
                             ></i>
                           </button>
-                          {/* <span className="text-xs text-black">
+                          <span className="text-xs text-black">
                             {numberOfLikeOnSingleReply}
-                          </span> */}
-                        </div>
+                          </span>
+                        </div> */}
                       </div>
                     </div>
                   </div>

@@ -110,8 +110,8 @@ const ChatContainer: React.FC<IChatContainer> = ({
               :
               `text-black p-3 ms-2 rounded-lg w-fit bg-slate-300`}`} key={index}>{item.message}
             </p>
-            {item.sender === currentUser._id ? currentUserChat && currentUserChat.avatarUrl ?
-              <img src={currentUserChat.avatarUrl} className='h-[50px] w-[50px] rounded-full' alt="" />
+            {item.sender === currentUser._id ? currentUser && currentUser.avatarUrl ?
+              <img src={currentUser.avatarUrl} className='h-[50px] w-[50px] rounded-full' alt="" />
               :
               <i className="fa fa-user h-[50px] w-[50px] ring-1 rounded-full text-2xl text-gray-300 flex justify-center items-center "></i>
               : ""

@@ -3,9 +3,10 @@ import VideoDisplay from '@/pages/User/VideoDetails/components/VideoDisplay';
 // import IVideo from "@/interfaces/interfaces";
 import { useEffect, useRef, useState } from 'react';
 import { IMyVideoInfo } from '@/api/VideoDetails/apiSlice';
+
 // interface ICommentCreateAt {
 //   createdAt: string;
-// }
+// };
 
 // interface IMyVideoList {
 //   _id: string;
@@ -17,7 +18,7 @@ import { IMyVideoInfo } from '@/api/VideoDetails/apiSlice';
 //   videoTitle: string;
 //   videoUrl: string;
 //   __v: number;
-// }
+// };
 
 interface IMyMainVideoProps {
   myVideoListArr: IMyVideoInfo[] | undefined;
@@ -88,8 +89,8 @@ const MainVideo = (props: IMyMainVideoProps) => {
   const prevVideoClick = () => {
     if (myVideoListArr && videoIndex > 0) {
       setVideoIndex(videoIndex - 1);
-      const nextVideoId = myVideoListArr[videoIndex - 1]._id;
-      navigate(`/videodetails/${nextVideoId}`);
+      const prevVideoId = myVideoListArr[videoIndex - 1]._id;
+      navigate(`/videodetails/${prevVideoId}`);
     }
   };
 

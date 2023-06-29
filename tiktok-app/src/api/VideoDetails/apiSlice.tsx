@@ -127,8 +127,8 @@ interface ILikeResponse {
 }
 // put follow account
 interface IFollowingParam {
-  followedUser: string; // get from videoOwnerId
-  userFollow: string; // get from useModal()
+  followedUser: string | undefined; // get from videoOwnerId
+  userFollow: string | undefined; // get from useModal()
 }
 interface IFollowingAccountResponse {
   _id: string;

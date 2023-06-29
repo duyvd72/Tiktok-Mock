@@ -22,6 +22,7 @@ const VideoDetails = () => {
   const videoOwnerId = videoById?.ownerVideo._id;
   const commentNumberOnSingleVideo = videoById?.comment.length;
   const commentArrayOnSingleVideo = videoById?.comment;
+  // console.log("commentArrayOnSingleVideo: ", commentArrayOnSingleVideo);
   const likeNumberOnSingleVideo = videoById?.like.length;
   const likeIdByVideoArr = videoById?.like;
   // const userFullname = videoById?.ownerVideo.fullname;
@@ -43,7 +44,7 @@ const VideoDetails = () => {
   const myVideoListArr = userById?.myVideo;
 
   return (
-    <div className="grid grid-cols-12 fixed inset-0 max-w-screen max-h-screen z-50 top-0 left-0 overflow-auto">
+    <div className="grid grid-cols-12 fixed inset-0 max-w-screen max-h-screen h-screen overflow-auto z-50 top-0 left-0">
       {/* Main Video */}
       <MainVideo
         myVideoListArr={myVideoListArr}
