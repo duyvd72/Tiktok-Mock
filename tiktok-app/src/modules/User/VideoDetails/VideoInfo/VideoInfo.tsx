@@ -1,38 +1,74 @@
-import { NavLink } from 'react-router-dom';
-import logoIcon from '@/assets/images/logo-icon.png';
-import useModal from '@/hooks/useModal';
-import RepliesSection from '../components/RepliesSection/RepliesSection';
+import { useSelector, useDispatch } from "react-redux";
+import { NavLink } from "react-router-dom";
+import logoIcon from "@/assets/images/logo-icon.png";
+import useModal from "@/hooks/useModal";
+import RepliesSection from "../components/RepliesSection/RepliesSection";
 import {
   IMyVideoInfo,
   useGetAllRepliesByCommentIdQuery,
+  useGetAllVideosByUserIdQuery,
   usePostCommentMutation,
   usePostReplyMutation,
   usePutFollowingMutation,
   usePutLikeVideoMutation,
-} from '@/api/VideoDetails/apiSlice';
-import { useState, useRef, useEffect } from 'react';
-import { IPostComment, IRepliesContent } from '@/api/VideoDetails/apiSlice';
-import ModalEditVideo from '../components/ModalEditVideo';
-import useDebounce from '@/hooks/useDebounce';
+  IVideoByIdInfo,
+} from "@/api/VideoDetails/apiSlice";
+import {
+  selectLikedUsers,
+  setVideoLikedUsers,
+} from "@/pages/User/VideoDetails/redux/setLikeVideoSlice";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { IPostComment, IRepliesContent } from "@/api/VideoDetails/apiSlice";
+import ModalEditVideo from "../components/ModalEditVideo";
+import { formatDate } from "@/utils/formatDate";
+import calculateDaysAgo from "@/utils/calculateDaysAgo";
 
 interface IVideoInfoProps {
+  data: IVideoByIdInfo | undefined;
   userNickName: string | undefined;
   videoTitle: string | undefined;
   videoHashTag: string | undefined;
   avatarUrl: string | undefined;
   commentNumberOnSingleVideo: number | undefined;
-  likeNumberOnSingleVideo: number | undefined;
+  // likeNumberOnSingleVideo: number | undefined;
   numberOfShareVideo: string | undefined;
   myVideoListArr: IMyVideoInfo[] | undefined;
   currentVideoId: string | undefined;
   commentArrayOnSingleVideo: [] | undefined;
-  likeIdByVideoArr: [] | undefined;
+  likeIdByVideoArr: string[] | undefined;
   videoOwnerId: string | undefined;
-}
+  userFullname: string | undefined;
+  createdAt: string | undefined;
+  refetch: () => void;
+};
 export interface IActiveFunctionality {
   mode: string;
   nickname: string | undefined;
-}
+};
+// interface ICheckLikeVideo {
+//   comment: [];
+//   createdAt: string;
+//   like: [];
+//   ownerVideo: string;
+//   updatedAt: string;
+//   videoHashtag: string;
+//   videoTitle: string;
+//   videoUrl: string;
+//   __v: number;
+//   _id: string;
+// };
+interface ICheckFollowingAccount {
+  comment: [];
+  createdAt: string;
+  like: [];
+  ownerVideo: string;
+  updatedAt: string;
+  videoHashtag: string;
+  videoTitle: string;
+  videoUrl: string;
+  __v: number;
+  _id: string | undefined;
+};
 
 const VideoInfo = (props: IVideoInfoProps) => {
   const {
@@ -41,74 +77,109 @@ const VideoInfo = (props: IVideoInfoProps) => {
     videoHashTag,
     avatarUrl,
     commentNumberOnSingleVideo,
-    likeNumberOnSingleVideo,
+    // likeNumberOnSingleVideo,
     currentVideoId,
     commentArrayOnSingleVideo,
     videoOwnerId,
+    userFullname,
+    createdAt,
+    refetch,
+
   } = props;
+  const [daysAgo, setDaysAgo] = useState<string>("");
+  // const [checkLikeVideo, setCheckLikeVideo] = useState<boolean>(false);
+  const [checkFollowing, setCheckFollowing] = useState<boolean>(false);
   const repliesSectionRef = useRef<HTMLDivElement | null>(null);
-  const [commentContent, setCommentContent] = useState<string>('');
-  const [likedVideo, setLikedVideo] = useState<string[]>([]);
-  const [followingAccount, setFollowingAccount] = useState<string[]>([]);
+  const [commentContent, setCommentContent] = useState<string>("");
+  // const [likedVideo, setLikedVideo] = useState<string[]>([]);
+  // const [followingAccount, setFollowingAccount] = useState<string[]>([]);
   const [activeFunctionality, setActiveFunctionality] =
     useState<IActiveFunctionality>({
-      mode: 'comment',
-      nickname: '',
+      mode: "comment",
+      nickname: "",
     });
   const [currentCommentId, setCurrentCommentId] = useState<string | undefined>(
-    ''
+    ""
   );
   const [titleVideo, setTitleVideo] = useState(videoTitle);
   const [hashTagVideo, setHashTagVideo] = useState(videoHashTag);
   const { setModalIsOpen, currentUser } = useModal();
   const [openModal, setOpenModal] = useState(false);
   const currentUserId = currentUser && currentUser._id;
-  // console.log("Current user nickname: ", currentUser.nickname);
-  // console.log("Current user ID: ", currentUserId);
-
-  useEffect(() => {
-    setTitleVideo(videoTitle)
-    setHashTagVideo(videoHashTag)
-  }, [videoTitle, videoHashTag])
-
   const { data: getAllReplies } =
     useGetAllRepliesByCommentIdQuery(currentCommentId);
   // console.log("getAllReplies: >>>", getAllReplies);
   const numberOfLikesOnSingleComment = getAllReplies?.commentReply.like.length;
   const replyContentArr = getAllReplies?.commentReply.reply;
   const numberOfLikeOnSingleReply = getAllReplies?.commentReply.like.length;
+  const { data: getCurrentUserInfo } =
+    useGetAllVideosByUserIdQuery(currentUserId);
+  const checkFollowingAccArr = getCurrentUserInfo?.following.map(
+    (item: ICheckFollowingAccount) => {
+      return item._id;
+    }
+  );
+  // const checkLikeVideoArr = getCurrentUserInfo?.videoliked.map(
+  //   (item: ICheckLikeVideo) => {
+  //     console.log(item._id);
+  //     return item._id;
+  //   }
+  // );
+  const dispatch = useDispatch();
+  const likedUsers = useSelector(selectLikedUsers);
+  const numberOfLike = useMemo(() => likedUsers.length, [likedUsers]);
+  const isLiked = useMemo(
+    () => likedUsers.includes(currentUserId as string),
+    [likedUsers, currentUserId]
+  );
+  // console.log("checkLikeVideoArr: ", checkLikeVideoArr);
+  useEffect(() => {
+    if (createdAt) {
+      const createVideoDate = formatDate(createdAt);
+      const valueStr = calculateDaysAgo(createVideoDate);
+      setDaysAgo(valueStr);
+    }
+  }, [currentVideoId, createdAt]);
+  useEffect(() => {
+    if (checkFollowingAccArr?.includes(videoOwnerId)) {
+      setCheckFollowing(true);
+    };
+  }, [currentUserId, videoOwnerId]);
+
+  // useEffect(() => {
+  //   if(checkLikeVideoArr?.includes(videoOwnerId as string)) {
+  //     setCheckLikeVideo(true);
+  //   };
+  // }, [checkLikeVideoArr, currentVideoId, videoOwnerId]);
+  useEffect(() => {
+    setTitleVideo(videoTitle);
+    setHashTagVideo(videoHashTag);
+  }, [videoTitle, videoHashTag]);
   const scrollToTop = () => {
     setTimeout(() => {
       if (repliesSectionRef.current) {
         repliesSectionRef.current.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
+          behavior: "smooth",
+          block: "start",
         });
       }
     }, 800);
   };
-
   const onSignIn = () => {
     setModalIsOpen(true);
   };
-
   const handleOnChangePostComment = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const content = e.target.value;
     const nickname = `@${activeFunctionality.nickname}`;
     setCommentContent(content);
-    if (activeFunctionality.mode === 'reply') {
-      // Check if the content includes "@username"
-      // const username = ${activeFunctionality.username};
+    if (activeFunctionality.mode === "reply") {
       if (content.includes(nickname)) {
         const atIndex = content.lastIndexOf(nickname);
-
-        // Check if the username is followed by a space or reached the beginning of the string
-        if (content.charAt(atIndex - 1) === ' ' || atIndex === 0) {
-          setCommentContent(content); // Set the comment content as it is
+        if (content.charAt(atIndex - 1) === " " || atIndex === 0) {
+          setCommentContent(content);
         } else {
-          // Remove the "@username" part by replacing it with the remaining content
           setCommentContent(
             content.slice(0, atIndex) + content.slice(atIndex + nickname.length)
           );
@@ -117,30 +188,30 @@ const VideoInfo = (props: IVideoInfoProps) => {
         setCommentContent(content);
       }
     } else if (
-      activeFunctionality.mode === 'reply' &&
+      activeFunctionality.mode === "reply" &&
       !content.includes(`@${nickname}`)
     ) {
-      setActiveFunctionality({ mode: 'comment', nickname: '' });
-      setCommentContent('');
+      setActiveFunctionality({ mode: "comment", nickname: "" });
+      setCommentContent("");
     }
-    if (content === '') {
-      setCommentContent('');
-      setActiveFunctionality({ mode: 'comment', nickname: '' });
+    if (content === "") {
+      setCommentContent("");
+      setActiveFunctionality({ mode: "comment", nickname: "" });
     }
   };
-
   //Call API
   const [postComment] = usePostCommentMutation();
   const [postReply] = usePostReplyMutation();
   const [putLikeVideo] = usePutLikeVideoMutation();
   const [putFollowing] = usePutFollowingMutation();
 
+  // Handle functions
   const handlePostClick = async (e: React.FormEvent) => {
     e.preventDefault();
     // console.log("Post button clicked!!");
     // debugger;
     try {
-      if (activeFunctionality.mode === 'comment') {
+      if (activeFunctionality.mode === "comment") {
         const payload: IPostComment = {
           comment: commentContent,
           userId: currentUserId,
@@ -156,7 +227,7 @@ const VideoInfo = (props: IVideoInfoProps) => {
         //   commentArrayOnSingleVideo?.unshift(payload);
         //   toast.success("Nice comment!!");
         // }
-      } else if (activeFunctionality.mode === 'reply') {
+      } else if (activeFunctionality.mode === "reply") {
         // Post reply to single comment functionality
         // console.log("Reply functionality: ");
         const payload: IRepliesContent = {
@@ -175,25 +246,23 @@ const VideoInfo = (props: IVideoInfoProps) => {
         // }
       }
     } catch (error) {
-      setCommentContent('');
-      setActiveFunctionality({ mode: 'comment', nickname: '' });
-      if (activeFunctionality.mode === 'comment') {
+      setCommentContent("");
+      setActiveFunctionality({ mode: "comment", nickname: "" });
+      if (activeFunctionality.mode === "comment") {
         scrollToTop();
       }
       console.error(error);
     }
   };
-
-  // currentUserId = userFollow
-  const handleFollowingButton = async (currentVideoId: string) => {
-    // console.log("videoOwnerId: ", videoOwnerId);
-    setFollowingAccount((prevFollowing) => {
-      if (prevFollowing.includes(currentVideoId)) {
-        return prevFollowing.filter((id) => id !== currentVideoId);
-      } else {
-        return [...prevFollowing, currentVideoId];
-      }
-    });
+  const handleFollowingButton = async () => {
+    // setFollowingAccount((prevFollowing) => {
+    //   if (prevFollowing.includes(currentVideoId)) {
+    //     return prevFollowing.filter((id) => id !== currentVideoId);
+    //   } else {
+    //     return [...prevFollowing, currentVideoId];
+    //   }
+    // });
+    setCheckFollowing(!checkFollowing);
     try {
       const payload = {
         followedUser: videoOwnerId,
@@ -209,18 +278,13 @@ const VideoInfo = (props: IVideoInfoProps) => {
       // console.log('Following this account successfully');
     } catch (error) {
       console.error(error);
+    } finally {
+      refetch();
     }
   };
 
   const handleLikeVideoClick = async (currentVideoId: string) => {
-    // console.log(currentVideoId);
-    setLikedVideo((prevLikedVideo) => {
-      if (prevLikedVideo.includes(currentVideoId)) {
-        return prevLikedVideo.filter((id) => id !== currentVideoId);
-      } else {
-        return [...prevLikedVideo, currentVideoId];
-      }
-    });
+    dispatch(setVideoLikedUsers(currentUserId));
     try {
       const payload = {
         likedVideoId: currentVideoId,
@@ -236,33 +300,10 @@ const VideoInfo = (props: IVideoInfoProps) => {
       // console.log('Like video successfully');
     } catch (error) {
       console.error(error);
+    } finally {
+      refetch();
     }
   };
-
-  // useEffect(() => {
-  //   const storedLikedVideo = localStorage.getItem('likedVideo');
-  //   const storedFollowingAccount = localStorage.getItem('followingAccount');
-
-  //   if (storedLikedVideo) {
-  //     setLikedVideo(JSON.parse(storedLikedVideo));
-  //   }
-
-  //   if (storedFollowingAccount) {
-  //     setFollowingAccount(JSON.parse(storedFollowingAccount));
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   localStorage.setItem('likedVideo', JSON.stringify(likedVideo));
-  //   localStorage.setItem('followingAccount', JSON.stringify(followingAccount));
-  // }, [likedVideo, followingAccount]);
-
-  // Declare useDebounce hooks
-  const useDebounceHandleLikeVideoClick = useDebounce(
-    handleLikeVideoClick,
-    300
-  );
-  // const useDebounceHandlePostClick = useDebounce(handlePostClick, 300);
 
   return (
     <>
@@ -286,23 +327,29 @@ const VideoInfo = (props: IVideoInfoProps) => {
             {/* account & username */}
             <div className="leading-5 mr-2">
               <NavLink to={`/${videoOwnerId}`} className="">
-                <p className="font-semibold text-lg text-black hover:underline ">
+                <p className="font-semibold text-lg text-black hover:underline">
                   {userNickName}
                 </p>
               </NavLink>
-              <span className="text-sm text-black">{titleVideo}</span>
-              <div className="text-sm text-black mt-1">4d ago</div>
+              <NavLink to={`/${videoOwnerId}`} className="">
+                <span className="text-sm text-black hover:underline">
+                  {userFullname}
+                </span>
+              </NavLink>
+              {daysAgo && (
+                <span className="text-sm text-black mt-1"> • {daysAgo} </span>
+              )}
             </div>
           </div>
           {/* Right header*/}
           {currentUserId && videoOwnerId ? (
             <button
-              className={`border border-customedPink ${followingAccount.includes(videoOwnerId)
-                  ? 'bg-customedPink text-white'
-                  : ''
-                } hover:bg-[#fe2c550f] hover:ease-in-out transition duration-300 rounded-lg 
+              className={`border border-customedPink ${
+                checkFollowing ? "bg-customedPink text-white hover:text-customedPink" : ""
+              } hover:bg-[#fe2c550f] hover:ease-in-out transition duration-300 rounded-lg 
                   font-semibold text-customedPink px-4 flex-wrap sm:text-sm xs:text-xs min-w-[120px] min-h-[50px] w-[120px] h-[50px]`}
-              onClick={() => handleFollowingButton(videoOwnerId)}
+              // onClick={() => handleFollowingButton(videoOwnerId)}
+              onClick={() => handleFollowingButton()}
             >
               Follow
             </button>
@@ -319,56 +366,43 @@ const VideoInfo = (props: IVideoInfoProps) => {
         </div>
         {/* description */}
         <div className="flex justify-start items-center gap-1 pl-4 flex-wrap leading-none max-w-full mt-3">
-          {/* <span className="text-sm text-black">Stay balling</span> */}
+          <span className="text-md text-black-400">{titleVideo}</span>
           <span>
-            <NavLink to="/">
-              <span className="text-black font-semibold hover:underline text-sm">
-                {hashTagVideo}
-              </span>
-            </NavLink>
+            <span className="text-black font-semibold text-sm">
+              {hashTagVideo}
+            </span>
           </span>
         </div>
         {/* music */}
         <div className="flex justify-start items-center gap-1 mt-3 pl-4 flex-wrap">
-          <span className="text-black font-light hover:underline">
+          <span className="text-black font-light">
             <i className="fas fa-music text-xs"></i>
           </span>
           <span>
-            <NavLink to="/">
-              <span className="text-black font-semibold hover:underline text-sm">
-                #hollaatme
-              </span>
-            </NavLink>
+            <span className="text-black font-semibold text-sm">#hollaatme</span>
           </span>
           <span>
-            <NavLink to="/">
-              <span className="text-black font-semibold hover:underline text-sm">
-                #boostingstrive
-              </span>
-            </NavLink>
+            <span className="text-black font-semibold text-sm">
+              #boostingstrive
+            </span>
           </span>
           <span>
-            <NavLink to="/">
-              <span className="text-black font-semibold hover:underline text-sm">
-                #toendtherapture
-              </span>
-            </NavLink>
+            <span className="text-black font-semibold text-sm">
+              #toendtherapture
+            </span>
           </span>
         </div>
         {/* Likes and social platforms */}
-        <div className="flex justify-between items-center px-2 mt-3 mb-3 flex-wrap gap-2 max-w-full">
+        <div className="flex justify-between items-center px-2 mt-3 mb-3 flex-wrap gap-2 max-w-full mb-2">
           {/* Likes */}
           <span className="flex gap-1.5 items-center">
             {currentUserId && currentVideoId ? (
               <button
                 className="flex justify-center items-center bg-slate-100 w-5 h-5 rounded-full p-4 cursor-pointer"
-                onClick={() => useDebounceHandleLikeVideoClick(currentVideoId)}
+                onClick={() => handleLikeVideoClick(currentVideoId)}
               >
                 <i
-                  className={`fas fa-heart ${likedVideo.includes(currentVideoId)
-                      ? 'text-customedPink'
-                      : ''
-                    }`}
+                  className={`fas fa-heart ${isLiked && "text-customedPink"}`}
                 ></i>
               </button>
             ) : (
@@ -380,7 +414,7 @@ const VideoInfo = (props: IVideoInfoProps) => {
               </button>
             )}
             <span className="text-xs font-semibold">
-              {likeNumberOnSingleVideo}
+              {numberOfLike}
             </span>
             <span className="flex justify-center items-center bg-slate-100 w-5 h-5 rounded-full p-4 disabled">
               <i className="fas fa-comment-dots"></i>
@@ -388,12 +422,16 @@ const VideoInfo = (props: IVideoInfoProps) => {
             <span className="text-xs font-semibold">
               {commentNumberOnSingleVideo}
             </span>
-            {videoOwnerId == currentUser?._id &&
-              < button
-                onClick={() => setOpenModal(prev => !prev)}
-                className='absolute right-5 p-2 rounded-md bg-slate-300 hover:bg-slate-200'
-              >Sửa Video</button>
-            }
+            {videoOwnerId && currentUser && videoOwnerId == currentUser._id && (
+              <button
+                onClick={() => setOpenModal((prev) => !prev)}
+                className="absolute right-4 border border-customedPink hover:bg-[#fe2c550f] 
+                hover:ease-in-out transition duration-300 rounded-lg bg-transparent 
+                font-semibold text-customedPink px-2 min-w-[120px] min-h-[50px] w-[120px] h-[50px] flex-wrap sm:text-sm xs:text-xs mb-4 mt-2"
+              >
+                Edit Video
+              </button>
+            )}
             {/* <button
               className="flex justify-center items-center bg-slate-100 w-5 h-5 rounded-full p-4 cursor-pointer"
               onClick={() => onSignIn()}
@@ -447,15 +485,15 @@ const VideoInfo = (props: IVideoInfoProps) => {
                     className="px-3 py-3 text-slate-600 bg-customedGrey
                   rounded text-sm border-0 shadow outline-none caret-customedPink w-full md:w-[350px]"
                     placeholder={
-                      activeFunctionality.mode === 'reply'
+                      activeFunctionality.mode === "reply"
                         ? `Reply to ${activeFunctionality.nickname}:`
-                        : 'Add comment...'
+                        : "Add comment..."
                     }
                     value={commentContent}
                     onChange={handleOnChangePostComment}
                   />
                 </form>
-                {commentContent === '' ? (
+                {commentContent === "" ? (
                   <button
                     className="border-none outline-none font-extrabold text-slate-400 px-2 py-2 text-sm disabled cursor-default"
                     onClick={handlePostClick}
@@ -488,9 +526,10 @@ const VideoInfo = (props: IVideoInfoProps) => {
               setOpenModal={setOpenModal}
               setHashTagVideo={setHashTagVideo}
               setTitleVideo={setTitleVideo}
+              refetch={refetch}
             />
           ) : (
-            ''
+            ""
           )}
         </div>
       </div>

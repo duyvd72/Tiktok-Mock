@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect } from 'react';
 import { getUserByIdAPI } from '@/api/adminAPIs';
-import { convertDateFormat } from '@/utils/formateDate';
+import { formatDate } from '@/utils/formatDate';
 
 const UserInDetailAdmin = () => {
   const params = useParams();
@@ -56,7 +56,7 @@ const UserInDetailAdmin = () => {
               </p>
               <p>
                 <strong>Ngày tạo tài khoản: </strong>{' '}
-                {convertDateFormat(viewingUserInDetail?.createdAt as string)}
+                {formatDate(viewingUserInDetail?.createdAt as string)}
               </p>
             </div>
           </div>

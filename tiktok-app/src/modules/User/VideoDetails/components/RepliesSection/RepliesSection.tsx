@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import logoIcon from '@/assets/images/logo-icon.png';
 import { NavLink, useParams } from 'react-router-dom';
 import { useGetVideoByVideoIdQuery } from '@/api/VideoDetails/apiSlice';
 import { IActiveFunctionality } from '../../VideoInfo/VideoInfo';
+import calculateDaysAgo from '@/utils/calculateDaysAgo';
+import { formatDate } from '@/utils/formatDate';
 
 interface IRepliesSectionProps {
   activeFunctionality: IActiveFunctionality;
@@ -13,7 +15,7 @@ interface IRepliesSectionProps {
   replyContentArr: [] | undefined;
   numberOfLikeOnSingleReply: number | undefined;
   repliesSectionRef: React.RefObject<HTMLDivElement> | null;
-}
+};
 interface ICommentContentUser {
   _id: string;
   fullname: string;
@@ -27,7 +29,7 @@ interface ICommentContentUser {
   updatedAt: string;
   videoliked: [];
   __v: number;
-}
+};
 interface ICommentContent {
   _id: string;
   content: string;
@@ -36,7 +38,7 @@ interface ICommentContent {
   updatedAt: string;
   createdAt: string;
   user: ICommentContentUser;
-}
+};
 interface IUserReply {
   _id: string;
   createdAt: string;
@@ -51,7 +53,7 @@ interface IUserReply {
   nickname: string;
   fullname: string;
   __v: number;
-}
+};
 interface IReplyContent {
   _id: string;
   content: string;
@@ -61,17 +63,13 @@ interface IReplyContent {
   updatedAt: string;
   user: IUserReply;
   __v: number;
-}
+};
 
 const RepliesSection = (props: IRepliesSectionProps) => {
   const {
-    // activeFunctionality,
     setActiveFunctionality,
-    // currentCommentId,
     setCurrentCommentId,
-    // numberOfLikesOnSingleComment,
     replyContentArr,
-    // numberOfLikeOnSingleReply,
     repliesSectionRef,
   } = props;
   const [showReplies, setShowReplies] = useState<string[]>([]);
@@ -80,22 +78,10 @@ const RepliesSection = (props: IRepliesSectionProps) => {
   // const { currentUser } = useModal();
   // const currentUserId = currentUser._id;
   const { videoId } = useParams();
-  // const {
-  //   data: userInfo,
-  //   isLoading,
-  //   isSuccess,
-  //   isError,
-  //   error,
-  // } = useGetAllVideosByUserIdQuery(currentUserId);
-  // console.log("userInfo: >>>", userInfo);
-  // const nicknameComment = userInfo?.nickname;
-  // console.log("nicknameComment: ", nicknameComment)
-
   const { data: userComments } = useGetVideoByVideoIdQuery(videoId);
   // console.log("userComments: >>>", userComments);
   const userCommentsArr = userComments?.comment;
   // console.log("userCommentsArr: ", userCommentsArr);
-
   const handleViewMoreReplies = (currentCommentId: string) => {
     setShowReplies((prevState) => {
       if (prevState.includes(currentCommentId)) {
@@ -157,18 +143,17 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                 {/* account & username */}
                 <div className="max-w-full min-w-[150px] w-[350px] max-h-[250px] self-start justify-start">
                   <NavLink to={`/${comment.user._id}`} className="">
-                    <p className="font-semibold text-md text-black hover:underline mt-10">
+                    <p className="font-semibold text-md text-black hover:underline mt-5">
                       {comment.user.nickname}
                     </p>
                   </NavLink>
-                  <span className="text-sm text-black mr-5">19/12</span>
                   <div className="max-w-[350px] max-h-[200px] text-wrap">
                     <span className="text-sm text-black mr-5">
                       {comment.content}
                     </span>
                   </div>
                   <div>
-                    <span className="text-sm text-[#a19d9d] mr-5">3h ago</span>
+                    <span className="text-sm text-[#a19d9d] mr-5">{calculateDaysAgo(formatDate(comment.createdAt))}</span>
                     <button
                       className="text-sm text-[#a19d9d]"
                       onClick={() =>
@@ -244,7 +229,6 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                               {reply.user.nickname}
                             </p>
                           </NavLink>
-                          <span className="text-sm text-black mr-5">19/12</span>
                           <div className="max-w-[350px]">
                             <span className="text-sm text-black mr-5">
                               {reply.content}
@@ -252,7 +236,7 @@ const RepliesSection = (props: IRepliesSectionProps) => {
                           </div>
                           <div>
                             <span className="text-sm text-[#a19d9d] mr-5">
-                              3h ago
+                              {calculateDaysAgo(formatDate(reply.createdAt))}
                             </span>
                             <button
                               className="text-sm text-[#a19d9d]"

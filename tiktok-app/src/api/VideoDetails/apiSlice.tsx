@@ -9,19 +9,19 @@ interface IOwnerVideo {
   avatarUrl: string;
   fullname: string;
   nickname: string;
-}
-interface IVideoByIdInfo {
+};
+export interface IVideoByIdInfo {
   _id: string;
   videoUrl: string;
   videoHashtag: string;
   videoTitle: string;
-  like: [];
+  like: string[];
   comment: [];
   createdAt: string;
   updatedAt: string;
   ownerVideo: IOwnerVideo;
   __v: number;
-}
+};
 // get video by userId
 export interface IMyVideoInfo {
   _id: string;
@@ -34,7 +34,7 @@ export interface IMyVideoInfo {
   createdAt: string;
   updatedAt: string;
   __v: number;
-}
+};
 export interface IOwnerInfo {
   _id: string;
   avatarUrl: string;
@@ -49,7 +49,7 @@ export interface IOwnerInfo {
   createdAt: string;
   updatedAt: string;
   __v: number;
-}
+};
 //get all replies by commentId
 interface ICommentReply {
   _id: string;
@@ -59,17 +59,17 @@ interface ICommentReply {
   createdAt: string;
   updatedAt: string;
   __v: number;
-}
+};
 interface IRepliesResponse {
   success: boolean;
   commentReply: ICommentReply;
-}
+};
 // post comment
 export interface IPostComment {
   comment: string;
   userId: string | undefined;
   videoId: string | undefined;
-}
+};
 interface IPostCommentResponse {
   success: boolean;
   video: {
@@ -84,19 +84,19 @@ interface IPostCommentResponse {
     updatedAt: string;
     __v: number;
   };
-}
+};
 interface IPostCommentResponseData {
   data: IPostCommentResponse;
-}
+};
 // post replies
 export interface IRepliesContent {
   userId: string | undefined;
   replyComment: string;
   commentId: string | undefined;
-}
+};
 interface IPostRepliesResponse {
   success: boolean;
-}
+};
 // type prepareHeaders
 // type prepareHeaders = (
 //   headers: Headers,
@@ -112,7 +112,7 @@ interface IPostRepliesResponse {
 interface ILikeParam {
   likedVideoId: string;
   userLikeId: string;
-}
+};
 interface ILikeResponse {
   _id: string;
   videoUrl: string;
@@ -124,12 +124,12 @@ interface ILikeResponse {
   createdAt: string;
   updatedAt: string;
   __v: number;
-}
+};
 // put follow account
 interface IFollowingParam {
   followedUser: string | undefined; // get from videoOwnerId
   userFollow: string | undefined; // get from useModal()
-}
+};
 interface IFollowingAccountResponse {
   _id: string;
   avatarUrl: string;
@@ -145,7 +145,7 @@ interface IFollowingAccountResponse {
   createdAt: string;
   updatedAt: string;
   __v: 0;
-}
+};
 // token
 const token = localStorage.getItem('token');
 // Create API
@@ -163,22 +163,22 @@ export const VideoDetailsApi = createApi({
   endpoints: (builder) => ({
     getAllVideos: builder.query<IVideoResponse, void>({
       query: () => GET_ALL_VIDEOS_URL,
-      providesTags: ['videoDetails'],
+      // providesTags: ['videoDetails'],
     }),
     getVideoByVideoId: builder.query<IVideoByIdInfo, string | undefined>({
       query: (_id) => `videos/${_id}`,
-      providesTags: ['videoDetails'],
+      // providesTags: ['videoDetails'],
     }),
     getAllVideosByUserId: builder.query<IOwnerInfo, string | undefined>({
       query: (userId) => `accounts/searchuser/${userId}`,
-      providesTags: ['videoDetails'],
+      // providesTags: ['videoDetails'],
     }),
     getAllRepliesByCommentId: builder.query<
       IRepliesResponse,
       string | undefined
     >({
       query: (currentCommentId) => `accounts/commentreply/${currentCommentId}`,
-      providesTags: ['videoDetails'],
+      // providesTags: ['videoDetails'],
     }),
     postComment: builder.mutation<IPostCommentResponseData, IPostComment>({
       query: (commentContent) => ({
@@ -186,7 +186,7 @@ export const VideoDetailsApi = createApi({
         method: 'POST',
         body: commentContent,
       }),
-      invalidatesTags: ['videoDetails'],
+      // invalidatesTags: ['videoDetails'],
     }),
     postReply: builder.mutation<IPostRepliesResponse, IRepliesContent>({
       query: (replyContent) => ({
@@ -194,7 +194,7 @@ export const VideoDetailsApi = createApi({
         method: 'POST',
         body: replyContent,
       }),
-      invalidatesTags: ['videoDetails'],
+      // invalidatesTags: ['videoDetails'],
     }),
     // like video by videoId
     putLikeVideo: builder.mutation<ILikeResponse, ILikeParam>({
@@ -203,7 +203,7 @@ export const VideoDetailsApi = createApi({
         method: 'PUT',
         body: data,
       }),
-      invalidatesTags: ['videoDetails'],
+      // invalidatesTags: ['videoDetails'],
     }),
     // like comment by commentId
     // putLike: builder.mutation<ILikeResponse, void>({
@@ -229,7 +229,7 @@ export const VideoDetailsApi = createApi({
         method: 'PUT',
         body: data,
       }),
-      invalidatesTags: ['videoDetails'],
+      // invalidatesTags: ['videoDetails'],
     }),
   }),
 });
