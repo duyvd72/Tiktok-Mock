@@ -1,6 +1,17 @@
+import { useEffect } from 'react';
 import UserTable from './UserTable';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { getUserListAPI } from '@/api/adminAPIs';
 
 const UserManagement = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getUserListAPI());
+  }, []);
+
+  const loading = useAppSelector((state) => state.userManagement.loading);
+
   return (
     <div>
       <div className="flex justify-between">
@@ -30,9 +41,7 @@ const UserManagement = () => {
           <option value="4">Số lượng video từ ít đến nhiều</option>
         </select>
       </div>
-      <div className="mt-[100px]">
-        <UserTable />
-      </div>
+      <div className="mt-[100px]">{!loading && <UserTable />}</div>
     </div>
   );
 };

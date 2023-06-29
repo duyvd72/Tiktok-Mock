@@ -1,10 +1,11 @@
 import { ChangeEvent, useState } from 'react';
-// import { useNavigate } from 'react-router';
 import UserTableItem from './UserTableItem';
+import { useAppSelector } from '@/redux/hooks';
 
 const UserTable = () => {
-  // const [searchKeyword, setSearchKeyword] = useState('');
-  // const navigate = useNavigate();
+  const userList = useAppSelector((state) => state.userManagement.userList);
+
+  const userListWithoutAdmin = userList.filter((user) => user.role !== 'admin');
 
   const defaultFormQuantity = 2;
   const [quantity, setQuantity] = useState(defaultFormQuantity);
@@ -60,11 +61,6 @@ const UserTable = () => {
   //   }
   // };
 
-  // const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setSearchKeyword(e.target.value);
-  //   setActivePage(1);
-  // };
-
   const hanldeChangeQuantity = (e: ChangeEvent<HTMLSelectElement>) => {
     setQuantity(Number(e.target.value));
     setActivePage(1);
@@ -86,13 +82,9 @@ const UserTable = () => {
           </tr>
         </thead>
         <tbody>
-          <UserTableItem />
-          <UserTableItem />
-          <UserTableItem />
-          <UserTableItem />
-          <UserTableItem />
-          <UserTableItem />
-          <UserTableItem />
+          {userListWithoutAdmin.map((user) => {
+            return <UserTableItem key={user._id} user={user} />;
+          })}
         </tbody>
       </table>
 
