@@ -1,9 +1,9 @@
 import ScrollToTop from '@/components/ScrollToTop';
 import VideoItem from './components/VideoItem/VideoItem';
 import { useEffect, useRef, useState } from 'react';
-import axiosInstance from '@/libs/axios/axiosConfig';
 import { IVideo } from '@/interfaces/interfaces';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import { getAllVideo } from '@/api/videoAPIs';
 
 const NewsFeed = () => {
   const [limit] = useState(3)
@@ -18,10 +18,10 @@ const NewsFeed = () => {
     (async () => {
       try {
         setIsLoading(true)
-        const response = await axiosInstance.get(`videos/getAllVideo/?page=${page}&limit=${limit}`);
+        const response = await getAllVideo(page, limit)
         setIsLoading(false)
-        setVideoList(prev => [...prev, ...response.data.video])
-        setTotalPage(response.data.totalPage)
+        setVideoList(prev => [...prev, ...response.video])
+        setTotalPage(response.totalPage)
       } catch (error) {
         setIsLoading(false)
         throw new Error('Failed to get video list!');
