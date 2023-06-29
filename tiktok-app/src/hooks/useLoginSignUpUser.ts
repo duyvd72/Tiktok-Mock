@@ -6,12 +6,12 @@ import useModal from '@/hooks/useModal';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { loginUserAPI } from '@/api/userAPIs';
-import authenticationSlice from '@/pages/User/Authentication/redux/authenticationSlice';
+import authenticationSlice from '@/modules/User/Authentication/redux/authenticationSlice';
 import { useNavigate } from 'react-router-dom';
 function useLoginSignUpUser() {
   const { setModalIsOpen, setModalState, setCurrentUser } = useModal();
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const isLoading = useSelector(
     (state: RootState) => state.authentication.isLoading
   );
@@ -40,7 +40,7 @@ function useLoginSignUpUser() {
       if (isLoading.data?.response.user.role !== 'admin') {
         location.reload();
       } else {
-        navigate('/admin')
+        navigate('/admin');
       }
       setCurrentUser(isLoading.data?.response.user);
       setModalIsOpen(false);

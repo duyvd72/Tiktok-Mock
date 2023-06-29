@@ -16,7 +16,9 @@ function Chat() {
   const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    socket.emit('add-user', currentUser._id);
+    if (currentUser) {
+      socket.emit('add-user', currentUser._id);
+    }
   }, []);
 
   useEffect(() => {
@@ -55,7 +57,7 @@ function Chat() {
                 if (user?._id !== currentUser?._id) {
                   return (
                     <section
-                      className={`${currentUserChat._id == user._id
+                      className={`${currentUserChat?._id == user._id
                         ? `bg-slate-200`
                         : `hover:bg-slate-100 `
                         }`}

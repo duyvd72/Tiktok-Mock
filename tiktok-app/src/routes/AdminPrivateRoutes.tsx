@@ -1,17 +1,10 @@
 import { getAccessToken } from '@/utils/accessTokenLS';
 import { Navigate } from 'react-router';
 import jwt_decode from 'jwt-decode';
+import { IDecodeToken } from '@/interfaces/interfaces';
 
 interface IProps {
   children: JSX.Element;
-}
-
-export interface IDecodeToken {
-  exp: number;
-  iat: number;
-  id: string;
-  refreshToken: string;
-  role: string;
 }
 
 const AdminPrivateRoutes = (props: IProps) => {

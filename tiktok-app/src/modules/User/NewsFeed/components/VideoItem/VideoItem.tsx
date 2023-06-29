@@ -1,4 +1,4 @@
-import ButtonGroup from '@/pages/User/NewsFeed/components/ButtonGroup/ButtonGroup';
+import ButtonGroup from '@/modules/User/NewsFeed/components/ButtonGroup/ButtonGroup';
 import { IVideo } from '@/interfaces/interfaces';
 import defaultAva from '@/assets/images/default-ava.png';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
@@ -14,33 +14,33 @@ const VideoItem = (props: IProps) => {
   const videoRef = useRef<any>();
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0);
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-
     if (videoRef.current) {
       const callback: IntersectionObserverCallback = (entries) => {
-        const [entry] = entries
+        const [entry] = entries;
 
-        setVisible(entry.isIntersecting)
-
-      }
+        setVisible(entry.isIntersecting);
+      };
       const observer = new IntersectionObserver(callback, {
-        root: null, rootMargin: '0px', threshold: 0.5
-      })
-      observer.observe(videoRef.current)
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5,
+      });
+      observer.observe(videoRef.current);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (visible) {
-      videoRef.current?.play()
-      setIsPlaying(true)
+      videoRef.current?.play();
+      setIsPlaying(true);
     } else {
-      videoRef.current?.pause()
-      setIsPlaying(false)
+      videoRef.current?.pause();
+      setIsPlaying(false);
     }
-  }, [visible])
+  }, [visible]);
 
   const handlePlayBtn = () => {
     const video = videoRef.current;
@@ -104,7 +104,10 @@ const VideoItem = (props: IProps) => {
         </div>
         <div className="w-[50%]">
           <div className="flex items-center gap-2">
-            <p className="font-bold cursor-pointer" onClick={() => navigate(`/${video.ownerVideo._id}`)} >
+            <p
+              className="font-bold cursor-pointer"
+              onClick={() => navigate(`/${video.ownerVideo._id}`)}
+            >
               {video.ownerVideo.nickname}
             </p>
             <p className="text-sm">{video.ownerVideo.fullname}</p>
