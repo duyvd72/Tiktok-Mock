@@ -23,7 +23,6 @@ const ChatContainer: React.FC<IChatContainer> = ({
   const [conservation, setConservation] = useState<IMessage[]>([])
   const scrollRef = useRef<any>()
   const [message, setMessage] = useState('')
-  const count = useRef<any>(0)
 
   useEffect(() => {
     if (currentUserChat._id) {
