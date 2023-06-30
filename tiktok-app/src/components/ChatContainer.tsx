@@ -46,12 +46,7 @@ const ChatContainer: React.FC<IChatContainer> = ({
 
   useEffect(() => {
     socket.on('message-receive', (data: any) => {
-      count.current += 1
-      if (count.current <= 1) {
-        setConservation((prevMessages) => [...prevMessages, data]);
-      } else {
-        count.current = 0
-      }
+      setConservation((prevMessages) => [...prevMessages, data]);
     });
   }, [])
 
