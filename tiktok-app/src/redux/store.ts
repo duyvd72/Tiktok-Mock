@@ -2,8 +2,9 @@ import newsFeedSlice from '@/modules/User/NewsFeed/redux/newsFeedSlice';
 import authenticationSlice from '@/modules/User/Authentication/redux/authenticationSlice';
 import { configureStore } from '@reduxjs/toolkit';
 import { VideoDetailsApi } from '@/api/VideoDetails/apiSlice';
-import { videoTimeStampReducer } from '@/modules/User/NewsFeed/redux/videoTimeStampSlice';
-import userManagementSlice from '@/modules/Admin/UserManagement/redux/userManagementSlice';
+import videoDetailSlice from '@/pages/User/VideoDetails/redux/setLikeVideoSlice';
+import { videoTimeStampReducer } from '@/pages/User/NewsFeed/redux/videoTimeStampSlice';
+import userManagementSlice from '@/pages/Admin/UserManagement/redux/userManagementSlice';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     //----------------------Linh starts------------------------------------------------
     // Video details slice using RTK query
     [VideoDetailsApi.reducerPath]: VideoDetailsApi.reducer,
+    [videoDetailSlice.name]: videoDetailSlice.reducer,
 
     //----------------------Linh ends------------------------------------------------
   },
@@ -23,8 +25,6 @@ export const store = configureStore({
   // Add middlewares for RTK query
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(VideoDetailsApi.middleware),
-
-  //----------------------Linh ends------------------------------------------------
 
   //----------------------Linh ends------------------------------------------------
 });

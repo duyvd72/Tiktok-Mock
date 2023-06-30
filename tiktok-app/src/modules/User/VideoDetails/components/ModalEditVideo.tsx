@@ -10,15 +10,30 @@ interface IModalEditVideo {
     setHashTagVideo: React.Dispatch<React.SetStateAction<string | undefined>>
     setTitleVideo: React.Dispatch<React.SetStateAction<string | undefined>>
     videoId: string
+    refetch: () => void;
+}
+interface IVideosValues {
+    titleVideo: string,
+    hashtagVideo: string,
 }
 
-const ModalEditVideo: React.FC<IModalEditVideo> = ({ titleVideo = '', hashtagVideo = '', setOpenModal, videoId, setHashTagVideo, setTitleVideo }) => {
+const ModalEditVideo: React.FC<IModalEditVideo> = ({ titleVideo = '', hashtagVideo = '', setOpenModal, videoId, setHashTagVideo, setTitleVideo, refetch }) => {
 
     const [isLoading, setIsLoading] = useState(false)
     const initialValues = {
         titleVideo,
         hashtagVideo
-    }
+    };
+
+    const onHandleSubmit = async (values: IVideosValues) => {
+        setIsLoading(true)
+        const response = await updateVideo(videoId, values)
+        setHashTagVideo(response.videoHashtag)
+        setTitleVideo(response.videoTitle)
+        setIsLoading(false)
+        setOpenModal(false)
+        refetch();
+    };
 
     return (
         <main
@@ -26,15 +41,7 @@ const ModalEditVideo: React.FC<IModalEditVideo> = ({ titleVideo = '', hashtagVid
             h-[400px] w-[400px] bg-stone-500 rounded-md p-5`}>
             <Formik
                 initialValues={initialValues}
-                onSubmit={async (values) => {
-                    setIsLoading(true)
-                    const response = await updateVideo(videoId, values)
-                    setHashTagVideo(response.videoHashtag)
-                    setTitleVideo(response.videoTitle)
-                    setIsLoading(false)
-                    setOpenModal(false)
-                }}
-
+                onSubmit={(values) => onHandleSubmit(values)}
             >
                 {({ values }) => (
                     <Form className='flex flex-col relative h-full w-full'>

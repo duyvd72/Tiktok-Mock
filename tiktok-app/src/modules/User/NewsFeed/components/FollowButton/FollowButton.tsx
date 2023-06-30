@@ -15,7 +15,7 @@ function FollowButton({ video }: { video: IVideo }) {
                 setFollowed(true)
             }
         }
-    }, [currentUser])
+    }, [currentUser]);
     const handleFollow = () => {
         if (currentUser && currentUser._id) {
             axiosInstance.put('/accounts/follow', {
@@ -31,7 +31,7 @@ function FollowButton({ video }: { video: IVideo }) {
         <button
             onClick={() => handleFollow()}
             className={`${currentUser && currentUser._id == video.ownerVideo._id ? "" : followed
-                ? `font-bold border border-[rgba(22, 24, 35, 0.12)] hover:bg-[#f8f8f8] rounded-[4px] px-4`
+                ? `font-bold border border-[rgba(22, 24, 35, 0.12)] hover:bg-[#f8f8f8] rounded-[4px]`
                 : `border border-[#fe2c55] text-[#fe2c55] font-bold rounded-[4px] px-8 hover:bg-[#fe2c550f]`}
             `}
         >
