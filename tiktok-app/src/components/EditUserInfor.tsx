@@ -1,13 +1,13 @@
-import styles from "@/styles/userDetail.module.css";
-import axios from "axios";
-import { ChangeEvent, useContext, useState } from "react";
-import { ErrorMessage, Field, Formik } from "formik";
-import * as Yup from "yup";
-import { InitialValuesContext } from "./UserDetail";
-import { useParams } from "react-router-dom";
-import defaultAva from "@/assets/images/default-ava.png";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { storage } from "@/firebase/index";
+import styles from '@/styles/userDetail.module.css';
+import axios from 'axios';
+import { ChangeEvent, useContext, useState } from 'react';
+import { ErrorMessage, Field, Formik } from 'formik';
+import * as Yup from 'yup';
+import { InitialValuesContext } from './UserDetail';
+import { useParams } from 'react-router-dom';
+import defaultAva from '@/assets/images/default-ava.png';
+import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import { storage } from '@/firebase/index';
 
 interface EditUserInforProps {
   setClickEdit: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,7 +20,7 @@ const EditUserInfor = ({
 }: EditUserInforProps) => {
   const initialValues = useContext(InitialValuesContext);
   const [changeImage, setChangeImage] = useState(false);
-  const [imageState, setImageState] = useState("");
+  const [imageState, setImageState] = useState('');
   const { userId } = useParams();
   const [currentFile, setCurrentFile] = useState<any>();
   const handleUpdateUser = (values: any) => {
@@ -28,8 +28,10 @@ const EditUserInfor = ({
     const uploadTask = uploadBytesResumable(storageRef, currentFile[0]);
 
     uploadTask.on(
-      "state_changed",
-      (snapshot) => {},
+      'state_changed',
+      (snapshot) => {
+        console.log('snapshot', snapshot);
+      },
       (error) => {
         console.error(error);
       },
@@ -47,7 +49,7 @@ const EditUserInfor = ({
               setChangeImage(false);
               setClickEdit(false);
               setCurrentUser(res.data.user);
-              setImageState("");
+              setImageState('');
             })
             .catch((err) => console.error(err));
         });
@@ -70,12 +72,12 @@ const EditUserInfor = ({
         initialValues={initialValues}
         validationSchema={Yup.object().shape({
           nickname: Yup.string()
-            .required("Không được để trống TikTokID")
-            .matches(/^[A-Za-z0-9_.]+$/, "Đoạn mã không hợp lệ")
-            .min(3, "TikTokID phải gồm ít nhất 3 kí tự")
-            .max(24, "Tối đa 24 kí tự"),
-          fullname: Yup.string().max(30, "Tối đa 30 kí tự"),
-          bio: Yup.string().max(80, "Tối đa 80 kí tự"),
+            .required('Không được để trống TikTokID')
+            .matches(/^[A-Za-z0-9_.]+$/, 'Đoạn mã không hợp lệ')
+            .min(3, 'TikTokID phải gồm ít nhất 3 kí tự')
+            .max(24, 'Tối đa 24 kí tự'),
+          fullname: Yup.string().max(30, 'Tối đa 30 kí tự'),
+          bio: Yup.string().max(80, 'Tối đa 80 kí tự'),
         })}
         onSubmit={(values) => {
           handleUpdateUser(values);
@@ -102,7 +104,7 @@ const EditUserInfor = ({
                   <p className="w-1/4 font-bold">Ảnh hồ sơ</p>
                   <div className="w-2/4 relative">
                     <div className="w-fit m-auto cursor-pointer">
-                      {imageState === "" ? (
+                      {imageState === '' ? (
                         <label htmlFor="img" className="cursor-pointer">
                           <img
                             src={
@@ -210,8 +212,8 @@ const EditUserInfor = ({
                       initialValues.fullname !== formik.values.fullname ||
                       initialValues.bio !== formik.values.bio ||
                       changeImage === true
-                        ? "bg-[#fe2c55] text-white"
-                        : "bg-gray-200 text-slate-500 pointer-events-none"
+                        ? 'bg-[#fe2c55] text-white'
+                        : 'bg-gray-200 text-slate-500 pointer-events-none'
                     } `}
                     type="submit"
                   >

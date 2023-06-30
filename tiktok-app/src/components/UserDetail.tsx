@@ -1,11 +1,11 @@
-import { createContext, useEffect, useState } from "react";
-import img from "@/assets/images/default-ava.png";
-import styles from "@/styles/userDetail.module.css";
-import UserDetailVideos from "./UserDetailVideos";
-import EditUserInfor from "./EditUserInfor";
-import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
-import useModal from "@/hooks/useModal";
+import { createContext, useEffect, useState } from 'react';
+import img from '@/assets/images/default-ava.png';
+import styles from '@/styles/userDetail.module.css';
+import UserDetailVideos from './UserDetailVideos';
+import EditUserInfor from './EditUserInfor';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
+import useModal from '@/hooks/useModal';
 
 interface IUserInfo {
   avatarUrl: string;
@@ -29,10 +29,10 @@ interface ICurrentUserList {
 }
 
 export const InitialValuesContext = createContext<IUserInfo>({
-  avatarUrl: "",
-  nickname: "",
-  fullname: "",
-  bio: "",
+  avatarUrl: '',
+  nickname: '',
+  fullname: '',
+  bio: '',
 });
 
 const UserDetail = () => {
@@ -42,29 +42,26 @@ const UserDetail = () => {
   const { currentUser, setCurrentUser } = useModal();
   const [checkfollowing, setCheckfollowing] = useState(false);
   const [currentUserList, setCurrentUserList] = useState<ICurrentUserList>({
-    avatarUrl: "",
-    bio: "",
-    follow: "",
-    following: "",
-    fullname: "",
-    myVideo: "",
-    nickname: "",
-    role: "",
-    username: "",
+    avatarUrl: '',
+    bio: '',
+    follow: '',
+    following: '',
+    fullname: '',
+    myVideo: '',
+    nickname: '',
+    role: '',
+    username: '',
     videoliked: [],
-    _id: "",
+    _id: '',
   });
   const [initialValues, setInitialValues] = useState({
-    avatarUrl: "",
-    nickname: "",
-    fullname: "",
-    bio: "",
+    avatarUrl: '',
+    nickname: '',
+    fullname: '',
+    bio: '',
   });
   const navigate = useNavigate();
 
-  const aaa = () => {
-    console.log("hế lô");
-  };
   const handleFollowingAccount = () => {
     const payload = {
       userFollow: currentUser?._id,
@@ -119,7 +116,7 @@ const UserDetail = () => {
                 </p>
               </div>
               <p className="text-lg	font-medium cursor-pointer">
-                {initialValues?.fullname || ""}
+                {initialValues?.fullname || ''}
               </p>
               {currentUser?._id === userId ? (
                 <button
@@ -203,7 +200,7 @@ const UserDetail = () => {
             onClick={() => setClickLike(false)}
           >
             <span
-              className={`text-lg ml-2 pb-2 ${clickLike ? "" : "text-black"}`}
+              className={`text-lg ml-2 pb-2 ${clickLike ? '' : 'text-black'}`}
             >
               Yêu Thích
             </span>
