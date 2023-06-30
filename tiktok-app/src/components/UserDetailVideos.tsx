@@ -1,17 +1,61 @@
-import axios from 'axios';
-import { useState, useEffect } from 'react';
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-const UserDetailVideos = () => {
+interface IOwnerVideo {
+  _id: string;
+  nickname: string;
+  fullname: string;
+}
+
+interface IVideoListItem {
+  _id: string;
+  comment: [];
+  createdAt: string;
+  like: [];
+  ownerVideo: IOwnerVideo;
+  updatedAt: string;
+  videoHashtag: string;
+  videoTitle: string;
+  videoUrl: string;
+  __v: number;
+}
+
+interface IVideoliked {
+  isVideoliked?: boolean;
+}
+
+const UserDetailVideos = ({ isVideoliked }: IVideoliked) => {
   const [videoUrlList, setVideoUrlList] = useState<[]>([]);
+  const navigate = useNavigate();
+  const { userId } = useParams();
 
-  useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/videos/getAllVideo`)
-      .then((response) => {
-        setVideoUrlList(response.data.video);
-      })
-      .catch((err) => console.error(err));
-  }, []);
+  console.log("isVideoliked", isVideoliked);
+
+  if (isVideoliked) {
+    useEffect(() => {
+      axios
+        .get(
+          `${import.meta.env.VITE_BACKEND_URL}/accounts/searchuser/${userId}`
+        )
+        .then((response) => {
+          setVideoUrlList(response.data.videoliked);
+        })
+        .catch((err) => console.error(err));
+    }, [isVideoliked]);
+  } else {
+    useEffect(() => {
+      axios
+        .get(
+          `${import.meta.env.VITE_BACKEND_URL}/accounts/searchuser/${userId}`
+        )
+        .then((response) => {
+          setVideoUrlList(response.data.myVideo);
+        })
+        .catch((err) => console.error(err));
+    }, [isVideoliked]);
+  }
 
   const handleOnMouseOver = (e: React.MouseEvent<HTMLVideoElement>) => {
     const video = e.target as HTMLVideoElement;
@@ -23,22 +67,27 @@ const UserDetailVideos = () => {
     video.currentTime = 0;
   };
 
+  const handleNavigate = (videoId: string) => {
+    navigate(`/videodetails/${videoId}`);
+  };
+
   return (
-    <div className="grid grid-cols-6 gap-4 mt-2">
-      {videoUrlList.map((item, id) => {
+    <div className="grid grid-cols-6 gap-4 mt-2 max-xl:grid-cols-5 max-lg:grid-cols-4 max-md:grid-cols-3 max-sm:grid-cols-2">
+      {videoUrlList.map((item: IVideoListItem) => {
         return (
-          <div key={id}>
+          <div key={item._id}>
             <div className="relative">
               <div
                 className="grid rounded-md bg-neutral-950 content-center"
-                style={{ width: 'fit-content' }}
+                style={{ width: "fit-content" }}
               >
                 <video
-                  className="w-full rounded-md"
-                  style={{ height: '340px', minWidth: '191px' }}
+                  className="w-full rounded-md cursor-pointer"
+                  // style={{ height: "340px", minWidth: "191px" }}
                   onMouseOver={handleOnMouseOver}
                   onMouseOut={handleOnMouseOut}
                   muted
+                  onClick={() => handleNavigate(item._id)}
                 >
                   <source
                     src={(item as { videoUrl: string }).videoUrl}
@@ -60,9 +109,6 @@ const UserDetailVideos = () => {
                 </svg>
                 <strong className="text-white">56.5K</strong>
               </div>
-            </div>
-            <div className="pt-2 px-2">
-              <p>ABC</p>
             </div>
           </div>
         );
