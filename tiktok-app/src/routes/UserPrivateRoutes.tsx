@@ -1,4 +1,3 @@
-import useModal from '@/hooks/useModal';
 import { getAccessToken } from '@/utils/accessTokenLS';
 
 interface IProps {

@@ -16,7 +16,9 @@ function Chat() {
   const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    socket.emit('add-user', currentUser._id);
+    if (currentUser) {
+      socket.emit('add-user', currentUser._id);
+    }
   }, []);
 
   useEffect(() => {
@@ -47,20 +49,18 @@ function Chat() {
           <div className="flex items-center justify-between p-3">
             <p className="font-bold text-xl ps-2">Tin nhắn</p>
             <p className="text-2xl">
-              <i className="fas fa-cog "></i>
             </p>
           </div>
-          <div className="flex-1 max-h-[520px] overflow-y-auto">
+          <div className="flex-1 min-h-[520px] max-h-[520px] overflow-y-auto">
             {listUser &&
               listUser.map((user: any) => {
                 if (user?._id !== currentUser?._id) {
                   return (
                     <section
-                      className={`${
-                        currentUserChat._id == user._id
-                          ? `bg-slate-200`
-                          : `hover:bg-slate-100 `
-                      }`}
+                      className={`${currentUserChat?._id == user._id
+                        ? `bg-slate-200`
+                        : `hover:bg-slate-100 `
+                        }`}
                       key={user?._id}
                       onClick={() => {
                         setCurrentUserChat(user);

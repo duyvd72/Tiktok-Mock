@@ -22,6 +22,7 @@ const EditUserInfor = ({
   const [changeImage, setChangeImage] = useState(false);
   const [imageState, setImageState] = useState('');
   const { userId } = useParams();
+  console.log(imageState);
 
   const handleUpdateUser = (values: any) => {
     axios

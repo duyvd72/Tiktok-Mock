@@ -1,4 +1,5 @@
 import { storage } from '@/firebase/index';
+import useModal from '@/hooks/useModal';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 
 interface IProps {
@@ -22,9 +23,11 @@ const UploadButton = (props: IProps) => {
     setProcess,
   } = props;
 
+  const { currentUser } = useModal();
+
   const handleChangeFile = (files: FileList | null) => {
     if (!files) return;
-    const storageRef = ref(storage, files[0].name);
+    const storageRef = ref(storage, files[0].name + currentUser._id);
     const uploadTask = uploadBytesResumable(storageRef, files[0]);
 
     uploadTask.on(

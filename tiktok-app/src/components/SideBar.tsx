@@ -3,7 +3,7 @@ import Footer from './Footer';
 import useModal from '@/hooks/useModal';
 import { useEffect, useState, useMemo } from 'react';
 import axiosInstance from '@/libs/axios/axiosConfig';
-import { ICurrentUser, IAccountItem } from '@/interfaces/interfaces';
+import { ICurrentUser } from '@/interfaces/interfaces';
 import AccountItem from './AccountItem';
 
 const SideBar = () => {
@@ -72,10 +72,11 @@ const SideBar = () => {
               Following accounts
             </p>
             {renderFollowingAccounts &&
-              renderFollowingAccounts.map((item: IAccountItem) => {
+              renderFollowingAccounts.map((item: any) => {
                 return (
                   <AccountItem
                     key={item._id}
+                    userId={item._id}
                     avatarUrl={item.avatarUrl}
                     nickname={item.nickname}
                     fullname={item.fullname}
@@ -87,7 +88,7 @@ const SideBar = () => {
                 className="text-[#fe2c55] font-bold text-sm cursor-pointer"
                 onClick={onLoadMore}
               >
-                {seeLess ? 'See less' : 'See more'}
+                {seeLess ? 'See less' : maxFollowing < loadMore ? "" : 'See more'}
               </p>
             ) : (
               <p>Bạn vẫn chưa theo dõi ai !</p>

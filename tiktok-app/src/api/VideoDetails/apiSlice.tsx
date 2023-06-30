@@ -13,7 +13,7 @@ interface IOwnerVideo {
 interface IVideoByIdInfo {
   _id: string;
   videoUrl: string;
-  videoHastag: string;
+  videoHashtag: string;
   videoTitle: string;
   like: [];
   comment: [];
@@ -27,7 +27,7 @@ export interface IMyVideoInfo {
   _id: string;
   videoUrl: string;
   videoTitle: string;
-  videoHastag: string;
+  videoHashtag: string;
   ownerVideo: string;
   like: [];
   comment: [];
@@ -76,7 +76,7 @@ interface IPostCommentResponse {
     _id: string;
     videoUrl: string;
     videoTitle: string;
-    videoHastag: string;
+    videoHashtag: string;
     ownerVideo: string;
     like: [];
     comment: [];
@@ -98,16 +98,16 @@ interface IPostRepliesResponse {
   success: boolean;
 }
 // type prepareHeaders
-type prepareHeaders = (
-  headers: Headers,
-  api: {
-    getState: () => unknown;
-    extra: unknown;
-    endpoint: string;
-    type: 'query' | 'mutation';
-    forced: boolean | undefined;
-  }
-) => Headers | void;
+// type prepareHeaders = (
+//   headers: Headers,
+//   api: {
+//     getState: () => unknown;
+//     extra: unknown;
+//     endpoint: string;
+//     type: 'query' | 'mutation';
+//     forced: boolean | undefined;
+//   }
+// ) => Headers | void;
 // put like video / comment
 interface ILikeParam {
   likedVideoId: string;
@@ -117,7 +117,7 @@ interface ILikeResponse {
   _id: string;
   videoUrl: string;
   videoTitle: string;
-  videoHastag: string;
+  videoHashtag: string;
   ownerVideo: string;
   like: [];
   comment: [];
@@ -127,8 +127,8 @@ interface ILikeResponse {
 }
 // put follow account
 interface IFollowingParam {
-  followedUser: string; // get from videoOwnerId
-  userFollow: string; // get from useModal()
+  followedUser: string | undefined; // get from videoOwnerId
+  userFollow: string | undefined; // get from useModal()
 }
 interface IFollowingAccountResponse {
   _id: string;

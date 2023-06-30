@@ -33,7 +33,9 @@ const UserChat: React.FC<IUserChat> = ({ userData, onlineUsers }) => {
             <div className="rounded-full bg-white m-3 flex justify-center items-center relative " >
                 <div className={`rounded-full absolute right-[-5px] top-[-10px] w-[15px] h-[15px] ${isOnline ? `bg-green-600` : `bg-red-400`}`}></div>
                 {userData && userData.avatarUrl ?
-                    <img src={userData.avatarUrl} className='h-[50px] w-[50px] rounded-full' alt="" />
+                    <p className='h-[50px] w-[50px]'>
+                        <img src={userData.avatarUrl} className='h-[50px] w-[50px] rounded-full' alt="img" />
+                    </p>
                     :
                     <i className="fa fa-user h-[50px] w-[50px] ring-1 rounded-full text-2xl text-gray-300 flex justify-center items-center "></i>
                 }
